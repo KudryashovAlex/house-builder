@@ -49,7 +49,9 @@ export function computeRoofStructure(p, m) {
   const cntKg = m.rafLen*.05*.05*RHO/Math.max(1,m.area);
   const rafKg = (m.V.rafter+m.V.hip+(m.V.jack||0))*RHO/Math.max(1,m.area);
   const warmKg = m.warm?(m.it*40+11):0;
-  const deadKg = coverKg+deckKg+cntKg+rafKg+warmKg+.6, deadKN = deadKg*9.81/1000;
+  /* Мёртвая нагрузка приходит из модели — одна формула на весь проект. */
+  const deadKg = Number.isFinite(m.deadKg) ? m.deadKg : coverKg+deckKg+cntKg+rafKg+warmKg+.6;
+  const deadKN = deadKg*9.81/1000;
 
   const sectMM = [Math.round(m.rt*1000), Math.round(m.rd*1000)];
   const seatWmm = Math.round(m.seatW*1000);

@@ -503,17 +503,20 @@ export function createRoofStage(host){
               if(b){b.userData.mk=markLen('extra',half*2);cb.push(b);}}
             addAll('frame',cb,10);}
         }
-        const mem=extrude(poly(0,fPie),m.memT,mMem,'y'); if(mem){mem.position.y=m.yMem;addTo('membrane',mem,10);}
+        /* Пирог лежит на ВЕРХНЕЙ грани стропилы, а не на нижней: её начало сдвинуто
+           к коньку на rd·tgα. Иначе весь пирог съезжает вниз по скату на rd·sinα. */
+        const xTop=Number.isFinite(f.xPie0)?f.xPie0:-m.rd*f.ta;
+        const mem=extrude(poly(xTop,fPie),m.memT,mMem,'y'); if(mem){mem.position.y=m.yMem;addTo('membrane',mem,10);}
         const cn=[];
         m.rafters.filter(r=>r.f===f).forEach(r=>{const cl2=r.len-.06;
-          const b=box(cl2,.05,.05,mCnt,r.x0+cl2/2+.03,m.yCnt+.025,r.z);
+          const b=box(cl2,.05,.05,mCnt,r.x0+xTop+cl2/2+.03,m.yCnt+.025,r.z);
           if(b){b.userData.mk=markLen('counter',cl2);cn.push(b);}});
         addAll('counter',cn,10);
-        if(m.solid){const d=extrude(poly(0,fPie),m.deckT,mDeck,'y'); if(d){d.position.y=m.yBat;addTo('batten',d,11);}}
+        if(m.solid){const d=extrude(poly(xTop,fPie),m.deckT,mDeck,'y'); if(d){d.position.y=m.yBat;addTo('batten',d,11);}}
         else{const bt=[]; m.rows.filter(r=>r.f===f).forEach(r=>{
           const b=box(.1,m.batT,r.len,mBat,r.x,m.yBat+m.batT/2,0);
           if(b){b.userData.mk=markLen('batten',r.len);bt.push(b);}}); addAll('batten',bt,11);}
-        const cm=extrude(poly(0,fPie),m.covT,mCov,'y');
+        const cm=extrude(poly(xTop,fPie),m.covT,mCov,'y');
         if(cm){uvRotate90(cm.geometry);cm.position.y=m.covY;cm.userData.faceTag=f.tag;addTo('cover',cm,12);}
 
         if(f.isBreakEnd){
