@@ -292,6 +292,7 @@ kbd{font:700 10px var(--m);background:var(--surface2);border:1px solid var(--lin
 <script type="module">
 import * as THREE from 'three';
 import { auditConfig, auditScene, deriveAll, AUDIT_MATRIX, AUDIT_GROUPS } from './src/roof/roof-audit.js';
+import { ROOF_DEFAULTS } from './src/roof/roof-params.js';
 import { createRoofStage } from './src/roof/roof-render.js';
 
 const $ = s => document.querySelector(s);
@@ -484,25 +485,31 @@ function dl(name, text, mime) {
   a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1500);
 }
 $('#bCsv').onclick = () => {
-  const rows = [['Конфигурация','Форма','Схема мансарды','Стропило','Домен','ID','Проверка','Статус','Детали']];
+  const rows = [['Конфигурация','ID','Проверка','Детали','Параметры']];
   ROWS.forEach(r => {
-    const m = r.resolved && r.resolved.model;
-    const sect = m ? `${Math.round(m.rt*1000)}×${Math.round(m.rd*1000)}` : '';
-    r.all.forEach(x => rows.push([r.name, r.form, r.params.mansard ? r.params.mansardScheme : '', sect,
-      (AUDIT_GROUPS[x.group]||{}).n || '', x.id, x.name,
-      x.skipped ? 'ПРОПУСК' : x.pass ? 'OK' : x.expected ? 'НОРМА' : 'БАГ', x.detail || '']));
+    const bad = r.all.filter(x => !x.pass && !x.expected && !x.skipped);
+    if (!bad.length) return;
+    const p = Object.keys(r.params).filter(k => r.params[k] !== ROOF_DEFAULTS[k]).map(k => k + '=' + r.params[k]).join(' ');
+    bad.forEach(x => rows.push([r.name, x.id, x.name, x.detail || '', p]));
   });
   dl('roof-audit.csv', '\uFEFF' + rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(';')).join('\n'), 'text/csv;charset=utf-8');
-  toast('CSV выгружен');
+  toast(rows.length > 1 ? 'CSV: только баги' : 'Багов нет — CSV пуст');
 };
 $('#bJson').onclick = () => {
+  const delta = p => { const d = {}; for (const k in p) if (p[k] !== ROOF_DEFAULTS[k]) d[k] = p[k]; return d; };
+  const fails = ROWS.filter(r => r.bugs > 0).map(r => {
+    const m = r.resolved && r.resolved.model;
+    return { cfg: r.name, form: r.form, p: delta(r.params), checks: r.all.length,
+      sect: m ? Math.round(m.rt*1000) + 'x' + Math.round(m.rd*1000) : null,
+      bugs: r.all.filter(x => !x.pass && !x.expected && !x.skipped).map(x => ({ id: x.id, n: x.name, d: x.detail || '' })) };
+  });
   dl('roof-audit.json', JSON.stringify({
-    generated: new Date().toISOString(), mode: lastMode ? 'core+scene' : 'core',
-    totals: { configs: ROWS.length, bugs: ROWS.reduce((s,r)=>s+r.bugs,0), norms: ROWS.reduce((s,r)=>s+r.violations,0), skipped: ROWS.reduce((s,r)=>s+r.skipped,0) },
-    configs: ROWS.map(r => ({ name: r.name, form: r.form, params: r.params, bugs: r.bugs, violations: r.violations,
-      checks: r.all.map(x => ({ id:x.id, group:x.group, name:x.name, status: x.skipped?'skip':x.pass?'ok':x.expected?'norm':'bug', detail:x.detail })) }))
-  }, null, 2), 'application/json');
-  toast('JSON выгружен');
+    t: new Date().toISOString(), mode: lastMode ? 'core+scene' : 'core',
+    totals: { configs: ROWS.length, checks: ROWS.reduce((s,r)=>s+r.all.length,0),
+      bugs: ROWS.reduce((s,r)=>s+r.bugs,0), norms: ROWS.reduce((s,r)=>s+r.violations,0), skipped: ROWS.reduce((s,r)=>s+r.skipped,0) },
+    fails
+  }), 'application/json');
+  toast('JSON: только баги');
 };
 
 addEventListener('keydown', e => {

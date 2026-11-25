@@ -418,17 +418,19 @@ $('#tExp').onclick=()=>{ F.expand=!F.expand; if(F.expand) ROWS.forEach(r=>open.a
 function dl(name,text,mime){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:mime}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);}
 $('#bCsv').onclick=()=>{
   if(!ROWS.length) return toast('Сначала прогоните тест');
-  const rows=[['Группа','ID','Сценарий','Статус','Детали','мс','Кадр %','Δ кадра %']];
-  ROWS.forEach(r=>rows.push([r.g,r.id,r.n,r.pass?'OK':'ПАДЕНИЕ',r.detail||'',r.ms,r.lit!=null?(r.lit*100).toFixed(1):'',r.delta!=null?(r.delta*100).toFixed(0):'']));
+  const bad=ROWS.filter(r=>!r.pass);
+  const rows=[['Группа','ID','Сценарий','Детали','Ошибки','мс']];
+  bad.forEach(r=>rows.push([r.g,r.id,r.n,r.detail||'',(r.errors||[]).join(' | '),r.ms]));
   dl('roof-ui-test.csv','\uFEFF'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(';')).join('\n'),'text/csv;charset=utf-8');
-  toast('CSV выгружен');
+  toast(bad.length?'CSV: только падения':'Падений нет — CSV пуст');
 };
 $('#bJson').onclick=()=>{
   if(!ROWS.length) return toast('Сначала прогоните тест');
-  dl('roof-ui-test.json',JSON.stringify({generated:new Date().toISOString(),cfg,
-    totals:{scenarios:SCENARIOS.length,run:ROWS.length,passed:ROWS.filter(r=>r.pass).length,failed:ROWS.filter(r=>!r.pass).length},
-    results:ROWS.map(r=>({group:r.g,id:r.id,name:r.n,pass:r.pass,detail:r.detail,data:r.data,ms:r.ms,lit:r.lit,delta:r.delta,errors:r.errors}))},null,2),'application/json');
-  toast('JSON выгружен');
+  const bad=ROWS.filter(r=>!r.pass);
+  dl('roof-ui-test.json',JSON.stringify({t:new Date().toISOString(),cfg,
+    totals:{scenarios:SCENARIOS.length,run:ROWS.length,failed:bad.length},
+    fails:bad.map(r=>({id:r.id,g:r.g,n:r.n,d:r.detail||'',err:(r.errors||[]).slice(0,10),ms:r.ms,data:r.data||null}))}),'application/json');
+  toast('JSON: только падения');
 };
 addEventListener('keydown',e=>{
   if(/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)) return;
