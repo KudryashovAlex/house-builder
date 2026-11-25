@@ -1,0 +1,204 @@
+:root {
+  --ed-bg:      #18201b;
+  --ed-bg2:     #212b24;
+  --ed-line:    #33403a;
+  --ed-line-hi: #4a5b50;
+  --ed-text:    #ece7da;
+  --ed-dim:     #9dae9f;
+  --ed-mute:    #6d7d70;
+  --ed-amber:   #e8a34c;
+  --ed-amber-hi:#f7c477;
+  --ed-green:   #4ade80;
+  --ed-red:     #f87171;
+  --dock-bottom: 18px;
+}
+
+/* ============ НИЖНИЙ ДОК (как в Sims) ============ */
+body #editor-panel {
+  position: fixed;
+  top: auto;
+  bottom: var(--dock-bottom);
+  left: calc(var(--panel-w, 330px) + 26px);
+  right: 26px;
+  transform: none;
+  width: auto;
+  max-width: none;
+  z-index: 25;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  pointer-events: none;
+}
+body.editing #editor-panel { display: flex; }
+body.walking #editor-panel { display: none !important; }
+
+.editor-dock {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  max-width: 1080px;
+}
+
+/* --- верхний ряд: настройки --- */
+.ed-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 9px;
+  border-radius: 12px;
+  background: rgba(20, 27, 22, .93);
+  border: 1px solid var(--ed-line);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .45);
+  backdrop-filter: blur(10px);
+  max-width: 100%;
+}
+.ed-sep { width: 1px; height: 20px; background: var(--ed-line); margin: 0 2px; }
+
+.ed-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 28px; padding: 0 10px;
+  border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--ed-line);
+  background: var(--ed-bg2);
+  font: 600 11.5px/1 'Manrope', sans-serif;
+  color: var(--ed-mute);
+  transition: color .15s, border-color .15s, background .15s;
+  white-space: nowrap;
+}
+.ed-chip:hover { color: var(--ed-text); border-color: var(--ed-line-hi); }
+.ed-chip .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #3d4a42; transition: background .15s, box-shadow .15s;
+}
+.ed-chip.on {
+  color: var(--ed-amber-hi);
+  border-color: rgba(232, 163, 76, .45);
+  background: rgba(232, 163, 76, .1);
+}
+.ed-chip.on .dot { background: var(--ed-amber); box-shadow: 0 0 7px rgba(232, 163, 76, .8); }
+
+.ed-select {
+  height: 28px; padding: 0 24px 0 9px;
+  border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--ed-line);
+  background: var(--ed-bg2)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6'%3E%3Cpath d='M1 1l3.5 3.5L8 1' fill='none' stroke='%23e8a34c' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;
+  font: 700 11.5px 'Manrope', sans-serif; color: var(--ed-text);
+  appearance: none; -webkit-appearance: none;
+}
+.ed-select:focus { outline: none; border-color: var(--ed-amber); }
+.ed-select option { background: var(--ed-bg2); }
+
+.ed-slider-wrap { display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 10px;
+  border-radius: 8px; border: 1px solid var(--ed-line); background: var(--ed-bg2); }
+.ed-slider-wrap span { font: 700 10px 'Manrope', sans-serif; letter-spacing: .08em; color: var(--ed-mute); text-transform: uppercase; }
+.ed-range { width: 68px; height: 16px; accent-color: var(--ed-amber); cursor: pointer; }
+
+.ed-icon {
+  width: 28px; height: 28px; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--ed-line); background: var(--ed-bg2);
+  color: var(--ed-dim); font: 700 13px/1 'Manrope', sans-serif;
+  transition: all .15s;
+}
+.ed-icon:hover:not(:disabled) { color: var(--ed-amber-hi); border-color: var(--ed-amber); }
+.ed-icon:disabled { opacity: .35; cursor: not-allowed; }
+.ed-zoom { font: 700 11px 'Manrope', sans-serif; color: var(--ed-mute); min-width: 38px; text-align: center;
+  font-variant-numeric: tabular-nums; }
+
+/* --- ряд инструментов --- */
+body #editor-panel .toolbar {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 5px;
+  padding: 7px 9px; border-radius: 14px;
+  background: rgba(20, 27, 22, .95);
+  border: 1px solid var(--ed-line);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .5);
+  backdrop-filter: blur(12px);
+  overflow: visible;
+  max-width: 100%;
+}
+body #editor-panel .tool-btn {
+  height: 36px; padding: 0 12px;
+  border: 1px solid transparent; border-radius: 9px;
+  font: 700 12.5px 'Manrope', sans-serif;
+  background: #2c3630; color: #cfd8cf;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: transform .12s, filter .12s, box-shadow .12s;
+}
+body #editor-panel .tool-btn:hover { filter: brightness(1.25); transform: translateY(-1px); }
+body #editor-panel .toolbar-sep { width: 1px; height: 24px; background: var(--ed-line); margin: 0 3px; }
+body #editor-panel .floor-label { font: 700 10px 'Manrope', sans-serif; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ed-mute); }
+body #editor-panel .floor-btn {
+  width: 30px; height: 30px; border-radius: 8px; border: none;
+  font: 800 12.5px 'Manrope', sans-serif; background: #2c3630; color: #cfd8cf;
+  transition: transform .12s, filter .12s;
+}
+body #editor-panel .floor-btn:hover { filter: brightness(1.3); transform: translateY(-1px); }
+.editor-hint { display: none !important; }
+
+/* --- строка состояния --- */
+.ed-status {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 20px; max-width: 100%;
+  padding: 3px 12px; border-radius: 9px;
+  background: rgba(18, 24, 20, .8);
+  font: 600 11.5px 'Manrope', sans-serif; color: var(--ed-mute);
+}
+.ed-metric {
+  font-weight: 800; color: var(--ed-amber-hi); font-variant-numeric: tabular-nums;
+  background: rgba(232, 163, 76, .13); padding: 2px 8px; border-radius: 6px; white-space: nowrap;
+}
+.ed-metric:empty { display: none; }
+.ed-metric.bad { color: #2a0d0d; background: linear-gradient(135deg, #ffb3b3, var(--ed-red)); }
+.ed-hint { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ed-hint b { color: var(--ed-amber); font-weight: 800; }
+
+/* --- всплывающее подменеево над доком --- */
+body #submenu-panel {
+  position: fixed;
+  top: auto;
+  bottom: 168px;
+  left: calc(var(--panel-w, 330px) + 26px);
+  right: 26px;
+  transform: none;
+  justify-content: center;
+  z-index: 26;
+}
+
+/* --- метка размера у курсора --- */
+#plan-label {
+  position: fixed; z-index: 29; display: none; pointer-events: none;
+  transform: translate(-50%, -170%);
+  padding: 4px 9px; border-radius: 8px;
+  background: rgba(24, 32, 26, .96);
+  border: 1px solid var(--ed-amber);
+  font: 800 12px 'Manrope', sans-serif; color: var(--ed-amber-hi);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .55);
+}
+#plan-label.bad { border-color: var(--ed-red); color: #ffc9c9; }
+#plan-label.info { border-color: #7cc4f0; color: #cfe9fb; }
+
+@media (max-width: 1180px) {
+  body #editor-panel .tool-btn { padding: 0 9px; font-size: 12px; }
+  .ed-range { width: 54px; }
+}
+@media (max-width: 900px) {
+  body #editor-panel { left: 12px; right: 12px; bottom: 12px; }
+  body #submenu-panel { left: 12px; right: 12px; bottom: 150px; }
+  .ed-slider-wrap, .ed-zoom { display: none; }
+}
+@media (max-width: 620px) {
+  body #editor-panel .tool-btn { padding: 0 10px; font-size: 0; gap: 0; }
+  body #editor-panel .tool-btn::first-letter { font-size: 15px; }
+  .ed-hint { display: none; }
+}

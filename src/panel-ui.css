@@ -1,0 +1,73 @@
+/* ===== Левая панель: спокойная смета ===== */
+#panel-head .panel-hint { color: var(--text-mute, #6f7f70); }
+
+#foundation-info {
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  margin: 0 0 8px !important;
+  font: 600 11.5px/1.4 'Manrope', sans-serif !important;
+  color: #8fa792 !important;
+  display: flex; align-items: center; gap: 7px;
+}
+#foundation-info::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #4ade80; box-shadow: 0 0 8px rgba(74, 222, 128, .7); flex: none;
+}
+
+.price-card {
+  padding: 12px 13px !important;
+  background: linear-gradient(160deg, #232d26, #1b231e) !important;
+  border: 1px solid rgba(232, 163, 76, .28) !important;
+  border-radius: 12px !important;
+  color: #ece7da !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+}
+.price-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.price-cap {
+  font: 700 9.5px/1 'Manrope', sans-serif; letter-spacing: .13em;
+  text-transform: uppercase; color: #7f8f80;
+}
+.price-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 24px; padding: 0 9px; cursor: pointer;
+  border-radius: 7px; border: 1px solid #3a463c; background: #1f2823;
+  font: 700 10.5px 'Manrope', sans-serif; color: #9fae9f;
+  transition: color .15s, border-color .15s, background .15s;
+}
+.price-toggle:hover { color: #f7c477; border-color: #e8a34c; background: #26312a; }
+.price-toggle svg { width: 9px; height: 6px; transition: transform .25s ease; }
+.price-card.open .price-toggle svg { transform: rotate(180deg); }
+
+.price-total {
+  font: 800 25px/1.15 'Manrope', sans-serif;
+  color: #f7c477; margin: 7px 0 3px;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 2px 14px rgba(232, 163, 76, .25);
+}
+.price-sub { font: 600 11px/1.4 'Manrope', sans-serif; color: #7f8f80; }
+
+.price-details {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows .3s cubic-bezier(.4, 0, .2, 1), opacity .22s ease;
+  opacity: 0;
+}
+.price-card.open .price-details { grid-template-rows: 1fr; opacity: 1; }
+.price-details-inner { overflow: hidden; min-height: 0; }
+
+.price-block { margin-top: 11px; padding-top: 10px; border-top: 1px solid #33403a; }
+.price-block h4 {
+  margin: 0 0 6px; font: 700 9.5px/1 'Manrope', sans-serif;
+  letter-spacing: .12em; text-transform: uppercase; color: #e8a34c;
+}
+.price-row {
+  display: flex; align-items: baseline; gap: 6px;
+  font: 600 11.5px/1.9 'Manrope', sans-serif; color: #9fae9f;
+}
+.price-row .lead { flex: 1; border-bottom: 1px dotted #3a463c; transform: translateY(-3px); }
+.price-row b { color: #ece7da; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.price-row.money b { color: #f7c477; }
+.price-note { margin-top: 9px; font: 500 10px/1.5 'Manrope', sans-serif; color: #5f6f61; }
+
+#controls-scroll { padding-bottom: 16px; }
+.section { margin-bottom: 8px; }

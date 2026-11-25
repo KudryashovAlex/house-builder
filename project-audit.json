@@ -1,0 +1,6587 @@
+{
+  "generated": "2026-11-24T11:40:59.092Z",
+  "root": "E:\\dom",
+  "counts": {
+    "files": 41,
+    "code": 38,
+    "html": 7,
+    "css": 4,
+    "edges": 107,
+    "exports": 193,
+    "errors": 9,
+    "warns": 13,
+    "infos": 72,
+    "cycles": 0,
+    "dead": 2,
+    "unused": 68,
+    "contracts": 1
+  },
+  "entries": [
+    "src/main.js",
+    "index.html",
+    "project-audit.html",
+    "roof-audit.html",
+    "roof-core-check.html",
+    "src/roof/lab.js",
+    "roof-lab.html",
+    "roof-ui-test.html"
+  ],
+  "importmap": {
+    "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+  },
+  "deps": [
+    "three",
+    "vite"
+  ],
+  "modules": [
+    {
+      "file": "audit-project.mjs",
+      "lines": 1132,
+      "bytes": 81441,
+      "html": false,
+      "imports": [
+        {
+          "spec": "node:fs",
+          "kind": "named",
+          "line": 7,
+          "res": {
+            "kind": "node",
+            "target": "node:fs"
+          },
+          "names": [
+            {
+              "imported": "default",
+              "local": "fs"
+            }
+          ]
+        },
+        {
+          "spec": "node:path",
+          "kind": "named",
+          "line": 8,
+          "res": {
+            "kind": "node",
+            "target": "node:path"
+          },
+          "names": [
+            {
+              "imported": "default",
+              "local": "path"
+            }
+          ]
+        },
+        {
+          "spec": "node:url",
+          "kind": "named",
+          "line": 9,
+          "res": {
+            "kind": "node",
+            "target": "node:url"
+          },
+          "names": [
+            {
+              "imported": "pathToFileURL",
+              "local": "pathToFileURL"
+            }
+          ]
+        }
+      ],
+      "exports": [],
+      "shapes": [
+        {
+          "disc": "t",
+          "val": "regex",
+          "keys": [
+            "spec",
+            "names",
+            "kind",
+            "line"
+          ],
+          "line": 87
+        },
+        {
+          "disc": "t",
+          "val": "num",
+          "keys": [
+            "imported",
+            "local"
+          ],
+          "line": 92
+        },
+        {
+          "disc": "t",
+          "val": "id",
+          "keys": [
+            "imported",
+            "local"
+          ],
+          "line": 96
+        },
+        {
+          "disc": "t",
+          "val": "punc",
+          "keys": [
+            "imported",
+            "local"
+          ],
+          "line": 99
+        },
+        {
+          "disc": "t",
+          "val": "punc",
+          "keys": [
+            "imported",
+            "local"
+          ],
+          "line": 100
+        },
+        {
+          "disc": "kind",
+          "val": "local",
+          "keys": [
+            "id",
+            "file",
+            "exists",
+            "issues"
+          ],
+          "line": 287
+        },
+        {
+          "disc": "kind",
+          "val": "node",
+          "keys": [
+            "kind",
+            "target"
+          ],
+          "line": 290
+        },
+        {
+          "disc": "kind",
+          "val": "pkg",
+          "keys": [
+            "kind",
+            "target"
+          ],
+          "line": 292
+        },
+        {
+          "disc": "kind",
+          "val": "pkg-undeclared",
+          "keys": [
+            "kind",
+            "target"
+          ],
+          "line": 293
+        },
+        {
+          "disc": "kind",
+          "val": "unknown",
+          "keys": [
+            "kind",
+            "target"
+          ],
+          "line": 294
+        }
+      ],
+      "userData": {
+        "write": [],
+        "read": [
+          "write",
+          "read"
+        ]
+      },
+      "dead": true,
+      "entry": false,
+      "fanIn": 0,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/builder.js",
+      "lines": 1391,
+      "bytes": 57052,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        },
+        {
+          "spec": "./verandas.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/verandas.js"
+          },
+          "names": [
+            {
+              "imported": "addVerandaStructure",
+              "local": "addVerandaStructure"
+            }
+          ]
+        },
+        {
+          "spec": "./stair-builder.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/stair-builder.js"
+          },
+          "names": [
+            {
+              "imported": "buildStairGroup",
+              "local": "buildStairGroup"
+            }
+          ]
+        },
+        {
+          "spec": "./stairs.js",
+          "kind": "named",
+          "line": 4,
+          "res": {
+            "kind": "local",
+            "target": "src/stairs.js"
+          },
+          "names": [
+            {
+              "imported": "computeStair",
+              "local": "computeStair"
+            }
+          ]
+        },
+        {
+          "spec": "./safe.js",
+          "kind": "named",
+          "line": 5,
+          "res": {
+            "kind": "local",
+            "target": "src/safe.js"
+          },
+          "names": [
+            {
+              "imported": "sanitizeHouseParams",
+              "local": "sanitizeHouseParams"
+            },
+            {
+              "imported": "guardGeometry",
+              "local": "guardGeometry"
+            },
+            {
+              "imported": "cleanPoly",
+              "local": "cleanPoly"
+            },
+            {
+              "imported": "polyArea",
+              "local": "polyArea"
+            },
+            {
+              "imported": "isSimple",
+              "local": "isSimple"
+            },
+            {
+              "imported": "num",
+              "local": "num"
+            }
+          ]
+        },
+        {
+          "spec": "./roof.js",
+          "kind": "named",
+          "line": 6,
+          "res": {
+            "kind": "local",
+            "target": "src/roof.js"
+          },
+          "names": [
+            {
+              "imported": "buildRoof",
+              "local": "buildRoof"
+            },
+            {
+              "imported": "roofGeom",
+              "local": "roofGeom"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "buildHouse",
+          "kind": "named",
+          "line": 79
+        },
+        {
+          "name": "createStairMesh",
+          "kind": "named",
+          "line": 1335
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [
+          "isCustomLight",
+          "lightRef",
+          "isInteriorWall",
+          "wallRef",
+          "isOpening",
+          "openingRef",
+          "isDoor",
+          "doorRef",
+          "isExteriorWall",
+          "wallName",
+          "isExteriorOpening",
+          "isColumn",
+          "columnRef"
+        ],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 2,
+      "fanOut": 5,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/calculator.js",
+      "lines": 143,
+      "bytes": 5952,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./prices.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/prices.js"
+          },
+          "names": [
+            {
+              "imported": "PRICES",
+              "local": "PRICES"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "calculateMaterials",
+          "kind": "named",
+          "line": 25
+        },
+        {
+          "name": "calculateVerandaExtras",
+          "kind": "named",
+          "line": 123
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 1,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/editor.js",
+      "lines": 1097,
+      "bytes": 48130,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        },
+        {
+          "spec": "./builder.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/builder.js"
+          },
+          "names": [
+            {
+              "imported": "createStairMesh",
+              "local": "createStairMesh"
+            }
+          ]
+        },
+        {
+          "spec": "./scene.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/scene.js"
+          },
+          "names": [
+            {
+              "imported": "screenToWorld",
+              "local": "screenToWorld"
+            },
+            {
+              "imported": "getWorldPerPixel",
+              "local": "getWorldPerPixel"
+            },
+            {
+              "imported": "planZoomAt",
+              "local": "planZoomAt"
+            },
+            {
+              "imported": "planPanByPixels",
+              "local": "planPanByPixels"
+            },
+            {
+              "imported": "fitPlanView",
+              "local": "fitPlanView"
+            },
+            {
+              "imported": "getPlanCamera",
+              "local": "getPlanCamera"
+            },
+            {
+              "imported": "getPlanZoom",
+              "local": "getPlanZoom"
+            }
+          ]
+        },
+        {
+          "spec": "./editor-ui.css",
+          "kind": "side",
+          "line": 7,
+          "res": {
+            "kind": "local",
+            "target": "src/editor-ui.css"
+          },
+          "names": []
+        },
+        {
+          "spec": "./stairs.js",
+          "kind": "named",
+          "line": 8,
+          "res": {
+            "kind": "local",
+            "target": "src/stairs.js"
+          },
+          "names": [
+            {
+              "imported": "computeStair",
+              "local": "computeStair"
+            },
+            {
+              "imported": "stairFitsHouse",
+              "local": "stairFitsHouse"
+            },
+            {
+              "imported": "stairOverlapsAny",
+              "local": "stairOverlapsAny"
+            },
+            {
+              "imported": "stairWorldPoly",
+              "local": "stairWorldPoly"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "initEditor",
+          "kind": "named",
+          "line": 810
+        },
+        {
+          "name": "updateEditorHelpers",
+          "kind": "named",
+          "line": 923
+        }
+      ],
+      "shapes": [
+        {
+          "disc": "kind",
+          "val": "extOpening",
+          "keys": [
+            "kind",
+            "ref",
+            "t",
+            "L"
+          ],
+          "line": 256
+        },
+        {
+          "disc": "kind",
+          "val": "intWall",
+          "keys": [
+            "x",
+            "z",
+            "floor"
+          ],
+          "line": 262
+        },
+        {
+          "disc": "kind",
+          "val": "extWall",
+          "keys": [
+            "x",
+            "z",
+            "floor"
+          ],
+          "line": 271
+        },
+        {
+          "disc": "type",
+          "val": "door",
+          "keys": [
+            "x",
+            "z",
+            "floor"
+          ],
+          "line": 359
+        }
+      ],
+      "userData": {
+        "write": [
+          "baseScale"
+        ],
+        "read": [
+          "baseScale"
+        ]
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 3,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/main.js",
+      "lines": 539,
+      "bytes": 21421,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        },
+        {
+          "spec": "./scene.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/scene.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "SCENE"
+            }
+          ]
+        },
+        {
+          "spec": "./editor.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/editor.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "EDITOR"
+            }
+          ]
+        },
+        {
+          "spec": "./walk.js",
+          "kind": "named",
+          "line": 4,
+          "res": {
+            "kind": "local",
+            "target": "src/walk.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "WALK"
+            }
+          ]
+        },
+        {
+          "spec": "./ui.js",
+          "kind": "named",
+          "line": 5,
+          "res": {
+            "kind": "local",
+            "target": "src/ui.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "UI"
+            }
+          ]
+        },
+        {
+          "spec": "./builder.js",
+          "kind": "named",
+          "line": 6,
+          "res": {
+            "kind": "local",
+            "target": "src/builder.js"
+          },
+          "names": [
+            {
+              "imported": "buildHouse",
+              "local": "buildHouse"
+            }
+          ]
+        },
+        {
+          "spec": "./roof.js",
+          "kind": "named",
+          "line": 7,
+          "res": {
+            "kind": "local",
+            "target": "src/roof.js"
+          },
+          "names": [
+            {
+              "imported": "initRoofEnvironment",
+              "local": "initRoofEnvironment"
+            }
+          ]
+        }
+      ],
+      "exports": [],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": [
+          "isDoor",
+          "doorRef"
+        ]
+      },
+      "dead": false,
+      "entry": true,
+      "fanIn": 0,
+      "fanOut": 6,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/prices.js",
+      "lines": 96,
+      "bytes": 4187,
+      "html": false,
+      "imports": [],
+      "exports": [
+        {
+          "name": "PRICES",
+          "kind": "named",
+          "line": 6
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 2,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof.js",
+      "lines": 588,
+      "bytes": 26606,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ROOF_MATERIALS",
+          "kind": "named",
+          "line": 10
+        },
+        {
+          "name": "ROOF_COLORS",
+          "kind": "named",
+          "line": 17
+        },
+        {
+          "name": "roofDesign",
+          "kind": "named",
+          "line": 35
+        },
+        {
+          "name": "roofColorHex",
+          "kind": "named",
+          "line": 47
+        },
+        {
+          "name": "initRoofEnvironment",
+          "kind": "named",
+          "line": 53
+        },
+        {
+          "name": "roofGeom",
+          "kind": "named",
+          "line": 84
+        },
+        {
+          "name": "roofArea",
+          "kind": "named",
+          "line": 185
+        },
+        {
+          "name": "buildRoof",
+          "kind": "named",
+          "line": 371
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [
+          "isRoof",
+          "roofInfo"
+        ],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 3,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/format.js",
+      "lines": 8,
+      "bytes": 427,
+      "html": false,
+      "imports": [],
+      "exports": [
+        {
+          "name": "fin",
+          "kind": "named",
+          "line": 1
+        },
+        {
+          "name": "cl",
+          "kind": "named",
+          "line": 2
+        },
+        {
+          "name": "fmt",
+          "kind": "named",
+          "line": 3
+        },
+        {
+          "name": "f1",
+          "kind": "named",
+          "line": 4
+        },
+        {
+          "name": "f2",
+          "kind": "named",
+          "line": 5
+        },
+        {
+          "name": "f3",
+          "kind": "named",
+          "line": 6
+        },
+        {
+          "name": "mm",
+          "kind": "named",
+          "line": 7
+        },
+        {
+          "name": "deg",
+          "kind": "named",
+          "line": 8
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 11,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/index.js",
+      "lines": 17,
+      "bytes": 1073,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./vec3.js",
+          "kind": "reexport",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/vec3.js"
+          },
+          "names": [
+            {
+              "imported": "Vec3",
+              "local": "Vec3"
+            },
+            {
+              "imported": "v3",
+              "local": "v3"
+            },
+            {
+              "imported": "eulerBasis",
+              "local": "eulerBasis"
+            }
+          ]
+        },
+        {
+          "spec": "./format.js",
+          "kind": "reexport",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "fin",
+              "local": "fin"
+            },
+            {
+              "imported": "cl",
+              "local": "cl"
+            },
+            {
+              "imported": "fmt",
+              "local": "fmt"
+            },
+            {
+              "imported": "f1",
+              "local": "f1"
+            },
+            {
+              "imported": "f2",
+              "local": "f2"
+            },
+            {
+              "imported": "f3",
+              "local": "f3"
+            },
+            {
+              "imported": "mm",
+              "local": "mm"
+            },
+            {
+              "imported": "deg",
+              "local": "deg"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-params.js",
+          "kind": "reexport",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-params.js"
+          },
+          "names": [
+            {
+              "imported": "ROOF_DEFAULTS",
+              "local": "ROOF_DEFAULTS"
+            },
+            {
+              "imported": "SEATS",
+              "local": "SEATS"
+            },
+            {
+              "imported": "TIEMODE",
+              "local": "TIEMODE"
+            },
+            {
+              "imported": "COVERS",
+              "local": "COVERS"
+            },
+            {
+              "imported": "RAFTER_MAX",
+              "local": "RAFTER_MAX"
+            },
+            {
+              "imported": "SNOW",
+              "local": "SNOW"
+            },
+            {
+              "imported": "WIND",
+              "local": "WIND"
+            },
+            {
+              "imported": "GRADE",
+              "local": "GRADE"
+            },
+            {
+              "imported": "RHO",
+              "local": "RHO"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-stages.js",
+          "kind": "reexport",
+          "line": 4,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-stages.js"
+          },
+          "names": [
+            {
+              "imported": "ROOF_STAGES",
+              "local": "ROOF_STAGES"
+            },
+            {
+              "imported": "PIECE_GROUPS",
+              "local": "PIECE_GROUPS"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-prices.js",
+          "kind": "reexport",
+          "line": 5,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-prices.js"
+          },
+          "names": [
+            {
+              "imported": "RATES",
+              "local": "RATES"
+            },
+            {
+              "imported": "RATES_DEF",
+              "local": "RATES_DEF"
+            },
+            {
+              "imported": "loadRates",
+              "local": "loadRates"
+            },
+            {
+              "imported": "saveRates",
+              "local": "saveRates"
+            },
+            {
+              "imported": "resetRates",
+              "local": "resetRates"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-model.js",
+          "kind": "reexport",
+          "line": 6,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-model.js"
+          },
+          "names": [
+            {
+              "imported": "computeRoofModel",
+              "local": "computeRoofModel"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-structure.js",
+          "kind": "reexport",
+          "line": 7,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-structure.js"
+          },
+          "names": [
+            {
+              "imported": "computeRoofStructure",
+              "local": "computeRoofStructure"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-pieces.js",
+          "kind": "reexport",
+          "line": 8,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-pieces.js"
+          },
+          "names": [
+            {
+              "imported": "computeRoofPieces",
+              "local": "computeRoofPieces"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-nesting.js",
+          "kind": "reexport",
+          "line": 9,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-nesting.js"
+          },
+          "names": [
+            {
+              "imported": "nestRoofPieces",
+              "local": "nestRoofPieces"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-bom.js",
+          "kind": "reexport",
+          "line": 10,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-bom.js"
+          },
+          "names": [
+            {
+              "imported": "roofBOM",
+              "local": "roofBOM"
+            },
+            {
+              "imported": "roofPrice",
+              "local": "roofPrice"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-checks.js",
+          "kind": "reexport",
+          "line": 11,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-checks.js"
+          },
+          "names": [
+            {
+              "imported": "roofChecks",
+              "local": "roofChecks"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-barcode.js",
+          "kind": "reexport",
+          "line": 12,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-barcode.js"
+          },
+          "names": [
+            {
+              "imported": "code39",
+              "local": "code39"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-context.js",
+          "kind": "reexport",
+          "line": 13,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-context.js"
+          },
+          "names": [
+            {
+              "imported": "roofFromHouse",
+              "local": "roofFromHouse"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-controller.js",
+          "kind": "reexport",
+          "line": 14,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-controller.js"
+          },
+          "names": [
+            {
+              "imported": "createRoof",
+              "local": "createRoof"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-long.js",
+          "kind": "reexport",
+          "line": 15,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-long.js"
+          },
+          "names": [
+            {
+              "imported": "planLongMembers",
+              "local": "planLongMembers"
+            },
+            {
+              "imported": "analyzeLong",
+              "local": "analyzeLong"
+            },
+            {
+              "imported": "LONG_STRATEGIES",
+              "local": "LONG_STRATEGIES"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-export.js",
+          "kind": "reexport",
+          "line": 16,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-export.js"
+          },
+          "names": [
+            {
+              "imported": "cutCSV",
+              "local": "cutCSV"
+            },
+            {
+              "imported": "nestCSV",
+              "local": "nestCSV"
+            },
+            {
+              "imported": "assemblyCSV",
+              "local": "assemblyCSV"
+            },
+            {
+              "imported": "packageJSON",
+              "local": "packageJSON"
+            },
+            {
+              "imported": "download",
+              "local": "download"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-hardware.js",
+          "kind": "reexport",
+          "line": 17,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-hardware.js"
+          },
+          "names": [
+            {
+              "imported": "HARDWARE_NOTES",
+              "local": "HARDWARE_NOTES"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "Vec3",
+          "kind": "reexport",
+          "from": "./vec3.js",
+          "orig": "Vec3",
+          "line": 1
+        },
+        {
+          "name": "v3",
+          "kind": "reexport",
+          "from": "./vec3.js",
+          "orig": "v3",
+          "line": 1
+        },
+        {
+          "name": "eulerBasis",
+          "kind": "reexport",
+          "from": "./vec3.js",
+          "orig": "eulerBasis",
+          "line": 1
+        },
+        {
+          "name": "fin",
+          "kind": "reexport",
+          "from": "./format.js",
+          "orig": "fin",
+          "line": 2
+        },
+        {
+          "name": "cl",
+          "kind": "reexport",
+          "from": "./format.js",
+          "orig": "cl",
+          "line": 2
+        },
+        {
+          "name": "fmt",
+          "kind": "reexport",
+          "from": "./format.js",
+          "orig": "fmt",
+          "line": 2
+        },
+        {
+          "name": "f1",
+          "kind": "reexport",
+          "from": "./format.js",
+          "orig": "f1",
+          "line": 2
+        },
+        {
+          "name": "f2",
+          "kind": "reexport",
+          "from": "./format.js",
+          "orig": "f2",
+          "line": 2
+        },
+        {
+          "name": "f3",
+          "kind": "reexport",
+          "from": "./format.js",
+          "orig": "f3",
+          "line": 2
+        },
+        {
+          "name": "mm",
+          "kind": "reexport",
+          "from": "./format.js",
+          "orig": "mm",
+          "line": 2
+        },
+        {
+          "name": "deg",
+          "kind": "reexport",
+          "from": "./format.js",
+          "orig": "deg",
+          "line": 2
+        },
+        {
+          "name": "ROOF_DEFAULTS",
+          "kind": "reexport",
+          "from": "./roof-params.js",
+          "orig": "ROOF_DEFAULTS",
+          "line": 3
+        },
+        {
+          "name": "SEATS",
+          "kind": "reexport",
+          "from": "./roof-params.js",
+          "orig": "SEATS",
+          "line": 3
+        },
+        {
+          "name": "TIEMODE",
+          "kind": "reexport",
+          "from": "./roof-params.js",
+          "orig": "TIEMODE",
+          "line": 3
+        },
+        {
+          "name": "COVERS",
+          "kind": "reexport",
+          "from": "./roof-params.js",
+          "orig": "COVERS",
+          "line": 3
+        },
+        {
+          "name": "RAFTER_MAX",
+          "kind": "reexport",
+          "from": "./roof-params.js",
+          "orig": "RAFTER_MAX",
+          "line": 3
+        },
+        {
+          "name": "SNOW",
+          "kind": "reexport",
+          "from": "./roof-params.js",
+          "orig": "SNOW",
+          "line": 3
+        },
+        {
+          "name": "WIND",
+          "kind": "reexport",
+          "from": "./roof-params.js",
+          "orig": "WIND",
+          "line": 3
+        },
+        {
+          "name": "GRADE",
+          "kind": "reexport",
+          "from": "./roof-params.js",
+          "orig": "GRADE",
+          "line": 3
+        },
+        {
+          "name": "RHO",
+          "kind": "reexport",
+          "from": "./roof-params.js",
+          "orig": "RHO",
+          "line": 3
+        },
+        {
+          "name": "ROOF_STAGES",
+          "kind": "reexport",
+          "from": "./roof-stages.js",
+          "orig": "ROOF_STAGES",
+          "line": 4
+        },
+        {
+          "name": "PIECE_GROUPS",
+          "kind": "reexport",
+          "from": "./roof-stages.js",
+          "orig": "PIECE_GROUPS",
+          "line": 4
+        },
+        {
+          "name": "RATES",
+          "kind": "reexport",
+          "from": "./roof-prices.js",
+          "orig": "RATES",
+          "line": 5
+        },
+        {
+          "name": "RATES_DEF",
+          "kind": "reexport",
+          "from": "./roof-prices.js",
+          "orig": "RATES_DEF",
+          "line": 5
+        },
+        {
+          "name": "loadRates",
+          "kind": "reexport",
+          "from": "./roof-prices.js",
+          "orig": "loadRates",
+          "line": 5
+        },
+        {
+          "name": "saveRates",
+          "kind": "reexport",
+          "from": "./roof-prices.js",
+          "orig": "saveRates",
+          "line": 5
+        },
+        {
+          "name": "resetRates",
+          "kind": "reexport",
+          "from": "./roof-prices.js",
+          "orig": "resetRates",
+          "line": 5
+        },
+        {
+          "name": "computeRoofModel",
+          "kind": "reexport",
+          "from": "./roof-model.js",
+          "orig": "computeRoofModel",
+          "line": 6
+        },
+        {
+          "name": "computeRoofStructure",
+          "kind": "reexport",
+          "from": "./roof-structure.js",
+          "orig": "computeRoofStructure",
+          "line": 7
+        },
+        {
+          "name": "computeRoofPieces",
+          "kind": "reexport",
+          "from": "./roof-pieces.js",
+          "orig": "computeRoofPieces",
+          "line": 8
+        },
+        {
+          "name": "nestRoofPieces",
+          "kind": "reexport",
+          "from": "./roof-nesting.js",
+          "orig": "nestRoofPieces",
+          "line": 9
+        },
+        {
+          "name": "roofBOM",
+          "kind": "reexport",
+          "from": "./roof-bom.js",
+          "orig": "roofBOM",
+          "line": 10
+        },
+        {
+          "name": "roofPrice",
+          "kind": "reexport",
+          "from": "./roof-bom.js",
+          "orig": "roofPrice",
+          "line": 10
+        },
+        {
+          "name": "roofChecks",
+          "kind": "reexport",
+          "from": "./roof-checks.js",
+          "orig": "roofChecks",
+          "line": 11
+        },
+        {
+          "name": "code39",
+          "kind": "reexport",
+          "from": "./roof-barcode.js",
+          "orig": "code39",
+          "line": 12
+        },
+        {
+          "name": "roofFromHouse",
+          "kind": "reexport",
+          "from": "./roof-context.js",
+          "orig": "roofFromHouse",
+          "line": 13
+        },
+        {
+          "name": "createRoof",
+          "kind": "reexport",
+          "from": "./roof-controller.js",
+          "orig": "createRoof",
+          "line": 14
+        },
+        {
+          "name": "planLongMembers",
+          "kind": "reexport",
+          "from": "./roof-long.js",
+          "orig": "planLongMembers",
+          "line": 15
+        },
+        {
+          "name": "analyzeLong",
+          "kind": "reexport",
+          "from": "./roof-long.js",
+          "orig": "analyzeLong",
+          "line": 15
+        },
+        {
+          "name": "LONG_STRATEGIES",
+          "kind": "reexport",
+          "from": "./roof-long.js",
+          "orig": "LONG_STRATEGIES",
+          "line": 15
+        },
+        {
+          "name": "cutCSV",
+          "kind": "reexport",
+          "from": "./roof-export.js",
+          "orig": "cutCSV",
+          "line": 16
+        },
+        {
+          "name": "nestCSV",
+          "kind": "reexport",
+          "from": "./roof-export.js",
+          "orig": "nestCSV",
+          "line": 16
+        },
+        {
+          "name": "assemblyCSV",
+          "kind": "reexport",
+          "from": "./roof-export.js",
+          "orig": "assemblyCSV",
+          "line": 16
+        },
+        {
+          "name": "packageJSON",
+          "kind": "reexport",
+          "from": "./roof-export.js",
+          "orig": "packageJSON",
+          "line": 16
+        },
+        {
+          "name": "download",
+          "kind": "reexport",
+          "from": "./roof-export.js",
+          "orig": "download",
+          "line": 16
+        },
+        {
+          "name": "HARDWARE_NOTES",
+          "kind": "reexport",
+          "from": "./roof-hardware.js",
+          "orig": "HARDWARE_NOTES",
+          "line": 17
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 2,
+      "fanOut": 17,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/lab.js",
+      "lines": 652,
+      "bytes": 51010,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./roof.css",
+          "kind": "side",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof.css"
+          },
+          "names": []
+        },
+        {
+          "spec": "./index.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/index.js"
+          },
+          "names": [
+            {
+              "imported": "createRoof",
+              "local": "createRoof"
+            },
+            {
+              "imported": "SEATS",
+              "local": "SEATS"
+            },
+            {
+              "imported": "TIEMODE",
+              "local": "TIEMODE"
+            },
+            {
+              "imported": "COVERS",
+              "local": "COVERS"
+            },
+            {
+              "imported": "SNOW",
+              "local": "SNOW"
+            },
+            {
+              "imported": "WIND",
+              "local": "WIND"
+            },
+            {
+              "imported": "RHO",
+              "local": "RHO"
+            },
+            {
+              "imported": "ROOF_STAGES",
+              "local": "ROOF_STAGES"
+            },
+            {
+              "imported": "RATES",
+              "local": "RATES"
+            },
+            {
+              "imported": "resetRates",
+              "local": "resetRates"
+            },
+            {
+              "imported": "saveRates",
+              "local": "saveRates"
+            },
+            {
+              "imported": "roofPrice",
+              "local": "roofPrice"
+            },
+            {
+              "imported": "fmt",
+              "local": "fmt"
+            },
+            {
+              "imported": "f1",
+              "local": "f1"
+            },
+            {
+              "imported": "f2",
+              "local": "f2"
+            },
+            {
+              "imported": "f3",
+              "local": "f3"
+            },
+            {
+              "imported": "mm",
+              "local": "mm"
+            },
+            {
+              "imported": "cl",
+              "local": "cl"
+            },
+            {
+              "imported": "code39",
+              "local": "code39"
+            },
+            {
+              "imported": "planLongMembers",
+              "local": "planLongMembers"
+            },
+            {
+              "imported": "LONG_STRATEGIES",
+              "local": "LONG_STRATEGIES"
+            },
+            {
+              "imported": "cutCSV",
+              "local": "cutCSV"
+            },
+            {
+              "imported": "nestCSV",
+              "local": "nestCSV"
+            },
+            {
+              "imported": "assemblyCSV",
+              "local": "assemblyCSV"
+            },
+            {
+              "imported": "packageJSON",
+              "local": "packageJSON"
+            },
+            {
+              "imported": "download",
+              "local": "download"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-render.js",
+          "kind": "named",
+          "line": 9,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-render.js"
+          },
+          "names": [
+            {
+              "imported": "createRoofStage",
+              "local": "createRoofStage"
+            },
+            {
+              "imported": "ROOF_LAYERS",
+              "local": "ROOF_LAYERS"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-mansard.js",
+          "kind": "named",
+          "line": 10,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-mansard.js"
+          },
+          "names": [
+            {
+              "imported": "MANSARD_SCHEMES",
+              "local": "MANSARD_SCHEMES"
+            }
+          ]
+        }
+      ],
+      "exports": [],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": [
+          "mk",
+          "isMarks"
+        ]
+      },
+      "dead": false,
+      "entry": true,
+      "fanIn": 0,
+      "fanOut": 3,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-audit.js",
+      "lines": 380,
+      "bytes": 31639,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./roof-model.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-model.js"
+          },
+          "names": [
+            {
+              "imported": "computeRoofModel",
+              "local": "computeRoofModel"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-structure.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-structure.js"
+          },
+          "names": [
+            {
+              "imported": "computeRoofStructure",
+              "local": "computeRoofStructure"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-pieces.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-pieces.js"
+          },
+          "names": [
+            {
+              "imported": "computeRoofPieces",
+              "local": "computeRoofPieces"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-nesting.js",
+          "kind": "named",
+          "line": 4,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-nesting.js"
+          },
+          "names": [
+            {
+              "imported": "nestRoofPieces",
+              "local": "nestRoofPieces"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-long.js",
+          "kind": "named",
+          "line": 5,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-long.js"
+          },
+          "names": [
+            {
+              "imported": "planLongMembers",
+              "local": "planLongMembers"
+            },
+            {
+              "imported": "purlinXs",
+              "local": "purlinXs"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-params.js",
+          "kind": "named",
+          "line": 6,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-params.js"
+          },
+          "names": [
+            {
+              "imported": "ROOF_DEFAULTS",
+              "local": "ROOF_DEFAULTS"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-mansard.js",
+          "kind": "named",
+          "line": 7,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-mansard.js"
+          },
+          "names": [
+            {
+              "imported": "MANSARD_SCHEMES",
+              "local": "MANSARD_SCHEMES"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "AUDIT_GROUPS",
+          "kind": "named",
+          "line": 10
+        },
+        {
+          "name": "deriveAll",
+          "kind": "named",
+          "line": 19
+        },
+        {
+          "name": "auditCore",
+          "kind": "named",
+          "line": 30
+        },
+        {
+          "name": "auditScene",
+          "kind": "named",
+          "line": 207
+        },
+        {
+          "name": "AUDIT_MATRIX",
+          "kind": "named",
+          "line": 323
+        },
+        {
+          "name": "auditConfig",
+          "kind": "named",
+          "line": 361
+        },
+        {
+          "name": "runMatrix",
+          "kind": "named",
+          "line": 380
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": [
+          "layerId",
+          "st",
+          "mk",
+          "hw",
+          "vertSupport",
+          "joint",
+          "knee",
+          "kneeCap",
+          "breakPurlin",
+          "mansardTie",
+          "tieTop",
+          "ridgeBeam",
+          "gableBearing",
+          "trussWeb",
+          "tieBrace",
+          "upperKing",
+          "tieKing",
+          "trussCeiling",
+          "trussPlate",
+          "kneeStud",
+          "faceTag",
+          "culled",
+          "msPart"
+        ]
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 7,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-barcode.js",
+      "lines": 22,
+      "bytes": 1507,
+      "html": false,
+      "imports": [],
+      "exports": [
+        {
+          "name": "code39",
+          "kind": "named",
+          "line": 8
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-bom.js",
+      "lines": 111,
+      "bytes": 10008,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./roof-params.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-params.js"
+          },
+          "names": [
+            {
+              "imported": "SEATS",
+              "local": "SEATS"
+            },
+            {
+              "imported": "TIEMODE",
+              "local": "TIEMODE"
+            }
+          ]
+        },
+        {
+          "spec": "./format.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "mm",
+              "local": "mm"
+            },
+            {
+              "imported": "f1",
+              "local": "f1"
+            },
+            {
+              "imported": "f2",
+              "local": "f2"
+            },
+            {
+              "imported": "fmt",
+              "local": "fmt"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-prices.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-prices.js"
+          },
+          "names": [
+            {
+              "imported": "RATES",
+              "local": "RATES"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "roofBOM",
+          "kind": "named",
+          "line": 5
+        },
+        {
+          "name": "roofPrice",
+          "kind": "named",
+          "line": 98
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 2,
+      "fanOut": 3,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-checks.js",
+      "lines": 124,
+      "bytes": 13970,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./roof-params.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-params.js"
+          },
+          "names": [
+            {
+              "imported": "SEATS",
+              "local": "SEATS"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-mansard.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-mansard.js"
+          },
+          "names": [
+            {
+              "imported": "MANSARD_SCHEMES",
+              "local": "MANSARD_SCHEMES"
+            }
+          ]
+        },
+        {
+          "spec": "./format.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "mm",
+              "local": "mm"
+            },
+            {
+              "imported": "f1",
+              "local": "f1"
+            },
+            {
+              "imported": "f2",
+              "local": "f2"
+            },
+            {
+              "imported": "fmt",
+              "local": "fmt"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "roofChecks",
+          "kind": "named",
+          "line": 5
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 2,
+      "fanOut": 3,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-context.js",
+      "lines": 32,
+      "bytes": 1463,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./roof-params.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-params.js"
+          },
+          "names": [
+            {
+              "imported": "ROOF_DEFAULTS",
+              "local": "ROOF_DEFAULTS"
+            }
+          ]
+        },
+        {
+          "spec": "./format.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "cl",
+              "local": "cl"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "roofFromHouse",
+          "kind": "named",
+          "line": 5
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 2,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-controller.js",
+      "lines": 52,
+      "bytes": 2406,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./roof-params.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-params.js"
+          },
+          "names": [
+            {
+              "imported": "ROOF_DEFAULTS",
+              "local": "ROOF_DEFAULTS"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-model.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-model.js"
+          },
+          "names": [
+            {
+              "imported": "computeRoofModel",
+              "local": "computeRoofModel"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-structure.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-structure.js"
+          },
+          "names": [
+            {
+              "imported": "computeRoofStructure",
+              "local": "computeRoofStructure"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-pieces.js",
+          "kind": "named",
+          "line": 4,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-pieces.js"
+          },
+          "names": [
+            {
+              "imported": "computeRoofPieces",
+              "local": "computeRoofPieces"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-nesting.js",
+          "kind": "named",
+          "line": 5,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-nesting.js"
+          },
+          "names": [
+            {
+              "imported": "nestRoofPieces",
+              "local": "nestRoofPieces"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-bom.js",
+          "kind": "named",
+          "line": 6,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-bom.js"
+          },
+          "names": [
+            {
+              "imported": "roofBOM",
+              "local": "roofBOM"
+            },
+            {
+              "imported": "roofPrice",
+              "local": "roofPrice"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-checks.js",
+          "kind": "named",
+          "line": 7,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-checks.js"
+          },
+          "names": [
+            {
+              "imported": "roofChecks",
+              "local": "roofChecks"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-long.js",
+          "kind": "named",
+          "line": 8,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-long.js"
+          },
+          "names": [
+            {
+              "imported": "planLongMembers",
+              "local": "planLongMembers"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "createRoof",
+          "kind": "named",
+          "line": 13
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 8,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-export.js",
+      "lines": 86,
+      "bytes": 5119,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./format.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "mm",
+              "local": "mm"
+            },
+            {
+              "imported": "f2",
+              "local": "f2"
+            },
+            {
+              "imported": "f3",
+              "local": "f3"
+            },
+            {
+              "imported": "fmt",
+              "local": "fmt"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-stages.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-stages.js"
+          },
+          "names": [
+            {
+              "imported": "ROOF_STAGES",
+              "local": "ROOF_STAGES"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-prices.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-prices.js"
+          },
+          "names": [
+            {
+              "imported": "RATES",
+              "local": "RATES"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "cutCSV",
+          "kind": "named",
+          "line": 7
+        },
+        {
+          "name": "nestCSV",
+          "kind": "named",
+          "line": 17
+        },
+        {
+          "name": "assemblyCSV",
+          "kind": "named",
+          "line": 25
+        },
+        {
+          "name": "packageJSON",
+          "kind": "named",
+          "line": 39
+        },
+        {
+          "name": "download",
+          "kind": "named",
+          "line": 81
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 3,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-hardware.js",
+      "lines": 557,
+      "bytes": 28891,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        },
+        {
+          "spec": "three/addons/utils/BufferGeometryUtils.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js"
+          },
+          "names": [
+            {
+              "imported": "mergeGeometries",
+              "local": "mergeGeometries"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "buildHardware",
+          "kind": "named",
+          "line": 181
+        },
+        {
+          "name": "HARDWARE_NOTES",
+          "kind": "named",
+          "line": 551
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [
+          "mk",
+          "joint"
+        ],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 2,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-long.js",
+      "lines": 302,
+      "bytes": 17329,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./format.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "f1",
+              "local": "f1"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-params.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-params.js"
+          },
+          "names": [
+            {
+              "imported": "GRADE",
+              "local": "GRADE"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "LONG_STRATEGIES",
+          "kind": "named",
+          "line": 4
+        },
+        {
+          "name": "analyzeLong",
+          "kind": "named",
+          "line": 14
+        },
+        {
+          "name": "purlinXs",
+          "kind": "named",
+          "line": 25
+        },
+        {
+          "name": "hipNeedsSupport",
+          "kind": "named",
+          "line": 42
+        },
+        {
+          "name": "planLongMembers",
+          "kind": "named",
+          "line": 122
+        }
+      ],
+      "shapes": [
+        {
+          "disc": "t",
+          "val": "ровный",
+          "keys": [
+            "sect",
+            "mark"
+          ],
+          "line": 141
+        },
+        {
+          "disc": "t",
+          "val": "ровный",
+          "keys": [
+            "sect",
+            "mark"
+          ],
+          "line": 141
+        }
+      ],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 4,
+      "fanOut": 2,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-mansard-ui.js",
+      "lines": 246,
+      "bytes": 16704,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./format.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "cl",
+              "local": "cl"
+            },
+            {
+              "imported": "deg",
+              "local": "deg"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "MANSARD_SCHEMES",
+          "kind": "named",
+          "line": 3
+        },
+        {
+          "name": "GL",
+          "kind": "named",
+          "line": 19
+        },
+        {
+          "name": "RAFTER_SECTIONS",
+          "kind": "named",
+          "line": 20
+        },
+        {
+          "name": "snowMu",
+          "kind": "named",
+          "line": 24
+        },
+        {
+          "name": "slopeLineLoad",
+          "kind": "named",
+          "line": 25
+        },
+        {
+          "name": "checkRafterSection",
+          "kind": "named",
+          "line": 28
+        },
+        {
+          "name": "pickRafterSection",
+          "kind": "named",
+          "line": 41
+        },
+        {
+          "name": "solveMansard",
+          "kind": "named",
+          "line": 150
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": true,
+      "entry": false,
+      "fanIn": 0,
+      "fanOut": 1,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-mansard.js",
+      "lines": 253,
+      "bytes": 16714,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./format.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "cl",
+              "local": "cl"
+            },
+            {
+              "imported": "deg",
+              "local": "deg"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "MANSARD_SCHEMES",
+          "kind": "named",
+          "line": 3
+        },
+        {
+          "name": "GL",
+          "kind": "named",
+          "line": 17
+        },
+        {
+          "name": "RAFTER_SECTIONS",
+          "kind": "named",
+          "line": 18
+        },
+        {
+          "name": "snowMu",
+          "kind": "named",
+          "line": 22
+        },
+        {
+          "name": "slopeLineLoad",
+          "kind": "named",
+          "line": 23
+        },
+        {
+          "name": "checkRafterSection",
+          "kind": "named",
+          "line": 25
+        },
+        {
+          "name": "pickRafterSection",
+          "kind": "named",
+          "line": 36
+        },
+        {
+          "name": "solveMansard",
+          "kind": "named",
+          "line": 157
+        }
+      ],
+      "shapes": [
+        {
+          "disc": "t",
+          "val": "box",
+          "keys": [
+            "t",
+            "s",
+            "p",
+            "zs",
+            "mat",
+            "tag",
+            "st"
+          ],
+          "line": 78
+        },
+        {
+          "disc": "t",
+          "val": "brace",
+          "keys": [
+            "t",
+            "s",
+            "p",
+            "zs",
+            "mat",
+            "tag",
+            "st"
+          ],
+          "line": 85
+        },
+        {
+          "disc": "t",
+          "val": "box",
+          "keys": [
+            "t",
+            "s",
+            "p",
+            "zs",
+            "mat",
+            "tag",
+            "st"
+          ],
+          "line": 88
+        }
+      ],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 5,
+      "fanOut": 1,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-model.js",
+      "lines": 309,
+      "bytes": 18497,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./vec3.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/vec3.js"
+          },
+          "names": [
+            {
+              "imported": "v3",
+              "local": "v3"
+            },
+            {
+              "imported": "eulerBasis",
+              "local": "eulerBasis"
+            }
+          ]
+        },
+        {
+          "spec": "./format.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "cl",
+              "local": "cl"
+            },
+            {
+              "imported": "fin",
+              "local": "fin"
+            },
+            {
+              "imported": "deg",
+              "local": "deg"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-params.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-params.js"
+          },
+          "names": [
+            {
+              "imported": "SEATS",
+              "local": "SEATS"
+            },
+            {
+              "imported": "TIEMODE",
+              "local": "TIEMODE"
+            },
+            {
+              "imported": "COVERS",
+              "local": "COVERS"
+            },
+            {
+              "imported": "RAFTER_MAX",
+              "local": "RAFTER_MAX"
+            },
+            {
+              "imported": "SNOW",
+              "local": "SNOW"
+            },
+            {
+              "imported": "GRADE",
+              "local": "GRADE"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-mansard.js",
+          "kind": "named",
+          "line": 4,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-mansard.js"
+          },
+          "names": [
+            {
+              "imported": "solveMansard",
+              "local": "solveMansard"
+            },
+            {
+              "imported": "snowMu",
+              "local": "snowMu"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "computeRoofModel",
+          "kind": "named",
+          "line": 8
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 3,
+      "fanOut": 4,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-nesting.js",
+      "lines": 31,
+      "bytes": 1777,
+      "html": false,
+      "imports": [],
+      "exports": [
+        {
+          "name": "nestRoofPieces",
+          "kind": "named",
+          "line": 1
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 3,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-params.js",
+      "lines": 44,
+      "bytes": 2558,
+      "html": false,
+      "imports": [],
+      "exports": [
+        {
+          "name": "ROOF_DEFAULTS",
+          "kind": "named",
+          "line": 1
+        },
+        {
+          "name": "SEATS",
+          "kind": "named",
+          "line": 18
+        },
+        {
+          "name": "TIEMODE",
+          "kind": "named",
+          "line": 24
+        },
+        {
+          "name": "COVERS",
+          "kind": "named",
+          "line": 29
+        },
+        {
+          "name": "RAFTER_MAX",
+          "kind": "named",
+          "line": 36
+        },
+        {
+          "name": "SNOW",
+          "kind": "named",
+          "line": 37
+        },
+        {
+          "name": "WIND",
+          "kind": "named",
+          "line": 38
+        },
+        {
+          "name": "GRADE",
+          "kind": "named",
+          "line": 39
+        },
+        {
+          "name": "RHO",
+          "kind": "named",
+          "line": 44
+        }
+      ],
+      "shapes": [
+        {
+          "disc": "type",
+          "val": "hip",
+          "keys": [
+            "n",
+            "s"
+          ],
+          "line": 1
+        }
+      ],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 10,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-pieces.js",
+      "lines": 145,
+      "bytes": 8289,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./format.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "mm",
+              "local": "mm"
+            },
+            {
+              "imported": "deg",
+              "local": "deg"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-params.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-params.js"
+          },
+          "names": [
+            {
+              "imported": "RHO",
+              "local": "RHO"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-stages.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-stages.js"
+          },
+          "names": [
+            {
+              "imported": "PIECE_GROUPS",
+              "local": "GRP"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "computeRoofPieces",
+          "kind": "named",
+          "line": 21
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 3,
+      "fanOut": 3,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-prices.js",
+      "lines": 100,
+      "bytes": 11988,
+      "html": false,
+      "imports": [],
+      "exports": [
+        {
+          "name": "RATES_DEF",
+          "kind": "named",
+          "line": 4
+        },
+        {
+          "name": "RATES",
+          "kind": "named",
+          "line": 82
+        },
+        {
+          "name": "loadRates",
+          "kind": "named",
+          "line": 84
+        },
+        {
+          "name": "saveRates",
+          "kind": "named",
+          "line": 91
+        },
+        {
+          "name": "resetRates",
+          "kind": "named",
+          "line": 95
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 3,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-render.js",
+      "lines": 753,
+      "bytes": 52774,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        },
+        {
+          "spec": "three/addons/controls/OrbitControls.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/examples/jsm/controls/OrbitControls.js"
+          },
+          "names": [
+            {
+              "imported": "OrbitControls",
+              "local": "OrbitControls"
+            }
+          ]
+        },
+        {
+          "spec": "three/addons/utils/BufferGeometryUtils.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js"
+          },
+          "names": [
+            {
+              "imported": "mergeGeometries",
+              "local": "mergeGeometries"
+            }
+          ]
+        },
+        {
+          "spec": "./format.js",
+          "kind": "named",
+          "line": 4,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/format.js"
+          },
+          "names": [
+            {
+              "imported": "cl",
+              "local": "cl"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-hardware.js",
+          "kind": "named",
+          "line": 5,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-hardware.js"
+          },
+          "names": [
+            {
+              "imported": "buildHardware",
+              "local": "buildHardware"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "rejectedCount",
+          "kind": "named",
+          "line": 8
+        },
+        {
+          "name": "ROOF_LAYERS",
+          "kind": "named",
+          "line": 30
+        },
+        {
+          "name": "createRoofStage",
+          "kind": "named",
+          "line": 241
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [
+          "isMarks",
+          "isRoofRoot",
+          "layerId",
+          "st",
+          "mk",
+          "msPart",
+          "vertSupport",
+          "ridgeBeam",
+          "sect",
+          "mansardTie",
+          "tieTop",
+          "hw",
+          "segLen",
+          "faceTag",
+          "breakFlashing",
+          "culled",
+          "_mat"
+        ],
+        "read": [
+          "msPart",
+          "layerId",
+          "st",
+          "culled",
+          "_mat",
+          "mk"
+        ]
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 2,
+      "fanOut": 2,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-stages.js",
+      "lines": 35,
+      "bytes": 4212,
+      "html": false,
+      "imports": [],
+      "exports": [
+        {
+          "name": "ROOF_STAGES",
+          "kind": "named",
+          "line": 1
+        },
+        {
+          "name": "PIECE_GROUPS",
+          "kind": "named",
+          "line": 18
+        }
+      ],
+      "shapes": [
+        {
+          "disc": "t",
+          "val": "Площадка готова",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 2
+        },
+        {
+          "disc": "t",
+          "val": "Мауэрлат и опорный брусок",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 3
+        },
+        {
+          "disc": "t",
+          "val": "Балки перекрытия",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 4
+        },
+        {
+          "disc": "t",
+          "val": "Лежень",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 5
+        },
+        {
+          "disc": "t",
+          "val": "Стойки и коньковый прогон",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 6
+        },
+        {
+          "disc": "t",
+          "val": "Накосные стропила",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 7
+        },
+        {
+          "disc": "t",
+          "val": "Стропила парами + ригели",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 8
+        },
+        {
+          "disc": "t",
+          "val": "Подкосы",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 9
+        },
+        {
+          "disc": "t",
+          "val": "Полуноги",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 10
+        },
+        {
+          "disc": "t",
+          "val": "Свесы, лобовая и ветровая",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 11
+        },
+        {
+          "disc": "t",
+          "val": "Мембрана и контробрешётка",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 12
+        },
+        {
+          "disc": "t",
+          "val": "Обрешётка",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 13
+        },
+        {
+          "disc": "t",
+          "val": "Кровельное покрытие",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 14
+        },
+        {
+          "disc": "t",
+          "val": "Конёк, хребты, водосток",
+          "keys": [
+            "ab",
+            "lat",
+            "n",
+            "st"
+          ],
+          "line": 15
+        }
+      ],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 3,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/roof-structure.js",
+      "lines": 116,
+      "bytes": 7036,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./roof-params.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-params.js"
+          },
+          "names": [
+            {
+              "imported": "GRADE",
+              "local": "GRADE"
+            },
+            {
+              "imported": "SNOW",
+              "local": "SNOW"
+            },
+            {
+              "imported": "WIND",
+              "local": "WIND"
+            },
+            {
+              "imported": "RHO",
+              "local": "RHO"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-long.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-long.js"
+          },
+          "names": [
+            {
+              "imported": "purlinXs",
+              "local": "purlinXs"
+            }
+          ]
+        },
+        {
+          "spec": "./roof-mansard.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-mansard.js"
+          },
+          "names": [
+            {
+              "imported": "GL",
+              "local": "GL"
+            },
+            {
+              "imported": "snowMu",
+              "local": "snowMu"
+            },
+            {
+              "imported": "slopeLineLoad",
+              "local": "slopeLineLoad"
+            },
+            {
+              "imported": "checkRafterSection",
+              "local": "checkRafterSection"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "computeRoofStructure",
+          "kind": "named",
+          "line": 40
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 3,
+      "fanOut": 3,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/ui-test.js",
+      "lines": 445,
+      "bytes": 30328,
+      "html": false,
+      "imports": [],
+      "exports": [
+        {
+          "name": "CFG_DEFAULTS",
+          "kind": "named",
+          "line": 8
+        },
+        {
+          "name": "Driver",
+          "kind": "named",
+          "line": 45
+        },
+        {
+          "name": "SCENARIOS",
+          "kind": "named",
+          "line": 141
+        },
+        {
+          "name": "runSuite",
+          "kind": "named",
+          "line": 393
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/roof/vec3.js",
+      "lines": 80,
+      "bytes": 4148,
+      "html": false,
+      "imports": [],
+      "exports": [
+        {
+          "name": "Vec3",
+          "kind": "named",
+          "line": 3
+        },
+        {
+          "name": "v3",
+          "kind": "named",
+          "line": 67
+        },
+        {
+          "name": "eulerBasis",
+          "kind": "named",
+          "line": 70
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 2,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/safe.js",
+      "lines": 206,
+      "bytes": 8379,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "num",
+          "kind": "named",
+          "line": 4
+        },
+        {
+          "name": "clamp",
+          "kind": "named",
+          "line": 9
+        },
+        {
+          "name": "int",
+          "kind": "named",
+          "line": 13
+        },
+        {
+          "name": "sanitizeHouseParams",
+          "kind": "named",
+          "line": 34
+        },
+        {
+          "name": "cleanPoly",
+          "kind": "named",
+          "line": 100
+        },
+        {
+          "name": "polyArea",
+          "kind": "named",
+          "line": 115
+        },
+        {
+          "name": "isSimple",
+          "kind": "named",
+          "line": 131
+        },
+        {
+          "name": "guardGeometry",
+          "kind": "named",
+          "line": 144
+        },
+        {
+          "name": "safeBox",
+          "kind": "named",
+          "line": 164
+        },
+        {
+          "name": "safeCylinder",
+          "kind": "named",
+          "line": 171
+        },
+        {
+          "name": "safeSphere",
+          "kind": "named",
+          "line": 177
+        },
+        {
+          "name": "safeExtrude",
+          "kind": "named",
+          "line": 184
+        },
+        {
+          "name": "safeMatrix",
+          "kind": "named",
+          "line": 201
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 3,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/scene.js",
+      "lines": 223,
+      "bytes": 7939,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        },
+        {
+          "spec": "three/addons/controls/OrbitControls.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/examples/jsm/controls/OrbitControls.js"
+          },
+          "names": [
+            {
+              "imported": "OrbitControls",
+              "local": "OrbitControls"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "initScene",
+          "kind": "named",
+          "line": 52
+        },
+        {
+          "name": "getRenderCamera",
+          "kind": "named",
+          "line": 156
+        },
+        {
+          "name": "getPlanCamera",
+          "kind": "named",
+          "line": 157
+        },
+        {
+          "name": "getPlanZoom",
+          "kind": "named",
+          "line": 158
+        },
+        {
+          "name": "getCanvasElement",
+          "kind": "named",
+          "line": 159
+        },
+        {
+          "name": "isPlanMode",
+          "kind": "named",
+          "line": 160
+        },
+        {
+          "name": "screenToWorld",
+          "kind": "named",
+          "line": 165
+        },
+        {
+          "name": "getWorldPerPixel",
+          "kind": "named",
+          "line": 176
+        },
+        {
+          "name": "setPlanMode",
+          "kind": "named",
+          "line": 184
+        },
+        {
+          "name": "fitPlanView",
+          "kind": "named",
+          "line": 191
+        },
+        {
+          "name": "planZoomAt",
+          "kind": "named",
+          "line": 202
+        },
+        {
+          "name": "planPanByPixels",
+          "kind": "named",
+          "line": 212
+        },
+        {
+          "name": "updateEnvironment",
+          "kind": "named",
+          "line": 219
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 2,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/stair-builder.js",
+      "lines": 357,
+      "bytes": 15241,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        },
+        {
+          "spec": "three/addons/utils/BufferGeometryUtils.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js"
+          },
+          "names": [
+            {
+              "imported": "mergeGeometries",
+              "local": "mergeGeometries"
+            }
+          ]
+        },
+        {
+          "spec": "./stairs.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/stairs.js"
+          },
+          "names": [
+            {
+              "imported": "computeStair",
+              "local": "computeStair"
+            }
+          ]
+        },
+        {
+          "spec": "./safe.js",
+          "kind": "named",
+          "line": 4,
+          "res": {
+            "kind": "local",
+            "target": "src/safe.js"
+          },
+          "names": [
+            {
+              "imported": "num",
+              "local": "num"
+            },
+            {
+              "imported": "safeBox",
+              "local": "safeBox"
+            },
+            {
+              "imported": "safeSphere",
+              "local": "safeSphere"
+            },
+            {
+              "imported": "safeExtrude",
+              "local": "safeExtrude"
+            },
+            {
+              "imported": "safeMatrix",
+              "local": "safeMatrix"
+            },
+            {
+              "imported": "guardGeometry",
+              "local": "guardGeometry"
+            },
+            {
+              "imported": "cleanPoly",
+              "local": "cleanPoly"
+            },
+            {
+              "imported": "polyArea",
+              "local": "polyArea"
+            },
+            {
+              "imported": "isSimple",
+              "local": "isSimple"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "buildStairGroup",
+          "kind": "named",
+          "line": 304
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 2,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/stairs.js",
+      "lines": 260,
+      "bytes": 11061,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./safe.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/safe.js"
+          },
+          "names": [
+            {
+              "imported": "num",
+              "local": "num"
+            },
+            {
+              "imported": "clamp",
+              "local": "clamp"
+            },
+            {
+              "imported": "int",
+              "local": "int"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "STAIR_TYPES",
+          "kind": "named",
+          "line": 3
+        },
+        {
+          "name": "STAIR_WIDTHS",
+          "kind": "named",
+          "line": 9
+        },
+        {
+          "name": "STAIR_STRINGERS",
+          "kind": "named",
+          "line": 15
+        },
+        {
+          "name": "STAIR_RAILS",
+          "kind": "named",
+          "line": 19
+        },
+        {
+          "name": "STAIR_TURNS",
+          "kind": "named",
+          "line": 24
+        },
+        {
+          "name": "STAIR_RISERS",
+          "kind": "named",
+          "line": 28
+        },
+        {
+          "name": "stairDesign",
+          "kind": "named",
+          "line": 37
+        },
+        {
+          "name": "sanitizeStairParams",
+          "kind": "named",
+          "line": 49
+        },
+        {
+          "name": "solveRises",
+          "kind": "named",
+          "line": 61
+        },
+        {
+          "name": "computeStair",
+          "kind": "named",
+          "line": 83
+        },
+        {
+          "name": "stairWorldPoly",
+          "kind": "named",
+          "line": 217
+        },
+        {
+          "name": "stairFitsHouse",
+          "kind": "named",
+          "line": 222
+        },
+        {
+          "name": "pointInPoly",
+          "kind": "named",
+          "line": 231
+        },
+        {
+          "name": "polysOverlap",
+          "kind": "named",
+          "line": 247
+        },
+        {
+          "name": "stairOverlapsAny",
+          "kind": "named",
+          "line": 257
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 4,
+      "fanOut": 1,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/ui.js",
+      "lines": 334,
+      "bytes": 17265,
+      "html": false,
+      "imports": [
+        {
+          "spec": "./prices.js",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "local",
+            "target": "src/prices.js"
+          },
+          "names": [
+            {
+              "imported": "PRICES",
+              "local": "PRICES"
+            }
+          ]
+        },
+        {
+          "spec": "./calculator.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "local",
+            "target": "src/calculator.js"
+          },
+          "names": [
+            {
+              "imported": "calculateMaterials",
+              "local": "calculateMaterials"
+            }
+          ]
+        },
+        {
+          "spec": "./roof.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/roof.js"
+          },
+          "names": [
+            {
+              "imported": "ROOF_MATERIALS",
+              "local": "ROOF_MATERIALS"
+            },
+            {
+              "imported": "ROOF_COLORS",
+              "local": "ROOF_COLORS"
+            },
+            {
+              "imported": "roofGeom",
+              "local": "roofGeom"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "updateFoundationRecommendation",
+          "kind": "named",
+          "line": 7
+        },
+        {
+          "name": "initUI",
+          "kind": "named",
+          "line": 100
+        },
+        {
+          "name": "updatePriceDisplay",
+          "kind": "named",
+          "line": 231
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 3,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/verandas.js",
+      "lines": 391,
+      "bytes": 17495,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "VERANDA_STYLES",
+          "kind": "named",
+          "line": 4
+        },
+        {
+          "name": "getVerandaCollisionSegments",
+          "kind": "named",
+          "line": 71
+        },
+        {
+          "name": "addVerandaStructure",
+          "kind": "named",
+          "line": 87
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [
+          "isVeranda"
+        ],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 0,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "src/walk.js",
+      "lines": 199,
+      "bytes": 8162,
+      "html": false,
+      "imports": [
+        {
+          "spec": "three",
+          "kind": "named",
+          "line": 1,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/build/three.module.js"
+          },
+          "names": [
+            {
+              "imported": "*",
+              "local": "THREE"
+            }
+          ]
+        },
+        {
+          "spec": "three/addons/controls/PointerLockControls.js",
+          "kind": "named",
+          "line": 2,
+          "res": {
+            "kind": "importmap",
+            "target": "https://unpkg.com/three@0.169.0/examples/jsm/controls/PointerLockControls.js"
+          },
+          "names": [
+            {
+              "imported": "PointerLockControls",
+              "local": "PointerLockControls"
+            }
+          ]
+        },
+        {
+          "spec": "./stairs.js",
+          "kind": "named",
+          "line": 3,
+          "res": {
+            "kind": "local",
+            "target": "src/stairs.js"
+          },
+          "names": [
+            {
+              "imported": "computeStair",
+              "local": "computeStair"
+            },
+            {
+              "imported": "pointInPoly",
+              "local": "pointInPoly"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "initWalk",
+          "kind": "named",
+          "line": 119
+        },
+        {
+          "name": "startWalk",
+          "kind": "named",
+          "line": 133
+        },
+        {
+          "name": "exit",
+          "kind": "named",
+          "line": 147
+        },
+        {
+          "name": "isWalkActive",
+          "kind": "named",
+          "line": 155
+        },
+        {
+          "name": "updateWalk",
+          "kind": "named",
+          "line": 157
+        }
+      ],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": false,
+      "fanIn": 1,
+      "fanOut": 1,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "roof-audit.html",
+      "lines": 523,
+      "bytes": 33769,
+      "html": true,
+      "imports": [
+        {
+          "spec": "./src/roof/roof-audit.js",
+          "kind": "html",
+          "line": 294,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-audit.js"
+          },
+          "names": []
+        },
+        {
+          "spec": "./src/roof/roof-render.js",
+          "kind": "html",
+          "line": 295,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/roof-render.js"
+          },
+          "names": []
+        }
+      ],
+      "exports": [],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": true,
+      "fanIn": 0,
+      "fanOut": 2,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "roof-core-check.html",
+      "lines": 40,
+      "bytes": 2700,
+      "html": true,
+      "imports": [
+        {
+          "spec": "./src/roof/index.js",
+          "kind": "html",
+          "line": 14,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/index.js"
+          },
+          "names": []
+        }
+      ],
+      "exports": [],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": true,
+      "fanIn": 0,
+      "fanOut": 1,
+      "loaded": false,
+      "browserOnly": false
+    },
+    {
+      "file": "roof-ui-test.html",
+      "lines": 447,
+      "bytes": 30541,
+      "html": true,
+      "imports": [
+        {
+          "spec": "./src/roof/ui-test.js",
+          "kind": "html",
+          "line": 261,
+          "res": {
+            "kind": "local",
+            "target": "src/roof/ui-test.js"
+          },
+          "names": []
+        }
+      ],
+      "exports": [],
+      "shapes": [],
+      "userData": {
+        "write": [],
+        "read": []
+      },
+      "dead": false,
+      "entry": true,
+      "fanIn": 0,
+      "fanOut": 1,
+      "loaded": false,
+      "browserOnly": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "src/builder.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/builder.js",
+      "to": "src/verandas.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/builder.js",
+      "to": "src/stair-builder.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/builder.js",
+      "to": "src/stairs.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/builder.js",
+      "to": "src/safe.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/builder.js",
+      "to": "src/roof.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/calculator.js",
+      "to": "src/prices.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/editor.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/editor.js",
+      "to": "src/builder.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/editor.js",
+      "to": "src/scene.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/editor.js",
+      "to": "src/editor-ui.css",
+      "kind": "side"
+    },
+    {
+      "from": "src/editor.js",
+      "to": "src/stairs.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/main.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/main.js",
+      "to": "src/scene.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/main.js",
+      "to": "src/editor.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/main.js",
+      "to": "src/walk.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/main.js",
+      "to": "src/ui.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/main.js",
+      "to": "src/builder.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/main.js",
+      "to": "src/roof.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/vec3.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/format.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-params.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-stages.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-prices.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-model.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-structure.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-pieces.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-nesting.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-bom.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-checks.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-barcode.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-context.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-controller.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-long.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-export.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/index.js",
+      "to": "src/roof/roof-hardware.js",
+      "kind": "reexport"
+    },
+    {
+      "from": "src/roof/lab.js",
+      "to": "src/roof/roof.css",
+      "kind": "side"
+    },
+    {
+      "from": "src/roof/lab.js",
+      "to": "src/roof/index.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/lab.js",
+      "to": "src/roof/roof-render.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/lab.js",
+      "to": "src/roof/roof-mansard.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-audit.js",
+      "to": "src/roof/roof-model.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-audit.js",
+      "to": "src/roof/roof-structure.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-audit.js",
+      "to": "src/roof/roof-pieces.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-audit.js",
+      "to": "src/roof/roof-nesting.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-audit.js",
+      "to": "src/roof/roof-long.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-audit.js",
+      "to": "src/roof/roof-params.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-audit.js",
+      "to": "src/roof/roof-mansard.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-bom.js",
+      "to": "src/roof/roof-params.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-bom.js",
+      "to": "src/roof/format.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-bom.js",
+      "to": "src/roof/roof-prices.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-checks.js",
+      "to": "src/roof/roof-params.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-checks.js",
+      "to": "src/roof/roof-mansard.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-checks.js",
+      "to": "src/roof/format.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-context.js",
+      "to": "src/roof/roof-params.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-context.js",
+      "to": "src/roof/format.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-controller.js",
+      "to": "src/roof/roof-params.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-controller.js",
+      "to": "src/roof/roof-model.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-controller.js",
+      "to": "src/roof/roof-structure.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-controller.js",
+      "to": "src/roof/roof-pieces.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-controller.js",
+      "to": "src/roof/roof-nesting.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-controller.js",
+      "to": "src/roof/roof-bom.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-controller.js",
+      "to": "src/roof/roof-checks.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-controller.js",
+      "to": "src/roof/roof-long.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-export.js",
+      "to": "src/roof/format.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-export.js",
+      "to": "src/roof/roof-stages.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-export.js",
+      "to": "src/roof/roof-prices.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-hardware.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-hardware.js",
+      "to": "https://unpkg.com/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-long.js",
+      "to": "src/roof/format.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-long.js",
+      "to": "src/roof/roof-params.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-mansard-ui.js",
+      "to": "src/roof/format.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-mansard.js",
+      "to": "src/roof/format.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-model.js",
+      "to": "src/roof/vec3.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-model.js",
+      "to": "src/roof/format.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-model.js",
+      "to": "src/roof/roof-params.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-model.js",
+      "to": "src/roof/roof-mansard.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-pieces.js",
+      "to": "src/roof/format.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-pieces.js",
+      "to": "src/roof/roof-params.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-pieces.js",
+      "to": "src/roof/roof-stages.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-render.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-render.js",
+      "to": "https://unpkg.com/three@0.169.0/examples/jsm/controls/OrbitControls.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-render.js",
+      "to": "https://unpkg.com/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-render.js",
+      "to": "src/roof/format.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-render.js",
+      "to": "src/roof/roof-hardware.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-structure.js",
+      "to": "src/roof/roof-params.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-structure.js",
+      "to": "src/roof/roof-long.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/roof/roof-structure.js",
+      "to": "src/roof/roof-mansard.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/safe.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/scene.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/scene.js",
+      "to": "https://unpkg.com/three@0.169.0/examples/jsm/controls/OrbitControls.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/stair-builder.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/stair-builder.js",
+      "to": "https://unpkg.com/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/stair-builder.js",
+      "to": "src/stairs.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/stair-builder.js",
+      "to": "src/safe.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/stairs.js",
+      "to": "src/safe.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/ui.js",
+      "to": "src/prices.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/ui.js",
+      "to": "src/calculator.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/ui.js",
+      "to": "src/roof.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/verandas.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/walk.js",
+      "to": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/walk.js",
+      "to": "https://unpkg.com/three@0.169.0/examples/jsm/controls/PointerLockControls.js",
+      "kind": "named"
+    },
+    {
+      "from": "src/walk.js",
+      "to": "src/stairs.js",
+      "kind": "named"
+    },
+    {
+      "from": "roof-audit.html",
+      "to": "src/roof/roof-audit.js",
+      "kind": "html"
+    },
+    {
+      "from": "roof-audit.html",
+      "to": "src/roof/roof-render.js",
+      "kind": "html"
+    },
+    {
+      "from": "roof-core-check.html",
+      "to": "src/roof/index.js",
+      "kind": "html"
+    },
+    {
+      "from": "roof-ui-test.html",
+      "to": "src/roof/ui-test.js",
+      "kind": "html"
+    }
+  ],
+  "issues": [
+    {
+      "sev": "error",
+      "kind": "contract",
+      "title": "Чтение поля, которого нет во всех вариантах формы",
+      "detail": "src/main.js:91 читает .x — есть только у intWall/extWall/door, нет у extOpening (производитель src/editor.js)",
+      "file": "src/main.js",
+      "line": 91
+    },
+    {
+      "sev": "error",
+      "kind": "contract",
+      "title": "Чтение поля, которого нет во всех вариантах формы",
+      "detail": "src/main.js:96 читает .x — есть только у intWall/extWall/door, нет у extOpening (производитель src/editor.js)",
+      "file": "src/main.js",
+      "line": 96
+    },
+    {
+      "sev": "error",
+      "kind": "contract",
+      "title": "Чтение поля, которого нет во всех вариантах формы",
+      "detail": "src/main.js:100 читает .x — есть только у intWall/extWall/door, нет у extOpening (производитель src/editor.js)",
+      "file": "src/main.js",
+      "line": 100
+    },
+    {
+      "sev": "error",
+      "kind": "contract",
+      "title": "Чтение поля, которого нет во всех вариантах формы",
+      "detail": "src/main.js:100 читает .z — есть только у intWall/extWall/door, нет у extOpening (производитель src/editor.js)",
+      "file": "src/main.js",
+      "line": 100
+    },
+    {
+      "sev": "error",
+      "kind": "contract",
+      "title": "Чтение поля, которого нет во всех вариантах формы",
+      "detail": "src/main.js:106 читает .x — есть только у intWall/extWall/door, нет у extOpening (производитель src/editor.js)",
+      "file": "src/main.js",
+      "line": 106
+    },
+    {
+      "sev": "error",
+      "kind": "contract",
+      "title": "Чтение поля, которого нет во всех вариантах формы",
+      "detail": "src/main.js:107 читает .z — есть только у intWall/extWall/door, нет у extOpening (производитель src/editor.js)",
+      "file": "src/main.js",
+      "line": 107
+    },
+    {
+      "sev": "error",
+      "kind": "contract",
+      "title": "Чтение поля, которого нет во всех вариантах формы",
+      "detail": "src/main.js:250 читает .floor — есть только у intWall/extWall/door, нет у extOpening (производитель src/editor.js)",
+      "file": "src/main.js",
+      "line": 250
+    },
+    {
+      "sev": "error",
+      "kind": "contract",
+      "title": "Чтение поля, которого нет во всех вариантах формы",
+      "detail": "src/main.js:426 читает .floor — есть только у intWall/extWall/door, нет у extOpening (производитель src/editor.js)",
+      "file": "src/main.js",
+      "line": 426
+    },
+    {
+      "sev": "error",
+      "kind": "contract",
+      "title": "Чтение поля, которого нет во всех вариантах формы",
+      "detail": "src/main.js:490 читает .x — есть только у intWall/extWall/door, нет у extOpening (производитель src/editor.js)",
+      "file": "src/main.js",
+      "line": 490
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "write: читают audit-project.mjs",
+      "file": "audit-project.mjs",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "read: читают audit-project.mjs",
+      "file": "audit-project.mjs",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "knee: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "kneeCap: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "breakPurlin: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "gableBearing: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "trussWeb: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "tieBrace: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "upperKing: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "tieKing: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "trussCeiling: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "trussPlate: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "warn",
+      "kind": "contract",
+      "title": "userData читается, но нигде не пишется",
+      "detail": "kneeStud: читают src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 0
+    },
+    {
+      "sev": "info",
+      "kind": "dead",
+      "title": "Файл недостижим из точек входа",
+      "detail": "audit-project.mjs — никто не импортирует, из HTML не подключён",
+      "file": "audit-project.mjs",
+      "line": 0
+    },
+    {
+      "sev": "info",
+      "kind": "dead",
+      "title": "Файл недостижим из точек входа",
+      "detail": "src/roof/roof-mansard-ui.js — никто не импортирует, из HTML не подключён",
+      "file": "src/roof/roof-mansard-ui.js",
+      "line": 0
+    },
+    {
+      "sev": "info",
+      "kind": "layer",
+      "title": "Обратная связь по слоям",
+      "detail": "src/roof/index.js (слой 16) импортирует src/roof/roof-hardware.js (слой 17)",
+      "file": "src/roof/index.js",
+      "line": 17
+    },
+    {
+      "sev": "info",
+      "kind": "layer",
+      "title": "Обратная связь по слоям",
+      "detail": "src/roof/roof-structure.js (слой 7) импортирует src/roof/roof-long.js (слой 8)",
+      "file": "src/roof/roof-structure.js",
+      "line": 2
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "calculateVerandaExtras в src/calculator.js",
+      "file": "src/calculator.js",
+      "line": 123
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "initEditor в src/editor.js",
+      "file": "src/editor.js",
+      "line": 810
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "updateEditorHelpers в src/editor.js",
+      "file": "src/editor.js",
+      "line": 923
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "roofDesign в src/roof.js",
+      "file": "src/roof.js",
+      "line": 35
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "roofColorHex в src/roof.js",
+      "file": "src/roof.js",
+      "line": 47
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "roofArea в src/roof.js",
+      "file": "src/roof.js",
+      "line": 185
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "Vec3 в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 1
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "v3 в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 1
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "eulerBasis в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 1
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "fin в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 2
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "deg в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 2
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "ROOF_DEFAULTS в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 3
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "RAFTER_MAX в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 3
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "GRADE в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 3
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "PIECE_GROUPS в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 4
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "RATES_DEF в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 5
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "loadRates в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 5
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "computeRoofModel в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 6
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "computeRoofStructure в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 7
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "computeRoofPieces в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 8
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "nestRoofPieces в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 9
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "roofBOM в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 10
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "roofChecks в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 11
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "roofFromHouse в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 13
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "analyzeLong в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 15
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "HARDWARE_NOTES в src/roof/index.js",
+      "file": "src/roof/index.js",
+      "line": 17
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "AUDIT_GROUPS в src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 10
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "deriveAll в src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 19
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "auditCore в src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 30
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "auditScene в src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 207
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "AUDIT_MATRIX в src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 323
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "auditConfig в src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 361
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "runMatrix в src/roof/roof-audit.js",
+      "file": "src/roof/roof-audit.js",
+      "line": 380
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "hipNeedsSupport в src/roof/roof-long.js",
+      "file": "src/roof/roof-long.js",
+      "line": 42
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "RAFTER_SECTIONS в src/roof/roof-mansard.js",
+      "file": "src/roof/roof-mansard.js",
+      "line": 18
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "pickRafterSection в src/roof/roof-mansard.js",
+      "file": "src/roof/roof-mansard.js",
+      "line": 36
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "rejectedCount в src/roof/roof-render.js",
+      "file": "src/roof/roof-render.js",
+      "line": 8
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "CFG_DEFAULTS в src/roof/ui-test.js",
+      "file": "src/roof/ui-test.js",
+      "line": 8
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "Driver в src/roof/ui-test.js",
+      "file": "src/roof/ui-test.js",
+      "line": 45
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "SCENARIOS в src/roof/ui-test.js",
+      "file": "src/roof/ui-test.js",
+      "line": 141
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "runSuite в src/roof/ui-test.js",
+      "file": "src/roof/ui-test.js",
+      "line": 393
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "safeCylinder в src/safe.js",
+      "file": "src/safe.js",
+      "line": 171
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "initScene в src/scene.js",
+      "file": "src/scene.js",
+      "line": 52
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "getRenderCamera в src/scene.js",
+      "file": "src/scene.js",
+      "line": 156
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "getCanvasElement в src/scene.js",
+      "file": "src/scene.js",
+      "line": 159
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "isPlanMode в src/scene.js",
+      "file": "src/scene.js",
+      "line": 160
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "setPlanMode в src/scene.js",
+      "file": "src/scene.js",
+      "line": 184
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "updateEnvironment в src/scene.js",
+      "file": "src/scene.js",
+      "line": 219
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "STAIR_TYPES в src/stairs.js",
+      "file": "src/stairs.js",
+      "line": 3
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "STAIR_WIDTHS в src/stairs.js",
+      "file": "src/stairs.js",
+      "line": 9
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "STAIR_STRINGERS в src/stairs.js",
+      "file": "src/stairs.js",
+      "line": 15
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "STAIR_RAILS в src/stairs.js",
+      "file": "src/stairs.js",
+      "line": 19
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "STAIR_TURNS в src/stairs.js",
+      "file": "src/stairs.js",
+      "line": 24
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "STAIR_RISERS в src/stairs.js",
+      "file": "src/stairs.js",
+      "line": 28
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "stairDesign в src/stairs.js",
+      "file": "src/stairs.js",
+      "line": 37
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "sanitizeStairParams в src/stairs.js",
+      "file": "src/stairs.js",
+      "line": 49
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "solveRises в src/stairs.js",
+      "file": "src/stairs.js",
+      "line": 61
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "polysOverlap в src/stairs.js",
+      "file": "src/stairs.js",
+      "line": 247
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "updateFoundationRecommendation в src/ui.js",
+      "file": "src/ui.js",
+      "line": 7
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "initUI в src/ui.js",
+      "file": "src/ui.js",
+      "line": 100
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "updatePriceDisplay в src/ui.js",
+      "file": "src/ui.js",
+      "line": 231
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "VERANDA_STYLES в src/verandas.js",
+      "file": "src/verandas.js",
+      "line": 4
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "getVerandaCollisionSegments в src/verandas.js",
+      "file": "src/verandas.js",
+      "line": 71
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "initWalk в src/walk.js",
+      "file": "src/walk.js",
+      "line": 119
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "startWalk в src/walk.js",
+      "file": "src/walk.js",
+      "line": 133
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "exit в src/walk.js",
+      "file": "src/walk.js",
+      "line": 147
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "isWalkActive в src/walk.js",
+      "file": "src/walk.js",
+      "line": 155
+    },
+    {
+      "sev": "info",
+      "kind": "unused",
+      "title": "Экспорт никем не используется",
+      "detail": "updateWalk в src/walk.js",
+      "file": "src/walk.js",
+      "line": 157
+    }
+  ],
+  "cycles": [],
+  "dead": [
+    "audit-project.mjs",
+    "src/roof/roof-mansard-ui.js"
+  ],
+  "unused": [
+    {
+      "file": "src/calculator.js",
+      "name": "calculateVerandaExtras",
+      "line": 123
+    },
+    {
+      "file": "src/editor.js",
+      "name": "initEditor",
+      "line": 810
+    },
+    {
+      "file": "src/editor.js",
+      "name": "updateEditorHelpers",
+      "line": 923
+    },
+    {
+      "file": "src/roof.js",
+      "name": "roofDesign",
+      "line": 35
+    },
+    {
+      "file": "src/roof.js",
+      "name": "roofColorHex",
+      "line": 47
+    },
+    {
+      "file": "src/roof.js",
+      "name": "roofArea",
+      "line": 185
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "Vec3",
+      "line": 1
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "v3",
+      "line": 1
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "eulerBasis",
+      "line": 1
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "fin",
+      "line": 2
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "deg",
+      "line": 2
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "ROOF_DEFAULTS",
+      "line": 3
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "RAFTER_MAX",
+      "line": 3
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "GRADE",
+      "line": 3
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "PIECE_GROUPS",
+      "line": 4
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "RATES_DEF",
+      "line": 5
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "loadRates",
+      "line": 5
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "computeRoofModel",
+      "line": 6
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "computeRoofStructure",
+      "line": 7
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "computeRoofPieces",
+      "line": 8
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "nestRoofPieces",
+      "line": 9
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "roofBOM",
+      "line": 10
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "roofChecks",
+      "line": 11
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "roofFromHouse",
+      "line": 13
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "analyzeLong",
+      "line": 15
+    },
+    {
+      "file": "src/roof/index.js",
+      "name": "HARDWARE_NOTES",
+      "line": 17
+    },
+    {
+      "file": "src/roof/roof-audit.js",
+      "name": "AUDIT_GROUPS",
+      "line": 10
+    },
+    {
+      "file": "src/roof/roof-audit.js",
+      "name": "deriveAll",
+      "line": 19
+    },
+    {
+      "file": "src/roof/roof-audit.js",
+      "name": "auditCore",
+      "line": 30
+    },
+    {
+      "file": "src/roof/roof-audit.js",
+      "name": "auditScene",
+      "line": 207
+    },
+    {
+      "file": "src/roof/roof-audit.js",
+      "name": "AUDIT_MATRIX",
+      "line": 323
+    },
+    {
+      "file": "src/roof/roof-audit.js",
+      "name": "auditConfig",
+      "line": 361
+    },
+    {
+      "file": "src/roof/roof-audit.js",
+      "name": "runMatrix",
+      "line": 380
+    },
+    {
+      "file": "src/roof/roof-long.js",
+      "name": "hipNeedsSupport",
+      "line": 42
+    },
+    {
+      "file": "src/roof/roof-mansard.js",
+      "name": "RAFTER_SECTIONS",
+      "line": 18
+    },
+    {
+      "file": "src/roof/roof-mansard.js",
+      "name": "pickRafterSection",
+      "line": 36
+    },
+    {
+      "file": "src/roof/roof-render.js",
+      "name": "rejectedCount",
+      "line": 8
+    },
+    {
+      "file": "src/roof/ui-test.js",
+      "name": "CFG_DEFAULTS",
+      "line": 8
+    },
+    {
+      "file": "src/roof/ui-test.js",
+      "name": "Driver",
+      "line": 45
+    },
+    {
+      "file": "src/roof/ui-test.js",
+      "name": "SCENARIOS",
+      "line": 141
+    },
+    {
+      "file": "src/roof/ui-test.js",
+      "name": "runSuite",
+      "line": 393
+    },
+    {
+      "file": "src/safe.js",
+      "name": "safeCylinder",
+      "line": 171
+    },
+    {
+      "file": "src/scene.js",
+      "name": "initScene",
+      "line": 52
+    },
+    {
+      "file": "src/scene.js",
+      "name": "getRenderCamera",
+      "line": 156
+    },
+    {
+      "file": "src/scene.js",
+      "name": "getCanvasElement",
+      "line": 159
+    },
+    {
+      "file": "src/scene.js",
+      "name": "isPlanMode",
+      "line": 160
+    },
+    {
+      "file": "src/scene.js",
+      "name": "setPlanMode",
+      "line": 184
+    },
+    {
+      "file": "src/scene.js",
+      "name": "updateEnvironment",
+      "line": 219
+    },
+    {
+      "file": "src/stairs.js",
+      "name": "STAIR_TYPES",
+      "line": 3
+    },
+    {
+      "file": "src/stairs.js",
+      "name": "STAIR_WIDTHS",
+      "line": 9
+    },
+    {
+      "file": "src/stairs.js",
+      "name": "STAIR_STRINGERS",
+      "line": 15
+    },
+    {
+      "file": "src/stairs.js",
+      "name": "STAIR_RAILS",
+      "line": 19
+    },
+    {
+      "file": "src/stairs.js",
+      "name": "STAIR_TURNS",
+      "line": 24
+    },
+    {
+      "file": "src/stairs.js",
+      "name": "STAIR_RISERS",
+      "line": 28
+    },
+    {
+      "file": "src/stairs.js",
+      "name": "stairDesign",
+      "line": 37
+    },
+    {
+      "file": "src/stairs.js",
+      "name": "sanitizeStairParams",
+      "line": 49
+    },
+    {
+      "file": "src/stairs.js",
+      "name": "solveRises",
+      "line": 61
+    },
+    {
+      "file": "src/stairs.js",
+      "name": "polysOverlap",
+      "line": 247
+    },
+    {
+      "file": "src/ui.js",
+      "name": "updateFoundationRecommendation",
+      "line": 7
+    },
+    {
+      "file": "src/ui.js",
+      "name": "initUI",
+      "line": 100
+    },
+    {
+      "file": "src/ui.js",
+      "name": "updatePriceDisplay",
+      "line": 231
+    },
+    {
+      "file": "src/verandas.js",
+      "name": "VERANDA_STYLES",
+      "line": 4
+    },
+    {
+      "file": "src/verandas.js",
+      "name": "getVerandaCollisionSegments",
+      "line": 71
+    },
+    {
+      "file": "src/walk.js",
+      "name": "initWalk",
+      "line": 119
+    },
+    {
+      "file": "src/walk.js",
+      "name": "startWalk",
+      "line": 133
+    },
+    {
+      "file": "src/walk.js",
+      "name": "exit",
+      "line": 147
+    },
+    {
+      "file": "src/walk.js",
+      "name": "isWalkActive",
+      "line": 155
+    },
+    {
+      "file": "src/walk.js",
+      "name": "updateWalk",
+      "line": 157
+    }
+  ],
+  "contracts": [
+    {
+      "producer": "src/editor.js",
+      "consumer": "src/main.js",
+      "disc": "kind",
+      "variants": [
+        {
+          "val": "extOpening",
+          "keys": [
+            "kind",
+            "ref",
+            "t",
+            "L"
+          ]
+        },
+        {
+          "val": "intWall",
+          "keys": [
+            "x",
+            "z",
+            "floor"
+          ]
+        },
+        {
+          "val": "extWall",
+          "keys": [
+            "x",
+            "z",
+            "floor"
+          ]
+        },
+        {
+          "val": "door",
+          "keys": [
+            "x",
+            "z",
+            "floor"
+          ]
+        }
+      ],
+      "common": [],
+      "risky": [
+        {
+          "prop": "x",
+          "line": 91,
+          "onlyIn": "intWall/extWall/door",
+          "missingIn": "extOpening"
+        },
+        {
+          "prop": "x",
+          "line": 96,
+          "onlyIn": "intWall/extWall/door",
+          "missingIn": "extOpening"
+        },
+        {
+          "prop": "x",
+          "line": 100,
+          "onlyIn": "intWall/extWall/door",
+          "missingIn": "extOpening"
+        },
+        {
+          "prop": "z",
+          "line": 100,
+          "onlyIn": "intWall/extWall/door",
+          "missingIn": "extOpening"
+        },
+        {
+          "prop": "x",
+          "line": 106,
+          "onlyIn": "intWall/extWall/door",
+          "missingIn": "extOpening"
+        },
+        {
+          "prop": "z",
+          "line": 107,
+          "onlyIn": "intWall/extWall/door",
+          "missingIn": "extOpening"
+        },
+        {
+          "prop": "floor",
+          "line": 250,
+          "onlyIn": "intWall/extWall/door",
+          "missingIn": "extOpening"
+        },
+        {
+          "prop": "floor",
+          "line": 426,
+          "onlyIn": "intWall/extWall/door",
+          "missingIn": "extOpening"
+        },
+        {
+          "prop": "x",
+          "line": 490,
+          "onlyIn": "intWall/extWall/door",
+          "missingIn": "extOpening"
+        }
+      ]
+    }
+  ],
+  "userdata": [
+    {
+      "key": "isCustomLight",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "lightRef",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "isInteriorWall",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "wallRef",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "isOpening",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "openingRef",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "isDoor",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": [
+        "src/main.js"
+      ]
+    },
+    {
+      "key": "doorRef",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": [
+        "src/main.js"
+      ]
+    },
+    {
+      "key": "isExteriorWall",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "wallName",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "isExteriorOpening",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "isColumn",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "columnRef",
+      "writers": [
+        "src/builder.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "baseScale",
+      "writers": [
+        "src/editor.js"
+      ],
+      "readers": [
+        "src/editor.js"
+      ]
+    },
+    {
+      "key": "isRoof",
+      "writers": [
+        "src/roof.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "roofInfo",
+      "writers": [
+        "src/roof.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "mk",
+      "writers": [
+        "src/roof/roof-hardware.js",
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/lab.js",
+        "src/roof/roof-audit.js",
+        "src/roof/roof-render.js"
+      ]
+    },
+    {
+      "key": "joint",
+      "writers": [
+        "src/roof/roof-hardware.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "isMarks",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/lab.js"
+      ]
+    },
+    {
+      "key": "isRoofRoot",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "layerId",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js",
+        "src/roof/roof-render.js"
+      ]
+    },
+    {
+      "key": "st",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js",
+        "src/roof/roof-render.js"
+      ]
+    },
+    {
+      "key": "msPart",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js",
+        "src/roof/roof-render.js"
+      ]
+    },
+    {
+      "key": "vertSupport",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "ridgeBeam",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "sect",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "mansardTie",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "tieTop",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "hw",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "segLen",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "faceTag",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "breakFlashing",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "culled",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-audit.js",
+        "src/roof/roof-render.js"
+      ]
+    },
+    {
+      "key": "_mat",
+      "writers": [
+        "src/roof/roof-render.js"
+      ],
+      "readers": [
+        "src/roof/roof-render.js"
+      ]
+    },
+    {
+      "key": "isVeranda",
+      "writers": [
+        "src/verandas.js"
+      ],
+      "readers": []
+    },
+    {
+      "key": "write",
+      "writers": [],
+      "readers": [
+        "audit-project.mjs"
+      ]
+    },
+    {
+      "key": "read",
+      "writers": [],
+      "readers": [
+        "audit-project.mjs"
+      ]
+    },
+    {
+      "key": "knee",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "kneeCap",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "breakPurlin",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "gableBearing",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "trussWeb",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "tieBrace",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "upperKing",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "tieKing",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "trussCeiling",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "trussPlate",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    },
+    {
+      "key": "kneeStud",
+      "writers": [],
+      "readers": [
+        "src/roof/roof-audit.js"
+      ]
+    }
+  ],
+  "mapdiff": null,
+  "runtime": {
+    "ran": false,
+    "loaded": [],
+    "failed": [],
+    "browserOnly": [],
+    "matrix": [],
+    "ownAudit": null
+  }
+}

@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Карта проекта кровли · ДОМ·ЛЕС</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a110e;--sf:#121c17;--sf2:#19241e;--ov:#202e26;--ln:#293830;--ln2:#3f5347;
+  --tx:#eef4ec;--dim:#a1b4a7;--mute:#6f8377;
+  --timber:#e0913f;--timber-hi:#ffc477;--timber-deep:#9d5a17;
+  --steel:#7fb2d8;--blue:#4cc9f0;--acid:#a3e635;--violet:#b07cf0;--magenta:#f472b6;
+  --red:#f4645f;--green:#4ade80;--warn:#fbbf24;
+  --f:'Manrope',system-ui,sans-serif;--d:'Unbounded','Manrope',sans-serif;--m:'JetBrains Mono',ui-monospace,monospace;
+  --bar:60px;--filt:56px;--nav:300px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--tx);font:13.5px/1.55 var(--f);-webkit-font-smoothing:antialiased;overflow:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(820px 480px at 3% -8%,rgba(224,145,63,.17),transparent 62%),
+    radial-gradient(700px 460px at 100% 0%,rgba(76,201,240,.12),transparent 60%),
+    radial-gradient(900px 640px at 44% 116%,rgba(163,230,53,.07),transparent 62%),
+    linear-gradient(180deg,#0d1712,#0a110e 46%,#080f0c)}
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.42;
+  background-image:linear-gradient(rgba(63,83,71,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(63,83,71,.16) 1px,transparent 1px);
+  background-size:46px 46px;mask-image:radial-gradient(circle at 44% 24%,#000 16%,transparent 74%)}
+::selection{background:var(--timber);color:#1a1206}
+.scroll{scrollbar-width:thin;scrollbar-color:var(--timber-deep) var(--sf)}
+.scroll::-webkit-scrollbar{width:11px;height:11px}
+.scroll::-webkit-scrollbar-track{background:var(--sf);border-radius:9px}
+.scroll::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--timber),var(--timber-deep));border-radius:9px;border:2px solid var(--sf)}
+.scroll::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--timber-hi),var(--timber))}
+
+#bar{position:fixed;inset:0 0 auto 0;height:var(--bar);z-index:60;display:flex;align-items:center;gap:12px;padding:0 16px;
+  background:linear-gradient(180deg,rgba(10,17,14,.97),rgba(10,17,14,.86));backdrop-filter:blur(14px);border-bottom:1px solid var(--ln)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand svg{width:28px;height:28px;color:var(--timber);flex:none;filter:drop-shadow(0 0 11px rgba(224,145,63,.5))}
+.bname{font-family:var(--d);font-weight:700;font-size:12.5px;letter-spacing:.05em;white-space:nowrap}
+.bsub{font-size:10px;color:var(--mute);white-space:nowrap}
+#bar .grow{flex:1}
+.hstat{display:flex;gap:6px}
+.hstat div{background:rgba(10,17,14,.7);border:1px solid var(--ln);border-radius:8px;padding:4px 9px;text-align:center}
+.hstat b{display:block;font:800 13px var(--m);color:var(--timber-hi);line-height:1.1}
+.hstat span{font:700 7.5px var(--f);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.btn{position:relative;border:1px solid var(--ln2);border-radius:9px;cursor:pointer;background-color:#1e2b24;
+  background-image:linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.14));color:var(--tx);font:700 11.5px var(--f);
+  padding:8px 12px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 6px rgba(0,0,0,.32);transition:.15s cubic-bezier(.2,.8,.3,1)}
+.btn:hover{border-color:var(--timber);background-color:#2c3b33;transform:translateY(-1px)}
+.btn:active{transform:none;box-shadow:inset 0 2px 8px rgba(0,0,0,.5)}
+.btn.s{padding:6px 10px;font-size:10.5px}
+.btn:focus-visible,input:focus-visible,.chip:focus-visible,.seg button:focus-visible,.mrow:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(224,145,63,.32);border-color:var(--timber)}
+
+#filt{position:fixed;top:var(--bar);left:0;right:0;z-index:55;min-height:var(--filt);display:flex;align-items:center;gap:9px;
+  flex-wrap:wrap;padding:9px 16px;background:linear-gradient(180deg,rgba(18,28,23,.96),rgba(13,21,17,.92));
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--ln)}
+.search{position:relative;flex:0 1 240px;min-width:150px}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--mute);pointer-events:none}
+.search input{width:100%;padding:8px 10px 8px 31px;font:600 12px var(--f);color:var(--tx);background-color:#1b2721;
+  border:1px solid var(--ln2);border-radius:9px}
+.search input::placeholder{color:var(--mute)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:8px;cursor:pointer;border:1px solid var(--ln);
+  background:#1a2620;font:700 10.5px var(--f);color:var(--mute);transition:.14s;white-space:nowrap}
+.chip:hover{color:var(--tx);border-color:var(--ln2)}
+.chip i{width:8px;height:8px;border-radius:2.5px;background:#3b4a41;display:block;flex:none}
+.chip.on{color:var(--tx);border-color:var(--ln2);background:var(--ov)}
+.sep{width:1px;height:22px;background:var(--ln);flex:none}
+.seg{display:flex;border:1px solid var(--ln2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:#1a2620;color:var(--mute);font:700 10.5px var(--f);padding:7px 11px;cursor:pointer;transition:.14s}
+.seg button:hover{color:var(--tx)}
+.seg button.on{background:linear-gradient(180deg,var(--timber-hi),var(--timber));color:#241708}
+.ctl-mini{display:flex;align-items:center;gap:7px;font:700 10px var(--f);color:var(--mute);white-space:nowrap}
+.ctl-mini input[type=range]{width:82px;height:16px;-webkit-appearance:none;appearance:none;background:none;cursor:pointer}
+.ctl-mini input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:3px;background:linear-gradient(90deg,var(--timber-deep),var(--ln))}
+.ctl-mini input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;margin-top:-4.5px;border-radius:50%;
+  background:radial-gradient(circle at 34% 28%,var(--timber-hi),var(--timber) 56%,var(--timber-deep));border:2px solid #1a1206}
+.ctl-mini input[type=range]::-moz-range-track{height:4px;border-radius:3px;background:var(--ln)}
+.ctl-mini input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:var(--timber);border:2px solid #1a1206}
+.ctl-mini b{font:800 10px var(--m);color:var(--timber-hi);min-width:26px;text-align:right}
+
+#shell{position:fixed;top:calc(var(--bar) + var(--filt));left:0;right:0;bottom:0;display:grid;grid-template-columns:var(--nav) 1fr}
+#nav{border-right:1px solid var(--ln);background:linear-gradient(180deg,rgba(18,28,23,.96),rgba(13,21,17,.96));
+  overflow-y:auto;padding:12px 12px 24px}
+.nlayer{margin-bottom:12px}
+.nlayer h4{margin:0 0 6px;font:800 8.5px var(--f);letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:7px;color:var(--dim)}
+.nlayer h4 i{width:9px;height:9px;border-radius:3px;display:block}
+.nlayer h4 em{margin-left:auto;font-style:normal;font:700 9px var(--m);color:var(--mute)}
+.mrow{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:7px 9px;border-radius:9px;margin-bottom:4px;
+  border:1px solid var(--ln);background:#18231d;cursor:pointer;transition:.14s;color:inherit;font:inherit}
+.mrow:hover{border-color:var(--ln2);background:#1f2c25;transform:translateX(2px)}
+.mrow.on{border-color:var(--timber);background:linear-gradient(90deg,rgba(224,145,63,.16),rgba(224,145,63,.04))}
+.mrow .dot{width:7px;height:7px;border-radius:2px;flex:none}
+.mrow .nm{flex:1;font:700 11.5px var(--m);color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow.dead .nm{color:var(--mute);text-decoration:line-through}
+.mrow .cnt{font:700 9px var(--m);color:var(--mute);flex:none}
+.mrow .warn{color:var(--warn);font-size:10px;flex:none}
+
+#main{overflow-y:auto;padding:16px 18px 40px}
+.hero{margin-bottom:14px}
+.hero h1{font:800 24px/1.2 var(--f);margin:0 0 6px}
+.hero h1 em{font-style:normal;background:linear-gradient(96deg,var(--timber-hi),var(--acid) 54%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--dim);font-size:12.5px;max-width:96ch}
+
+#pipe{display:flex;gap:0;align-items:stretch;overflow-x:auto;padding:4px 0 12px;margin-bottom:14px}
+.pnode{flex:none;min-width:112px;border:1px solid var(--ln2);border-radius:11px;padding:9px 11px;background:linear-gradient(165deg,var(--sf2),var(--sf));
+  cursor:pointer;transition:.15s;position:relative}
+.pnode:hover{border-color:var(--timber);transform:translateY(-2px)}
+.pnode.on{border-color:var(--timber);box-shadow:0 0 0 1px rgba(224,145,63,.35)}
+.pnode b{display:block;font:700 11px var(--m);color:var(--timber-hi)}
+.pnode span{display:block;font:600 9.5px var(--f);color:var(--mute);margin-top:3px;line-height:1.35}
+.parrow{flex:none;display:grid;place-items:center;width:26px;color:var(--ln2);font-size:15px}
+
+.card{border:1px solid var(--ln);border-radius:13px;background:linear-gradient(180deg,var(--sf2),var(--sf));overflow:hidden;margin-bottom:12px}
+.cardh{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--ln);
+  background:linear-gradient(90deg,rgba(224,145,63,.09),transparent 72%);flex-wrap:wrap}
+.cardh b{font:800 13px var(--m);color:var(--timber-hi)}
+.cardh .tagl{font:800 8.5px var(--f);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:6px}
+.cardh .grow{flex:1}
+.cardh em{font-style:normal;font:600 10.5px var(--m);color:var(--mute)}
+.cardb{padding:12px 14px}
+.role{font:600 13px/1.6 var(--f);color:var(--dim);margin:0 0 12px}
+.sect{margin-bottom:14px}
+.sect:last-child{margin-bottom:0}
+.sect h5{margin:0 0 7px;font:800 8.5px var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+table.ex{width:100%;border-collapse:collapse;font:600 11px var(--m)}
+table.ex td{padding:6px 8px;border-bottom:1px solid rgba(41,56,48,.55);vertical-align:top}
+table.ex tr:last-child td{border-bottom:none}
+table.ex td.sig{color:var(--timber-hi);white-space:nowrap;width:1%}
+table.ex td.kind{width:1%;white-space:nowrap}
+table.ex td.desc{color:var(--dim);font:500 11px var(--f);line-height:1.5}
+.k{font:800 8px var(--f);letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:4px}
+.k.fn{background:rgba(76,201,240,.15);color:var(--blue)}
+.k.cls{background:rgba(176,124,240,.15);color:var(--violet)}
+.k.const{background:rgba(163,230,53,.14);color:var(--acid)}
+.k.css{background:rgba(244,114,182,.14);color:var(--magenta)}
+.links{display:flex;flex-wrap:wrap;gap:5px}
+.link{font:700 10px var(--m);padding:4px 8px;border-radius:6px;border:1px solid var(--ln2);background:#1a2620;color:var(--steel);cursor:pointer;transition:.14s}
+.link:hover{border-color:var(--timber);color:var(--timber-hi)}
+.link.none{color:var(--mute);cursor:default;border-style:dashed}
+.link.none:hover{border-color:var(--ln2);color:var(--mute)}
+ul.notes{margin:0;padding-left:16px;font:500 11.5px/1.65 var(--f);color:var(--dim)}
+ul.notes li{margin-bottom:5px}
+ul.notes li b{color:var(--timber-hi)}
+ul.notes.warns li{color:#f6d68a}
+ul.notes code{font:700 10.5px var(--m);color:var(--steel);background:rgba(127,178,216,.1);padding:1px 5px;border-radius:4px}
+
+.contract{border:1px solid var(--ln);border-left:3px solid var(--warn);border-radius:10px;padding:10px 12px;margin-bottom:9px;background:rgba(0,0,0,.2)}
+.contract.broke{border-left-color:var(--red)}
+.contract .ct{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+.contract .ct b{font:700 11.5px var(--m);color:var(--timber-hi)}
+.contract .flow{font:700 9.5px var(--m);color:var(--steel)}
+.contract p{margin:0;font:500 11px/1.6 var(--f);color:var(--dim)}
+.contract .was{margin-top:5px;font:600 10px var(--f);color:var(--red)}
+
+#graphwrap{border:1px solid var(--ln);border-radius:13px;background:linear-gradient(180deg,var(--sf2),var(--sf));overflow:hidden;position:relative}
+#graphbar{display:flex;align-items:center;gap:9px;padding:9px 12px;border-bottom:1px solid var(--ln);flex-wrap:wrap}
+#graphbar .hint{font:600 10px var(--f);color:var(--mute);margin-left:auto}
+#graph{display:block;width:100%;height:min(66vh,660px);cursor:grab;touch-action:none}
+#graph.drag{cursor:grabbing}
+.gnode rect{transition:.15s}
+.gnode text{font:700 10px var(--m);fill:var(--dim);pointer-events:none}
+.gnode.sel rect{stroke:var(--timber);stroke-width:2}
+.gnode.sel text{fill:var(--timber-hi)}
+.gnode.dim{opacity:.24}
+.gedge{fill:none;stroke:var(--ln2);stroke-width:1.2;opacity:.5;transition:.15s}
+.gedge.hot{stroke:var(--timber);opacity:1;stroke-width:2}
+.gedge.dim{opacity:.08}
+.glayer{font:800 8.5px var(--f);letter-spacing:.14em;text-transform:uppercase;fill:var(--mute)}
+
+#empty{text-align:center;padding:60px 20px;color:var(--mute)}
+#empty b{display:block;font:800 15px var(--f);color:var(--dim);margin-bottom:6px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,14px);z-index:70;opacity:0;pointer-events:none;
+  padding:10px 18px;border-radius:11px;background:linear-gradient(135deg,var(--ov),var(--sf2));border:1px solid var(--timber);
+  font:700 12px var(--f);box-shadow:0 14px 34px rgba(0,0,0,.6);transition:.22s}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:1100px){:root{--nav:250px}}
+@media(max-width:860px){
+  #shell{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  #nav{max-height:34vh;border-right:0;border-bottom:1px solid var(--ln)}
+  .bsub,.hstat{display:none}
+  #main{padding:12px}
+}
+</style>
+</head>
+<body>
+
+<header id="bar">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 16 16 5l14 11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M6 16v12h20V16M9 28V19M16 12v16M23 28V19M6 22h20" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+    <div><div class="bname">КАРТА ПРОЕКТА</div><div class="bsub">кровельный узел · 25 модулей · кто за что отвечает</div></div>
+  </div>
+  <div class="grow"></div>
+  <div class="hstat">
+    <div><b id="sMod">0</b><span>модулей</span></div>
+    <div><b id="sExp">0</b><span>экспортов</span></div>
+    <div><b id="sEdge">0</b><span>связей</span></div>
+    <div><b id="sDead">0</b><span>не исп.</span></div>
+  </div>
+  <button class="btn s" id="bMd" type="button">⤓ Markdown</button>
+  <button class="btn s" id="bJson" type="button">⤓ JSON</button>
+</header>
+
+<div id="filt">
+  <label class="search">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11 11l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+    <input id="q" type="search" placeholder="Поиск модуля, функции, контракта…" aria-label="Поиск">
+  </label>
+  <div class="sep"></div>
+  <div id="lchips" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+  <div class="sep"></div>
+  <div class="seg" id="view">
+    <button data-v="detail" class="on" type="button">Карточка</button>
+    <button data-v="graph" type="button">Граф</button>
+    <button data-v="contracts" type="button">Контракты</button>
+  </div>
+  <div class="sep"></div>
+  <button class="chip" id="tDead" type="button" aria-pressed="false"><i></i>Показать неиспользуемые</button>
+  <button class="chip" id="tRisk" type="button" aria-pressed="false"><i></i>Только с рисками</button>
+  <div class="ctl-mini"><span>Глубина</span><input type="range" id="cDepth" min="1" max="3" step="1" value="1"><b id="vDepth">1</b></div>
+  <div class="ctl-mini"><span>Масштаб</span><input type="range" id="cZoom" min="60" max="180" step="5" value="100"><b id="vZoom">100%</b></div>
+  <button class="btn s" id="bReset" type="button">↺ Сброс</button>
+</div>
+
+<div id="shell">
+  <aside id="nav" class="scroll"></aside>
+  <section id="main" class="scroll">
+    <div class="hero">
+      <h1>Что где лежит и <em>кто за что отвечает</em></h1>
+      <p>Слева — модули по слоям. Сверху — конвейер расчёта: параметры превращаются в геометрию, потом в расчёт, потом в ведомость, потом в сцену. Клик по модулю открывает карточку с экспортами, зависимостями и контрактами. Вкладка «Контракты» — места, где мы ломались чаще всего: несовпадение схем данных между модулями.</p>
+    </div>
+    <div id="pipe"></div>
+    <div id="body"></div>
+  </section>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ═══════════════ ДАННЫЕ КАРТЫ ═══════════════ */
+const LAYERS = {
+  core:{n:'Ядро и утилиты',c:'#7fb2d8'},
+  calc:{n:'Геометрия и расчёт',c:'#e0913f'},
+  prod:{n:'Производство',c:'#a3e635'},
+  state:{n:'Состояние и экспорт',c:'#4cc9f0'},
+  view:{n:'Визуал',c:'#f472b6'},
+  app:{n:'Приложение',c:'#b07cf0'},
+  test:{n:'Тесты',c:'#fbbf24'}
+};
+
+const M = [
+{id:'vec3',file:'src/roof/vec3.js',layer:'core',lines:70,
+ role:'Мини-вектор ядра без зависимости от three.js. Ядро считает геометрию на нём, рендер приводит его к THREE.Vector3 на своей границе.',
+ ex:[['Vec3','cls','class Vec3','Вектор: set/copy/clone/add/sub/addScaledVector/multiplyScalar/divideScalar/negate/dot/cross/crossVectors/length/normalize/distanceTo/lerp/angleTo/applyMatrix4/applyQuaternion/toArray'],
+     ['v3','fn','v3(x,y,z)','Фабрика вектора'],
+     ['eulerBasis','fn','eulerBasis({x,y,z})','Базис {X,Y,Z} для поворота XYZ в том же порядке, что THREE.Euler']],
+ imp:[], used:['roof-model','roof-context'],
+ notes:['<b>Нет флага isVector3</b> — специально. Рендер проверяет его и принудительно конвертирует через <code>T3()</code>.',
+       '<code>negate()</code> обязателен: крепёж вызывает <code>ax.clone().negate()</code>. Без него падала вся сборка прогонов.'],
+ risk:true},
+
+{id:'format',file:'src/roof/format.js',layer:'core',lines:20,
+ role:'Числовые guards и форматирование для всего проекта.',
+ ex:[['fin','fn','fin(v)','Возвращает v, если конечное, иначе 0'],
+     ['cl','fn','cl(v,min,max)','Зажим в диапазон'],
+     ['fmt','fn','fmt(n)','Целое с разделителями тысяч'],
+     ['f1 / f2 / f3','fn','f1(n)…','Фиксированные 1 / 2 / 3 знака'],
+     ['mm','fn','mm(m)','Метры → миллиметры, округлённо'],
+     ['deg','fn','deg(rad)','Радианы → градусы']],
+ imp:[], used:['roof-model','roof-mansard','roof-pieces','roof-checks','roof-render','lab','roof-long','roof-audit'],
+ notes:['Единственное место, где числа приводятся к безопасным. Всё, что уходит в геометрию, проходит через <code>fin</code>/<code>cl</code>.']},
+
+{id:'roof-params',file:'src/roof/roof-params.js',layer:'core',lines:60,
+ role:'Единый источник параметров и нормативных таблиц. Ничего не считает.',
+ ex:[['ROOF_DEFAULTS','const','{…}','Все параметры: геометрия, опирание, ригель, нагрузки, распил, пирог, мансарда, отображение'],
+     ['SEATS','const','notch | block | cleat','Узел опирания стропил'],
+     ['TIEMODE','const','side | under','Расположение ригеля'],
+     ['COVERS','const','metaltile | seam | shingle | prof','Покрытие: ширина листа, модуль, сплошное основание, ставка, минимальный уклон, цвет, вес'],
+     ['RAFTER_MAX','const','50x150…60x250','Предельный пролёт стропилы по сечению'],
+     ['SNOW / WIND','const','I…VIII / I…VII','Снеговые и ветровые районы по СП 20'],
+     ['GRADE','const','1 | 2 | 3','Сорт сосны: Ri, Rt, Rsm, E'],
+     ['RHO','const','500','Плотность древесины, кг/м³']],
+ imp:[], used:['roof-model','roof-structure','roof-checks','roof-controller','roof-long','roof-audit','lab'],
+ notes:['Мансардные ключи (<code>mansardRoomH</code>, <code>mansardLowPitch</code>…) могут отсутствовать — <code>lab.js</code> доопределяет их при старте, а <code>roof-mansard</code> читает через <code>?? значение</code>.']},
+
+{id:'roof-stages',file:'src/roof/roof-stages.js',layer:'core',lines:45,
+ role:'Этапы сборки и справочник групп деталей для маркировки.',
+ ex:[['ROOF_STAGES','const','[{t,d} × 14]','Название и описание каждого этапа сборки 0…13'],
+     ['PIECE_GROUPS','const','{группа:{ab,lat,st,n}}','Аббревиатура марки, латинский код для Code 39, этап, название']],
+ imp:[], used:['roof-pieces','roof-nesting','lab','roof-audit'],
+ notes:['Новую группу деталей нельзя завести только в <code>roof-pieces</code> — без записи в <code>PIECE_GROUPS</code> деталь молча выпадет из ведомости.']},
+
+{id:'roof-prices',file:'src/roof/roof-prices.js',layer:'core',lines:110,
+ role:'Ставки сметы с честной маркировкой: что подтверждено, а что ориентир.',
+ ex:[['RATES_DEF','const','{ключ:{v,u,src,verified,g,n,hint}}','Исходные ставки'],
+     ['RATES','const','mutable copy','Рабочая копия, правится в интерфейсе'],
+     ['loadRates / saveRates / resetRates','fn','()','localStorage: domles.roof.rates.v8']],
+ imp:[], used:['roof-bom','lab'],
+ notes:['<code>verified:false</code> — ориентир из общих знаний, не проверен по прайсу. В интерфейсе помечается жёлтым.']},
+
+{id:'roof-mansard',file:'src/roof/roof-mansard.js',layer:'calc',lines:300,
+ role:'Мансарда: четыре схемы без центральных опор. Геометрия ведётся ОТ КОМНАТЫ — высота потолка задаёт уровень перелома. Отдаёт членов как данные, а не как меши.',
+ ex:[['MANSARD_SCHEMES','const','broken | tie | ridge | truss','Схемы с описанием работы'],
+     ['GL','const','{Ri:24,Rt:16,Rsm:2.6,E:11500}','Клеёная GL24h'],
+     ['RAFTER_SECTIONS','const','[[50,150]…[100,300]]','Стандартный ряд сечений для автоподбора'],
+     ['snowMu','fn','snowMu(deg)','Коэффициент μ снега по уклону (СП 20)'],
+     ['slopeLineLoad','fn','slopeLineLoad(deadKN,caS,deg,Sg,step)','Погонная нагрузка на пару стропил'],
+     ['checkRafterSection','fn','checkRafterSection(sect,runH,caS,qPair,G,seatWmm,meta)','Изгиб, прогиб q⊥=q·cos²α, смятие'],
+     ['pickRafterSection','fn','pickRafterSection(cases,G,seatWmm,minSect)','Минимальное проходящее сечение'],
+     ['solveMansard','fn','solveMansard(p,ctx)','Геометрия комнаты + parts + checks + warnings']],
+ imp:['format'], used:['roof-model','roof-structure','roof-audit','lab'],
+ notes:['<b>parts</b> — двух видов: <code>{t:\'box\', s:[w,h,d], p:[x,y,z]}</code> и <code>{t:\'brace\', a:[x,y], b:[x,y], depth, thick}</code>. У подкоса <b>нет поля s</b>.',
+        'Каждый член несёт <code>mk:[группа, длина]</code> — по нему он попадает в распил.',
+        'Подбор клеёного прогона ограничен <code>h/b ≤ 4.5</code>: сечения вида 90×800 нестрогаемы и неустойчивы из плоскости.',
+        'Все концы балок зажимаются по контуру кровли. Область под скатом выпукла, поэтому внутренний конец ⇒ вся доска внутри.'],
+ risk:true},
+
+{id:'roof-model',file:'src/roof/roof-model.js',layer:'calc',lines:290,
+ role:'Главная геометрия. Из параметров собирает скаты, стропила, накосные, ригели, стойки, объёмы. Всё остальное читает результат.',
+ ex:[['computeRoofModel','fn','computeRoofModel(p)','Полная модель: faces, rafters, hips, tieZ, postZ, upperZ, V, fix, mansard']],
+ imp:['vec3','format','roof-params','roof-mansard'], used:['roof-controller','roof-audit'],
+ notes:['<b>Каждый скат живёт в своей геометрии</b>: <code>f.rl / f.a / f.sa / f.ca / f.ta / f.deg / f.mu / f.rlPie / f.isBreakEnd / f.snowRows / f.basis</code>. Ломаный скат — 4 ската с разными уклонами.',
+        'Верхний скат мансарды кончается ПЕРЕЛОМОМ, не карнизом: подрезки под лобовую доску нет, зато нужен нахлёст <code>lap = 0.22</code>.',
+        '<code>upperZ</code> выводится из <code>parts.some(q=>q.zs===\'upper\')</code>, а не из отдельного поля — иначе ферма над потолком терялась.',
+        'Объём членов мансарды считается по обеим схемам parts. Чтение <code>q.s[0]</code> у подкоса роняло весь вывод.'],
+ risk:true},
+
+{id:'roof-structure',file:'src/roof/roof-structure.js',layer:'calc',lines:190,
+ role:'Нагрузки и несущая способность. Для ломаного ската берёт ХУДШИЙ из двух скатов, а не первый.',
+ ex:[['computeRoofStructure','fn','computeRoofStructure(p,m)','qd, qPair, governing case, sigma/defl/sm, utilR/D/Sm/B/T, boltLayout, ridge, bottomTie']],
+ imp:['roof-params','roof-long','roof-mansard'], used:['roof-controller','roof-audit'],
+ notes:['Прогиб считается от <b>нормальной к оси</b> нагрузки <code>q⊥ = q·cos²α</code>. Формула <code>q/ca</code> завышала прогиб в 1/ca³ раз.',
+        'Проверка S10: <code>q⊥·Ls²/8 === q·Lh²/8</code> — прогиб и момент должны быть согласованы.',
+        'Клеёные характеристики применяются только к прогону мансарды или заказанной клеёнке — стропила остаются массивом.',
+        'Берёт <code>purlinXs</code> из roof-long: прогон разгружает пролёт, и расчёт обязан об этом знать.'],
+ risk:true},
+
+{id:'roof-long',file:'src/roof/roof-long.js',layer:'calc',lines:250,
+ role:'Детали длиннее заготовки: прогоны, подкладки, стойки, шпренгели, стыки с накладками. Ставит опоры только там, где не проходит расчёт.',
+ ex:[['LONG_STRATEGIES','const','support | splice | order | glulam','Как решать длинные детали'],
+     ['analyzeLong','fn','analyzeLong(pieces,stock,allow,kerf)','Кто длиннее usable'],
+     ['purlinXs','fn','purlinXs(m,p)','Позиции прогонов — общий источник для расчёта пролёта'],
+     ['hipNeedsSupport','fn','hipNeedsSupport(m,p,qArea)','Проходит ли накосное без шпренгеля'],
+     ['planLongMembers','fn','planLongMembers(m,p,pieces)','План опор + bom + economy; мутирует pieces и r.joints']],
+ imp:['format','roof-params'], used:['roof-controller','roof-structure','roof-audit','lab'],
+ notes:['<b>Мутирует входные данные</b>: дописывает опорные детали в <code>pieces</code> (идемпотентно по флагу <code>__support</code>) и проставляет <code>r.joints</code>.',
+        'Стык стропилы обязан лежать НА прогоне. Вразбежку на общем прогоне не делается.',
+        'В мансарде промежуточные опоры запрещены — длина решается заготовкой.'],
+ risk:true},
+
+{id:'roof-pieces',file:'src/roof/roof-pieces.js',layer:'prod',lines:170,
+ role:'Ведомость деталей: группирует одинаковые, присваивает марки и штрихкоды, считает углы резов.',
+ ex:[['computeRoofPieces','fn','computeRoofPieces(p,m)','Список марок: sect, len, cutLen, cutA/cutB, notch, qty, vol, mass, stage, code']],
+ imp:['format','roof-params','roof-stages'], used:['roof-controller','roof-audit'],
+ notes:['Члены мансарды берутся прямо из <code>MS.parts</code> по <code>q.mk</code> — то же самое, что рисуется в сцене, поэтому ведомость и модель не расходятся.',
+        'Группа обязана существовать в <code>PIECE_GROUPS</code>, иначе деталь отбрасывается.'],
+ risk:true},
+
+{id:'roof-nesting',file:'src/roof/roof-nesting.js',layer:'prod',lines:40,
+ role:'Раскрой по заготовкам: first-fit по убыванию длины, учёт пропила.',
+ ex:[['nestRoofPieces','fn','nestRoofPieces(list,p)','bins, over, boards, waste, vol, usable']],
+ imp:[], used:['roof-controller','roof-audit'],
+ notes:['Детали длиннее заготовки тоже потребляют материал — иначе отход завышается.']},
+
+{id:'roof-bom',file:'src/roof/roof-bom.js',layer:'prod',lines:120,
+ role:'Смета: превращает объёмы и погонаж в строки со ставками.',
+ ex:[['roofBOM','fn','roofBOM(p,m,S,pcs,NS)','Строки материалов, распила, работ'],
+     ['roofPrice','fn','roofPrice(lines)','{lines, mat, saw, work, total}']],
+ imp:['roof-prices','format'], used:['roof-controller','lab'],
+ notes:['Строки плана опор (<code>plan.bom</code>) добавляются к смете в контроллере, а не здесь.']},
+
+{id:'roof-checks',file:'src/roof/roof-checks.js',layer:'prod',lines:140,
+ role:'Человекочитаемые проверки конструктива с кнопками быстрого исправления.',
+ ex:[['roofChecks','fn','roofChecks(p,m,S,pcs,NS)','[{lv,t,d,act}] — ok / info / warn / bad']],
+ imp:['roof-params','roof-mansard','format'], used:['roof-controller','lab'],
+ notes:['Читает <b>фактическое</b> утепление <code>m.insulMM</code>, а не параметр: мансарда принудительно ≥250 мм.',
+        'Для мансарды сообщения о схеме и распоре свои — наслонная/висячая там неприменимы.']},
+
+{id:'roof-barcode',file:'src/roof/roof-barcode.js',layer:'prod',lines:35,
+ role:'Code 39 для этикеток на торец детали.',
+ ex:[['code39','fn','code39(text,height)','SVG-строка штрихкода']],
+ imp:[], used:['lab'],
+ notes:['Допустимы только A–Z, 0–9, дефис, точка, пробел. Латинский код берётся из <code>PIECE_GROUPS.lat</code>.']},
+
+{id:'roof-export',file:'src/roof/roof-export.js',layer:'state',lines:90,
+ role:'Выгрузки для лесопилки и площадки.',
+ ex:[['cutCSV','fn','cutCSV(p,pcs,S,NS)','Ведомость распила'],
+     ['nestCSV','fn','nestCSV(NS)','Раскрой по заготовкам'],
+     ['assemblyCSV','fn','assemblyCSV(pcs,m)','Инструкция сборки по этапам'],
+     ['packageJSON','fn','packageJSON(roof)','Производственный пакет целиком'],
+     ['download','fn','download(name,text,mime)','Скачивание blob']],
+ imp:['format'], used:['lab'],
+ notes:[]},
+
+{id:'roof-context',file:'src/roof/roof-context.js',layer:'state',lines:40,dead:true,
+ role:'Мост от конфигуратора дома к кровле. В автономной лаборатории не используется.',
+ ex:[['roofFromHouse','fn','roofFromHouse(houseParams)','Переводит параметры дома в параметры кровли']],
+ imp:['vec3'], used:[],
+ notes:['Кандидат на удаление либо на подключение к основному конфигуратору.']},
+
+{id:'roof-controller',file:'src/roof/roof-controller.js',layer:'state',lines:55,
+ role:'Единая точка состояния. Мемоизированный вывод в строгом порядке — план опор считается ВНУТРИ, чтобы его детали попали в раскрой и смету.',
+ ex:[['createRoof','fn','createRoof(initial)','api: get/set/patch/reset/model/structure/pieces/plan/nesting/bom/estimate/checks/all/subscribe/refresh']],
+ imp:['roof-params','roof-model','roof-structure','roof-pieces','roof-nesting','roof-bom','roof-checks','roof-long'], used:['lab'],
+ notes:['Порядок вывода: <code>model → structure → pieces → plan → nesting → lines(+plan.bom) → estimate → checks</code>.',
+        'Если считать план после раскроя, опорные детали в распил не попадут — так было раньше.'],
+ risk:true},
+
+{id:'index',file:'src/roof/index.js',layer:'state',lines:22,
+ role:'Барель: единая точка импорта для приложения и тестов.',
+ ex:[['re-exports','const','export {…} from …','Всё публичное API ядра одним импортом']],
+ imp:['vec3','format','roof-params','roof-stages','roof-prices','roof-model','roof-structure','roof-pieces','roof-nesting','roof-bom','roof-checks','roof-barcode','roof-context','roof-controller','roof-long','roof-export','roof-hardware'],
+ used:['lab'],
+ notes:['Добавил модуль — не забудь ре-экспорт, иначе <code>lab.js</code> его не увидит.']},
+
+{id:'roof-hardware',file:'src/roof/roof-hardware.js',layer:'view',lines:400,
+ role:'Реальные узлы крепления: скользящие опоры, болты ригеля, уголки подкосов и полуног, оголовки стоек, шпильки, саморезы конька, накладки стыков.',
+ ex:[['buildHardware','fn','buildHardware(m,p,S)','{parts:[{layer,stage,group}], count, materials, errors}'],
+     ['HARDWARE_NOTES','const','[[заголовок,текст]]','Описания узлов для интерфейса']],
+ imp:['three (внешний)'], used:['roof-render','index'],
+ notes:['<b>Принудительно приводит векторы ядра к THREE.Vector3</b> через <code>T3()</code> на границе — иначе <code>negate()</code> отсутствует и сборка обрывается.',
+        'Крепёж рисуется инстансами (<code>Batch</code>), пластины — обычными мешами с настоящими отверстиями.',
+        'Секции обёрнуты в <code>safe()</code>: падение одной не убивает остальные, ошибки уходят в отчёт.',
+        'Пустые группы не добавляются в сцену — иначе аудит видит «1 пустых».'],
+ risk:true},
+
+{id:'roof-render',file:'src/roof/roof-render.js',layer:'view',lines:700,
+ role:'Сцена three.js. Собирает всё по слоям и этапам, ведёт камеру, пикинг, разрез, разлёт слоёв.',
+ ex:[['createRoofStage','fn','createRoofStage(host)','{scene,camera,renderer,controls,rebuild,setView,pick,hover,focus,resize,tick,dispose,frame,root,…}'],
+     ['ROOF_LAYERS','const','17 слоёв {id,n,c,s,st}','Порядок, цвет, offset разлёта, этап по умолчанию'],
+     ['rejectedCount','fn','rejectedCount()','Сколько геометрии отбраковано по NaN']],
+ imp:['three (внешний)','format','roof-hardware'], used:['lab','roof-audit','ui-test'],
+ notes:['<b>Камера выставляется один раз</b> (<code>framed</code>). Пересборка её не трогает; вернуть вид можно только кнопкой <code>frame()</code>.',
+        'Подкосы рисуются через <code>braceXY()</code> — выдавливание профиля в плоскости XY. <code>setFromUnitVectors</code> давал произвольный крен доски.',
+        'Читает <b>per-face</b> геометрию: <code>f.rl / f.ta / f.rlPie / f.snowRows</code>. Глобальный <code>m.rl</code> внутри цикла скатов использовать нельзя.',
+        'Страховка контура снимает членов мансарды вне кровли; граница по Z — <code>m.L/2</code> (фронтон), а не <code>length/2</code>.',
+        'Проставляет <code>userData: st, mk, msPart, vertSupport, culled, joint, faceTag</code> — по ним работает аудит.'],
+ risk:true},
+
+{id:'roof.css',file:'src/roof/roof.css',layer:'view',lines:420,
+ role:'Дизайн-система: палитра плотницкой мастерской, кнопки, поля, панели, блок мансарды, оверлеи сцены, печать.',
+ ex:[[':root','css','переменные','Палитра, шрифты, размеры панелей'],
+     ['.btn / .chip / .tab','css','—','Кнопки с градиентом, бликом и нажатием'],
+     ['select / input','css','—','Фон задан ДЛИННЫМИ свойствами'],
+     ['.ms-info / .ms-acts / .ms-note','css','—','Сводка и кнопки мансарды'],
+     ['@media print','css','—','Печать только этикеток']],
+ imp:[], used:['lab'],
+ notes:['<b>Сокращение background из двух слоёв без запятой невалидно</b> — селект падал в белый стиль браузера, а на hover становился тёмным. Теперь фон задан длинными свойствами.',
+        'Стили мансарды раньше жили в <code>roof-mansard-ui.js</code>; после переноса контролов в SPEC они обязаны быть здесь.'],
+ risk:true},
+
+{id:'lab',file:'src/roof/lab.js',layer:'app',lines:640,
+ role:'Приложение «Кровельный узел»: панель конструктива, 6 вкладок справа, сцена, сборка по этапам, этикетки, выгрузки.',
+ ex:[['SPEC','const','8 секций','Контролы, включая секцию Мансарда'],
+     ['renderCtl / renderLayers / renderRight','fn','()','Перерисовка панелей'],
+     ['window.__roofTest','const','хук','ready/builds/errors/params/summary/scene/camera/capture/canvasSize/frame']],
+ imp:['roof.css','index','roof-render','roof-mansard'], used:[],
+ notes:['Мансарда — <b>обычная секция SPEC</b> внутри <code>#ctlBody</code>. Отдельная плавающая панель больше не нужна.',
+        '<code>renderCtl()</code> делает <code>innerHTML=\'\'</code> — всё, что смонтировано в этот контейнер извне, будет уничтожено.',
+        'Контролы помечены <code>data-k</code>, вкладки <code>data-tab</code>, кнопки <code>data-act</code> — по ним работает автотест интерфейса.',
+        'Хук <code>__roofTest</code> — единственный способ для теста увидеть состояние сцены.'],
+ risk:true},
+
+{id:'roof-mansard-ui',file:'src/roof/roof-mansard-ui.js',layer:'app',lines:230,dead:true,
+ role:'Отдельная панель мансарды. Устарела: контролы переехали в SPEC приложения.',
+ ex:[['initMansardPanel','fn','initMansardPanel(roof,opts)','Монтирует секцию и патчит параметры']],
+ imp:['roof-mansard'], used:[],
+ notes:['<b>Не импортируется.</b> Держать нельзя: два источника управления мансардой расходятся, а её CSS дублирует <code>roof.css</code>.',
+        'Кандидат на удаление вместе с проверкой, что нигде не осталось импорта.'],
+ risk:true},
+
+{id:'roof-audit',file:'src/roof/roof-audit.js',layer:'test',lines:380,
+ role:'Аудит конструктива и сцены на 32 конфигурациях. Отделяет баги кода от намеренных нарушений норм.',
+ ex:[['AUDIT_GROUPS','const','X M S P N C R','Домены проверок'],
+     ['deriveAll','fn','deriveAll(params)','Полный вывод без рендера'],
+     ['auditCore','fn','auditCore(params)','~60 проверок ядра'],
+     ['auditScene','fn','auditScene(THREE,root,model,pieces,plan,params,errors,info)','Проверки сцены, включая мансардные R11–R22'],
+     ['AUDIT_MATRIX','const','32 конфигурации','Форма задаётся ЯВНО; expect — ожидаемые нарушения'],
+     ['auditConfig / runMatrix','fn','(c,makeScene) / (makeScene)','Прогон одной или всех конфигураций']],
+ imp:['roof-model','roof-structure','roof-pieces','roof-nesting','roof-long','roof-params','roof-mansard'], used:[],
+ notes:['Вертикальная опора определяется по <code>userData.vertSupport</code> либо по строгим пропорциям. Крутая контробрешётка на 62° больше не принимается за висящую стойку.',
+        'Пустыми считаются только анонимные группы — слои имеют <code>userData.layerId</code> и исключены.']},
+
+{id:'ui-test',file:'src/roof/ui-test.js',layer:'test',lines:480,
+ role:'Автотест интерфейса: нажимает настоящие контролы в iframe, ждёт остановки камеры, снимает пиксели и считает цветовую сигнатуру.',
+ ex:[['CFG_DEFAULTS','const','{speed,gap,shot,pixelTol,camTol,…}','Настраиваемые допуски'],
+     ['Driver','cls','class Driver','setRange/select/chip/tab/act/layer/orbit/resize/measure/cameraStill/hookDownloads'],
+     ['SCENARIOS','const','51 сценарий','Каждый — объект с ключом <code>run</code>'],
+     ['runSuite','fn','runSuite(opts)','Прогон с прогрессом, паузой и шагом']],
+ imp:[], used:[],
+ notes:['Сигнатура кадра — куб RGB 3×3×3 плюс сетка яркости 8×8. Смена покрытия меняет цвет, а не яркость, и раньше не ловилась.',
+        'Перед замером камеры обязательно <code>cameraStill()</code>: инерция OrbitControls иначе читается как сброс вида.',
+        'Записи сценариев — <code>{id,g,n,run:async D=>…}</code>. Стрелочная функция без ключа свойства ломает весь файл синтаксически.'],
+ risk:true}
+];
+
+const PIPE = [
+  {id:'roof-params',t:'параметры',d:'что задано'},
+  {id:'roof-model',t:'геометрия',d:'скаты, стропила'},
+  {id:'roof-structure',t:'расчёт',d:'нагрузки, усилия'},
+  {id:'roof-pieces',t:'детали',d:'марки, резы'},
+  {id:'roof-long',t:'опоры',d:'прогоны, стыки'},
+  {id:'roof-nesting',t:'раскрой',d:'заготовки'},
+  {id:'roof-bom',t:'смета',d:'деньги'},
+  {id:'roof-checks',t:'проверки',d:'что не так'},
+  {id:'roof-render',t:'сцена',d:'что видно'}
+];
+
+const CONTRACTS = [
+  {n:'MS.parts[] — box и brace',from:'roof-mansard',to:'roof-model · roof-pieces · roof-render',broke:true,
+   d:'Брус: <code>{t:\'box\', s:[w,h,d], p:[x,y,z], zs, mat, tag, st, mk}</code>. Подкос: <code>{t:\'brace\', a:[x,y], b:[x,y], depth, thick, …}</code>. У подкоса нет поля <code>s</code>.',
+   was:'roof-model читал q.s[0] у подкоса → TypeError, каскадом убивал весь вывод при каждом наведении мыши.'},
+  {n:'q.mk = [группа, длина]',from:'roof-mansard',to:'roof-pieces',broke:true,
+   d:'Единственный мост между тем, что нарисовано, и тем, что уйдёт на лесопилку. Группа обязана быть в PIECE_GROUPS.',
+   was:'Без mk прогон перелома и потолочный пояс рисовались, но в ведомость не попадали.'},
+  {n:'per-face геометрия ската',from:'roof-model',to:'roof-render',broke:true,
+   d:'<code>f.rl / f.a / f.sa / f.ca / f.ta / f.deg / f.mu / f.rlPie / f.isBreakEnd / f.snowRows / f.basis</code>. У ломаного ската четыре разных набора.',
+   was:'Рендер брал глобальный m.rl и m.ta → дырки на переломе и снегозадержатели, улетающие за верхний скат.'},
+  {n:'upperZ — узлы фермы над потолком',from:'roof-model',to:'roof-render · roof-pieces',broke:true,
+   d:'Выводится из <code>parts.some(q=>q.zs===\'upper\')</code> и шага <code>upperStep</code>.',
+   was:'Строился от удалённого поля MS.upper → пустой массив → ферма не рисовалась и не попадала в распил.'},
+  {n:'r.joints[] — стыки стропил',from:'roof-long',to:'roof-render · roof-hardware',broke:true,
+   d:'Позиции стыков считаются один раз и лежат на самой стропиле. Рендер режет разрыв, крепёж ставит накладку — по одному источнику.',
+   was:'Сдвиг «вразбежку» считался по разным индексам → разрыв в одном месте, накладка в другом.'},
+  {n:'S.boltLayout.positions[]',from:'roof-structure',to:'roof-hardware',broke:false,
+   d:'Готовые координаты болтов в мировых осях. Крепёж их только зеркалит по сторонам ригеля.',
+   was:''},
+  {n:'params.__pieces / __struct / __long',from:'lab',to:'roof-render → roof-hardware',broke:false,
+   d:'Служебные поля, которыми приложение передаёт ведомость, расчёт и план опор в сцену. Без них марки и крепёж не строятся.',
+   was:''},
+  {n:'Vec3 → THREE.Vector3',from:'vec3',to:'roof-render · roof-hardware',broke:true,
+   d:'Ядро отдаёт свой вектор без флага isVector3. На границе рендера обязателен <code>T3(v)</code>.',
+   was:'ax.clone().negate is not a function — обрыв сборки прогонов и накладок.'},
+  {n:'m.ridgeBeamSect',from:'roof-model',to:'roof-render · roof-audit',broke:false,
+   d:'Сечение конькового прогона в мм. В схеме «на фронтонах» — клеёное, подобранное по h/b ≤ 4.5.',
+   was:''},
+  {n:'userData сцены',from:'roof-render',to:'roof-audit',broke:true,
+   d:'<code>st</code> этап, <code>mk</code> марка, <code>msPart</code> член мансарды, <code>vertSupport</code> стойка, <code>culled</code> снят страховкой, <code>joint</code> ключ стыка, <code>faceTag</code>.',
+   was:'Без vertSupport аудит принимал крутые контробрешётки за висящие стойки — 86 ложных падений.'},
+  {n:'порядок вывода в контроллере',from:'roof-controller',to:'всё приложение',broke:true,
+   d:'model → structure → pieces → <b>plan</b> → nesting → lines(+plan.bom) → estimate → checks.',
+   was:'План считался после раскроя → опорные детали не попадали ни в распил, ни в смету.'},
+  {n:'селект: фон длинными свойствами',from:'roof.css',to:'lab',broke:true,
+   d:'<code>background-image</code> со списком слоёв через запятую, отдельно color/repeat/position/size.',
+   was:'Сокращение background из двух слоёв без запятой невалидно → белый селект, темнеющий только на hover.'}
+];
+
+/* ═══════════════ СОСТОЯНИЕ ═══════════════ */
+const $=s=>document.querySelector(s);
+const byId=Object.fromEntries(M.map(m=>[m.id,m]));
+const F={q:'',layers:new Set(Object.keys(LAYERS)),view:'detail',dead:false,risk:false,depth:1,zoom:1};
+let sel='roof-model';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let tT; const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tT);tT=setTimeout(()=>e.classList.remove('on'),2400);};
+
+const edges=[];
+M.forEach(m=>m.imp.forEach(i=>{ if(byId[i]) edges.push([i,m.id]); }));
+const consumers=id=>M.filter(m=>m.imp.includes(id)).map(m=>m.id);
+
+function visible(){
+  return M.filter(m=>{
+    if(!F.layers.has(m.layer)) return false;
+    if(m.dead&&!F.dead) return false;
+    if(F.risk&&!m.risk) return false;
+    if(F.q){
+      const hay=(m.id+' '+m.file+' '+m.role+' '+m.ex.map(e=>e.join(' ')).join(' ')+' '+(m.notes||[]).join(' ')).toLowerCase();
+      if(!hay.includes(F.q)) return false;
+    }
+    return true;
+  });
+}
+
+/* ═══════════════ НАВИГАТОР ═══════════════ */
+function renderNav(){
+  const nav=$('#nav'); nav.innerHTML='';
+  const vis=visible();
+  Object.entries(LAYERS).forEach(([k,L])=>{
+    const rows=vis.filter(m=>m.layer===k); if(!rows.length) return;
+    const g=document.createElement('div'); g.className='nlayer';
+    g.innerHTML=`<h4><i style="background:${L.c}"></i>${L.n}<em>${rows.length}</em></h4>`;
+    rows.forEach(m=>{
+      const b=document.createElement('button'); b.type='button';
+      b.className='mrow'+(m.id===sel?' on':'')+(m.dead?' dead':'');
+      b.innerHTML=`<span class="dot" style="background:${L.c}"></span><span class="nm">${esc(m.file.split('/').pop())}</span>
+        ${m.risk?'<span class="warn" title="Есть контракт, на котором ломались">▲</span>':''}
+        <span class="cnt">${m.ex.length}</span>`;
+      b.onclick=()=>{sel=m.id;F.view='detail';syncView();render();};
+      g.appendChild(b);
+    });
+    nav.appendChild(g);
+  });
+  if(!vis.length) nav.innerHTML='<div style="padding:24px 8px;color:var(--mute);font:600 11.5px var(--f)">Под фильтр ничего не попало.</div>';
+}
+
+function renderPipe(){
+  const p=$('#pipe'); p.innerHTML='';
+  PIPE.forEach((n,i)=>{
+    if(i){const a=document.createElement('div');a.className='parrow';a.textContent='→';p.appendChild(a);}
+    const el=document.createElement('button'); el.type='button';
+    el.className='pnode'+(n.id===sel?' on':'');
+    el.innerHTML=`<b>${esc(n.t)}</b><span>${esc(n.d)}</span>`;
+    el.title=byId[n.id].file;
+    el.onclick=()=>{sel=n.id;F.view='detail';syncView();render();};
+    p.appendChild(el);
+  });
+}
+
+/* ═══════════════ КАРТОЧКА ═══════════════ */
+function renderDetail(){
+  const m=byId[sel]; const body=$('#body');
+  if(!m){body.innerHTML='<div id="empty"><b>Модуль не выбран</b>Кликните по нему слева или в конвейере сверху.</div>';return;}
+  const L=LAYERS[m.layer];
+  const cons=consumers(m.id);
+  const rel=CONTRACTS.filter(c=>c.from===m.id||c.to.includes(m.id));
+  const kindCls=k=>k==='cls'?'cls':k==='const'?'const':k==='css'?'css':'fn';
+  body.innerHTML=`
+    <div class="card">
+      <div class="cardh">
+        <b>${esc(m.file)}</b>
+        <span class="tagl" style="background:${L.c}22;color:${L.c}">${esc(L.n)}</span>
+        ${m.dead?'<span class="tagl" style="background:rgba(244,100,95,.16);color:var(--red)">не используется</span>':''}
+        ${m.risk?'<span class="tagl" style="background:rgba(251,191,36,.14);color:var(--warn)">контракт</span>':''}
+        <span class="grow"></span>
+        <em>~${m.lines} строк · ${m.ex.length} экспортов</em>
+      </div>
+      <div class="cardb">
+        <p class="role">${esc(m.role)}</p>
+        <div class="sect"><h5>Экспорты</h5>
+          <table class="ex"><tbody>${m.ex.map(e=>`<tr>
+            <td class="kind"><span class="k ${kindCls(e[1])}">${esc(e[1])}</span></td>
+            <td class="sig">${esc(e[2])}</td>
+            <td class="desc">${esc(e[3])}</td></tr>`).join('')}</tbody></table>
+        </div>
+        <div class="sect"><h5>Импортирует (${m.imp.length})</h5>
+          <div class="links">${m.imp.length?m.imp.map(i=>byId[i]
+            ?`<button class="link" data-go="${i}">${esc(i)}</button>`
+            :`<span class="link none">${esc(i)}</span>`).join(''):'<span class="link none">ничего</span>'}</div>
+        </div>
+        <div class="sect"><h5>Кто использует (${cons.length})</h5>
+          <div class="links">${cons.length?cons.map(i=>`<button class="link" data-go="${i}">${esc(i)}</button>`).join(''):'<span class="link none">никто — модуль верхнего уровня или мёртвый</span>'}</div>
+        </div>
+        ${m.notes&&m.notes.length?`<div class="sect"><h5>Что важно помнить</h5><ul class="notes${m.risk?' warns':''}">${m.notes.map(n=>`<li>${n}</li>`).join('')}</ul></div>`:''}
+        ${rel.length?`<div class="sect"><h5>Контракты этого модуля (${rel.length})</h5>
+          ${rel.map(c=>`<div class="contract${c.broke?' broke':''}">
+            <div class="ct"><b>${esc(c.n)}</b><span class="flow">${esc(c.from)} → ${esc(c.to)}</span></div>
+            <p>${c.d}</p>${c.was?`<div class="was">Ломалось: ${esc(c.was)}</div>`:''}</div>`).join('')}</div>`:''}
+      </div>
+    </div>`;
+  body.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{sel=b.dataset.go;render();});
+}
+
+/* ═══════════════ КОНТРАКТЫ ═══════════════ */
+function renderContracts(){
+  const list=CONTRACTS.filter(c=>{
+    if(F.risk&&!c.broke) return false;
+    if(F.q){const h=(c.n+' '+c.from+' '+c.to+' '+c.d+' '+c.was).toLowerCase(); if(!h.includes(F.q)) return false;}
+    if(!F.layers.has(byId[c.from]?.layer||'core')) return false;
+    return true;
+  });
+  $('#body').innerHTML=`
+    <div class="card"><div class="cardh"><b>Контракты между модулями</b>
+      <span class="tagl" style="background:rgba(244,100,95,.16);color:var(--red)">${list.filter(c=>c.broke).length} ломались</span>
+      <span class="grow"></span><em>${list.length} всего</em></div>
+      <div class="cardb">
+        <p class="role">Это места, где один модуль отдаёт данные другому. Почти все наши поломки были здесь, а не в математике: схема поменялась в одном файле, а читали её по-старому в другом.</p>
+        ${list.map(c=>`<div class="contract${c.broke?' broke':''}">
+          <div class="ct"><b>${esc(c.n)}</b><span class="flow">${esc(c.from)} → ${esc(c.to)}</span>
+            ${c.broke?'<span class="tagl" style="background:rgba(244,100,95,.16);color:var(--red)">ломался</span>':'<span class="tagl" style="background:rgba(74,222,128,.14);color:var(--green)">стабилен</span>'}</div>
+          <p>${c.d}</p>${c.was?`<div class="was">Ломалось: ${esc(c.was)}</div>`:''}
+          <div class="links" style="margin-top:8px">
+            ${byId[c.from]?`<button class="link" data-go="${c.from}">источник: ${esc(c.from)}</button>`:''}
+            ${c.to.split(' · ').map(t=>byId[t]?`<button class="link" data-go="${t}">${esc(t)}</button>`:'').join('')}
+          </div></div>`).join('')}
+      </div></div>`;
+  $('#body').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{sel=b.dataset.go;F.view='detail';syncView();render();});
+}
+
+/* ═══════════════ ГРАФ ═══════════════ */
+let pan={x:0,y:0},dragging=null;
+function renderGraph(){
+  const vis=visible(), ids=new Set(vis.map(m=>m.id));
+  const near=new Set([sel]);
+  let frontier=[sel];
+  for(let d=0;d<F.depth;d++){
+    const next=[];
+    frontier.forEach(id=>{
+      edges.forEach(([a,b])=>{ if(a===id&&!near.has(b)){near.add(b);next.push(b);} if(b===id&&!near.has(a)){near.add(a);next.push(a);} });
+    });
+    frontier=next;
+  }
+  const cols=Object.keys(LAYERS);
+  const grouped=cols.map(k=>vis.filter(m=>m.layer===k));
+  const colW=190, rowH=42, padX=40, padY=54;
+  const maxRows=Math.max(1,...grouped.map(g=>g.length));
+  const W=padX*2+cols.length*colW, H=padY+maxRows*rowH+30;
+  const pos={};
+  grouped.forEach((g,ci)=>g.forEach((m,ri)=>{ pos[m.id]={x:padX+ci*colW,y:padY+ri*rowH}; }));
+  const z=F.zoom/100;
+  const vw=W/z, vh=H/z;
+  const vb=`${(W-vw)/2+pan.x} ${(H-vh)/2+pan.y} ${vw} ${vh}`;
+
+  const edgeSvg=edges.filter(([a,b])=>ids.has(a)&&ids.has(b)).map(([a,b])=>{
+    const p=pos[a],q=pos[b];
+    const x1=p.x+134,y1=p.y+13,x2=q.x,y2=q.y+13;
+    const mx=(x1+x2)/2;
+    const hot=(a===sel||b===sel);
+    const dim=F.depth<3&&!near.has(a)&&!near.has(b);
+    return `<path class="gedge${hot?' hot':''}${dim?' dim':''}" d="M${x1} ${y1} C${mx} ${y1} ${mx} ${y2} ${x2} ${y2}"/>`;
+  }).join('');
+
+  const nodeSvg=vis.map(m=>{
+    const p=pos[m.id], L=LAYERS[m.layer];
+    const dim=F.depth<3&&!near.has(m.id);
+    return `<g class="gnode${m.id===sel?' sel':''}${dim?' dim':''}" data-id="${m.id}" transform="translate(${p.x},${p.y})" style="cursor:pointer">
+      <rect width="134" height="26" rx="7" fill="${m.id===sel?'rgba(224,145,63,.18)':'#18231d'}" stroke="${m.dead?'#4a3a3a':L.c}" stroke-width="1" stroke-opacity="${m.dead?.5:.75}"/>
+      <rect width="3" height="26" rx="1.5" fill="${L.c}" opacity=".85"/>
+      <text x="11" y="17">${esc(m.file.split('/').pop().replace('.js','').replace('.css','·css'))}</text>
+      ${m.risk?`<circle cx="126" cy="7" r="3" fill="#fbbf24"/>`:''}
+    </g>`;
+  }).join('');
+
+  const layerSvg=cols.map((k,ci)=>grouped[ci].length
+    ?`<text class="glayer" x="${padX+ci*colW}" y="34">${esc(LAYERS[k].n)}</text>`:'').join('');
+
+  $('#body').innerHTML=`
+    <div id="graphwrap">
+      <div id="graphbar">
+        <span style="font:800 10px var(--f);letter-spacing:.12em;text-transform:uppercase;color:var(--timber)">Граф зависимостей</span>
+        <span class="chip on" style="cursor:default"><i style="background:var(--timber)"></i>выбран: ${esc(sel)}</span>
+        <span class="chip" style="cursor:default"><i style="background:var(--warn)"></i>▲ есть контракт</span>
+        <span class="hint">Тяните мышью · глубина ${F.depth} · масштаб ${F.zoom}%</span>
+      </div>
+      <svg id="graph" viewBox="${vb}" preserveAspectRatio="xMidYMid meet">${layerSvg}${edgeSvg}${nodeSvg}</svg>
+    </div>`;
+  const svg=$('#graph');
+  svg.querySelectorAll('.gnode').forEach(g=>g.onclick=()=>{sel=g.dataset.id;render();});
+  svg.addEventListener('pointerdown',e=>{dragging={x:e.clientX,y:e.clientY,px:pan.x,py:pan.y};svg.classList.add('drag');svg.setPointerCapture(e.pointerId);});
+  svg.addEventListener('pointermove',e=>{
+    if(!dragging) return;
+    const r=svg.getBoundingClientRect();
+    pan.x=dragging.px-(e.clientX-dragging.x)*(vw/r.width);
+    pan.y=dragging.py-(e.clientY-dragging.y)*(vh/r.height);
+    svg.setAttribute('viewBox',`${(W-vw)/2+pan.x} ${(H-vh)/2+pan.y} ${vw} ${vh}`);
+  });
+  const stop=()=>{dragging=null;svg.classList.remove('drag');};
+  svg.addEventListener('pointerup',stop); svg.addEventListener('pointercancel',stop);
+}
+
+/* ═══════════════ РЕНДЕР ═══════════════ */
+function render(){
+  renderNav(); renderPipe();
+  if(F.view==='graph') renderGraph();
+  else if(F.view==='contracts') renderContracts();
+  else renderDetail();
+  $('#sMod').textContent=M.filter(m=>!m.dead).length;
+  $('#sExp').textContent=M.reduce((s,m)=>s+m.ex.length,0);
+  $('#sEdge').textContent=edges.length;
+  $('#sDead').textContent=M.filter(m=>m.dead).length;
+}
+function syncView(){
+  document.querySelectorAll('#view button').forEach(b=>b.classList.toggle('on',b.dataset.v===F.view));
+}
+function syncChips(){
+  document.querySelectorAll('#lchips .chip').forEach(b=>{
+    const on=F.layers.has(b.dataset.l); b.classList.toggle('on',on);
+    b.querySelector('i').style.background=on?LAYERS[b.dataset.l].c:'#3b4a41';
+  });
+  const set=(id,on)=>{const e=$(id);e.classList.toggle('on',on);e.setAttribute('aria-pressed',String(on));
+    e.querySelector('i').style.background=on?'var(--acid)':'#3b4a41';};
+  set('#tDead',F.dead); set('#tRisk',F.risk);
+}
+
+Object.entries(LAYERS).forEach(([k,L])=>{
+  const b=document.createElement('button'); b.type='button'; b.className='chip on'; b.dataset.l=k;
+  b.innerHTML=`<i style="background:${L.c}"></i>${L.n}`;
+  b.onclick=()=>{F.layers.has(k)?F.layers.delete(k):F.layers.add(k);syncChips();render();};
+  $('#lchips').appendChild(b);
+});
+document.querySelectorAll('#view button').forEach(b=>b.onclick=()=>{F.view=b.dataset.v;syncView();render();});
+$('#q').oninput=e=>{F.q=e.target.value.trim().toLowerCase();render();};
+$('#tDead').onclick=()=>{F.dead=!F.dead;syncChips();render();};
+$('#tRisk').onclick=()=>{F.risk=!F.risk;syncChips();render();};
+$('#cDepth').oninput=e=>{F.depth=+e.target.value;$('#vDepth').textContent=F.depth;if(F.view==='graph')render();};
+$('#cZoom').oninput=e=>{F.zoom=+e.target.value;$('#vZoom').textContent=F.zoom+'%';if(F.view==='graph')render();};
+$('#bReset').onclick=()=>{
+  F.q='';$('#q').value='';F.layers=new Set(Object.keys(LAYERS));F.dead=false;F.risk=false;
+  F.depth=1;$('#cDepth').value=1;$('#vDepth').textContent='1';
+  F.zoom=100;$('#cZoom').value=100;$('#vZoom').textContent='100%';
+  pan={x:0,y:0};sel='roof-model';F.view='detail';syncView();syncChips();render();toast('Показаны все модули');
+};
+
+function dl(name,text,mime){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:mime}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);}
+$('#bMd').onclick=()=>{
+  const L=[];
+  L.push('# Карта проекта кровли\n');
+  L.push(`Модулей: ${M.length} · экспортов: ${M.reduce((s,m)=>s+m.ex.length,0)} · связей: ${edges.length}\n`);
+  L.push('## Конвейер\n');
+  L.push(PIPE.map(n=>`\`${n.t}\``).join(' → ')+'\n');
+  Object.entries(LAYERS).forEach(([k,l])=>{
+    const rows=M.filter(m=>m.layer===k); if(!rows.length) return;
+    L.push(`\n## ${l.n}\n`);
+    rows.forEach(m=>{
+      L.push(`### ${m.file}${m.dead?' — НЕ ИСПОЛЬЗУЕТСЯ':''}\n`);
+      L.push(m.role+'\n');
+      L.push('| экспорт | вид | назначение |');
+      L.push('|---|---|---|');
+      m.ex.forEach(e=>L.push(`| \`${e[2]}\` | ${e[1]} | ${e[3]} |`));
+      L.push('');
+      if(m.imp.length) L.push('Импортирует: '+m.imp.map(i=>`\`${i}\``).join(', ')+'\n');
+      const c=consumers(m.id);
+      if(c.length) L.push('Используют: '+c.map(i=>`\`${i}\``).join(', ')+'\n');
+      if(m.notes?.length){L.push('Важно:');m.notes.forEach(n=>L.push('- '+n.replace(/<[^>]+>/g,'')));L.push('');}
+    });
+  });
+  L.push('\n## Контракты\n');
+  CONTRACTS.forEach(c=>{
+    L.push(`### ${c.n}${c.broke?' — ЛОМАЛСЯ':''}`);
+    L.push(`${c.from} → ${c.to}\n`);
+    L.push(c.d.replace(/<[^>]+>/g,'')+'\n');
+    if(c.was) L.push('Ломалось: '+c.was+'\n');
+  });
+  dl('roof-map.md',L.join('\n'),'text/markdown;charset=utf-8');
+  toast('Markdown выгружен');
+};
+$('#bJson').onclick=()=>{
+  dl('roof-map.json',JSON.stringify({generated:new Date().toISOString(),layers:LAYERS,modules:M,pipeline:PIPE,contracts:CONTRACTS,edges},null,2),'application/json');
+  toast('JSON выгружен');
+};
+addEventListener('keydown',e=>{
+  if(/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)){ if(e.key==='Escape'){e.target.value='';F.q='';render();e.target.blur();} return; }
+  const k=e.key.toLowerCase();
+  if(k==='/'){e.preventDefault();$('#q').focus();}
+  if(k==='g'){F.view='graph';syncView();render();}
+  if(k==='d'){F.view='detail';syncView();render();}
+  if(k==='k'){F.view='contracts';syncView();render();}
+});
+
+syncChips(); syncView(); render();
+</script>
+</body>
+</html>

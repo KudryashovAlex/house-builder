@@ -1,0 +1,17 @@
+export { Vec3, v3, eulerBasis } from './vec3.js';
+export { fin, cl, fmt, f1, f2, f3, mm, deg } from './format.js';
+export { ROOF_DEFAULTS, SEATS, TIEMODE, COVERS, RAFTER_MAX, SNOW, WIND, GRADE, RHO } from './roof-params.js';
+export { ROOF_STAGES, PIECE_GROUPS } from './roof-stages.js';
+export { RATES, RATES_DEF, loadRates, saveRates, resetRates } from './roof-prices.js';
+export { computeRoofModel } from './roof-model.js';
+export { computeRoofStructure } from './roof-structure.js';
+export { computeRoofPieces } from './roof-pieces.js';
+export { nestRoofPieces } from './roof-nesting.js';
+export { roofBOM, roofPrice } from './roof-bom.js';
+export { roofChecks } from './roof-checks.js';
+export { code39 } from './roof-barcode.js';
+export { roofFromHouse } from './roof-context.js';
+export { createRoof } from './roof-controller.js';
+export { planLongMembers, analyzeLong, LONG_STRATEGIES } from './roof-long.js';
+export { cutCSV, nestCSV, assemblyCSV, packageJSON, download } from './roof-export.js';
+export { HARDWARE_NOTES } from './roof-hardware.js';

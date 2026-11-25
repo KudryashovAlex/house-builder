@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Кровельный узел — расчёт, распил, сборка по номерам · ДОМ·ЛЕС</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header id="top">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 16 16 5l14 11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M6 16v12h20V16M9 28V19M16 12v16M23 28V19M6 22h20" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+    <div><div class="bname">КРОВЕЛЬНЫЙ УЗЕЛ</div><div class="bsub">расчёт нагрузок · ведомость распила · сборка по маркам</div></div>
+  </div>
+  <div class="topright">
+    <button class="btn s" id="mob" type="button">Панели</button>
+    <button class="btn s" id="bRand" type="button">🎲 Вариант</button>
+    <button class="btn s" id="bReset" type="button">↺ Сброс</button>
+    <button class="btn s" id="bPrint" type="button">🏷 Этикетки</button>
+    <button class="btn s" id="bCsv" type="button">Распил CSV</button>
+    <button class="btn p s" id="bJson" type="button">Пакет JSON</button>
+  </div>
+</header>
+
+<aside id="left">
+  <div class="phead"><span class="ptitle">КОНСТРУКТИВ</span><span style="font:700 9px var(--m);color:var(--mute)" id="tag">—</span></div>
+  <div class="pbody scroll" id="ctlBody"></div>
+</aside>
+
+<main id="stage">
+  <div id="hud">
+    <div class="stat"><span>Площадь скатов</span><b id="hArea">—</b></div>
+    <div class="stat"><span>Пиломатериал</span><b id="hWood">—</b></div>
+    <div class="stat"><span>Запил</span><b id="hNotch">—</b></div>
+    <div class="stat"><span>Ригель, усилие</span><b id="hTie">—</b></div>
+    <div class="stat"><span>Болты, загрузка</span><b id="hBolt">—</b></div>
+    <div class="stat"><span>Деталей / марок</span><b id="hPcs">—</b></div>
+  </div>
+  <div id="hover"></div>
+  <div id="nodeCard"><button class="x" id="nodeX" type="button" aria-label="Закрыть">✕</button><h4 id="nodeT"></h4><p id="nodeD"></p><div class="k" id="nodeK"></div></div>
+  <div id="pie">
+    <div class="ph"><h4>Слои</h4><span style="font:700 9px var(--m);color:var(--mute)" id="pieCount">—</span></div>
+    <div class="pb scroll" id="pieRows"></div>
+    <div class="pf"><button class="btn xs" id="pieAll" type="button">Все</button><button class="btn xs" id="pieStr" type="button">Каркас</button><button class="btn xs" id="pieOff" type="button">Скрыть</button></div>
+  </div>
+  <div id="tip">Тяни — орбита · колесо — зум · наведение показывает <b>марку детали</b></div>
+  <div id="asm">
+    <div class="ah"><span class="num" id="asmNum">13/13</span><span class="at" id="asmT">—</span><span class="ac" id="asmC">—</span></div>
+    <div class="ar">
+      <button class="iconbtn" id="asmPrev" type="button" title="Предыдущий этап">◀</button>
+      <button class="iconbtn" id="asmPlay" type="button" title="Проиграть сборку">▶</button>
+      <input type="range" id="asmRange" min="0" max="13" step="1" value="13" aria-label="Этап сборки">
+      <button class="iconbtn" id="asmNext" type="button" title="Следующий этап">▶</button>
+      <button class="iconbtn on" id="asmMarks" type="button" title="Марки деталей">🏷</button>
+    </div>
+    <div class="ad" id="asmD">—</div>
+  </div>
+  <div id="fail"><div><h3>Сцена не отрисовалась</h3><p id="failMsg">WebGL недоступен.</p><button class="btn p" id="failRetry" type="button">Пересобрать</button></div></div>
+</main>
+
+<aside id="right">
+  <div class="phead">
+    <div class="tabs">
+      <button class="tab on" data-tab="calc" type="button">Расчёт</button>
+      <button class="tab" data-tab="cut" type="button">Распил</button>
+      <button class="tab" data-tab="asm" type="button">Сборка</button>
+      <button class="tab" data-tab="lab" type="button">Марки</button>
+      <button class="tab" data-tab="est" type="button">Смета</button>
+      <button class="tab" data-tab="rate" type="button">Цены</button>
+    </div>
+  </div>
+  <div class="total">
+    <div class="cap" id="totCap">Итого по крыше</div>
+    <div class="sum" id="tSum">—</div>
+    <div class="sub" id="tSub">—</div>
+    <div class="split">
+      <div><span id="s1l">Материалы</span><b id="s1">—</b></div>
+      <div><span id="s2l">Работа</span><b id="s2">—</b></div>
+      <div><span id="s3l">₽ / м²</span><b id="s3">—</b></div>
+    </div>
+  </div>
+  <div class="pbody scroll" id="rightBody"></div>
+</aside>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.169.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.169.0/examples/jsm/"}}
+</script>
+<script type="module" src="./src/roof/lab.js"></script>
+</body>
+</html>

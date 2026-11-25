@@ -1,0 +1,40 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<title>Проверка ядра кровли</title>
+<style>
+body{background:#0f1512;color:#e8f0e6;font:14px/1.6 system-ui;padding:24px}
+h1{font-size:18px;color:#ffc477}
+table{border-collapse:collapse;margin:12px 0 24px}
+td,th{border:1px solid #2c3a32;padding:6px 10px;text-align:left;font-size:13px}
+th{color:#9db0a3;font-size:11px;text-transform:uppercase}
+.ok{color:#4ade80}.bad{color:#f4645f}
+</style></head><body>
+<h1>Ядро кровли — работает без 3D</h1>
+<div id="out">Считаю…</div>
+<script type="module">
+import { createRoof, roofFromHouse, ROOF_STAGES } from './src/roof/index.js';
+const roof = createRoof();
+const d = roof.all();
+const rows = [
+  ['Площадь скатов', d.model.area.toFixed(2) + ' м²'],
+  ['Пиломатериал', d.model.wood.toFixed(2) + ' м³'],
+  ['Накосных балок', d.model.hips.length],
+  ['Стропил / полуног', d.model.rafters.length + ' / ' + d.model.jackJoints],
+  ['Усилие в ригеле', d.structure.tieN.toFixed(1) + ' кН'],
+  ['Загрузка болтов', Math.round(d.structure.utilB * 100) + ' %'],
+  ['Прогиб стропил', d.structure.defl.toFixed(1) + ' мм'],
+  ['Марок / деталей', d.pieces.length + ' / ' + d.pieces.reduce((s, i) => s + i.qty, 0)],
+  ['Заготовок', d.nesting.boards],
+  ['Отход', Math.round(d.nesting.waste * 100) + ' %'],
+  ['Итого', Math.round(d.estimate.total).toLocaleString('ru-RU') + ' ₽'],
+  ['Этапов сборки', ROOF_STAGES.length]
+];
+const bad = d.checks.filter(c => c.lv === 'bad');
+document.getElementById('out').innerHTML =
+  '<table><tr><th>Показатель</th><th>Значение</th></tr>' +
+  rows.map(r => `<tr><td>${r[0]}</td><td><b>${r[1]}</b></td></tr>`).join('') + '</table>' +
+  `<p class="${bad.length ? 'bad' : 'ok'}">${bad.length ? 'Замечаний: ' + bad.length : 'Все проверки пройдены'}</p>` +
+  '<h1>Кровля из параметров дома</h1><table><tr><th>Параметр</th><th>Значение</th></tr>' +
+  (() => { const h = roofFromHouse({ width: 8, length: 6, floors: 2, roofType: 'hip', roofHeight: 2.2, beamWidth: '200', material: 'brevno', overhangSides: .8, overhangFront: .8 });
+    return [['тип', h.type], ['пролёт', h.span], ['уклон', h.pitch + '°'], ['свес', h.eave], ['утеплитель', h.insul + ' мм'], ['верх стены', h.context.wallTopY.toFixed(3) + ' м']]
+      .map(r => `<tr><td>${r[0]}</td><td><b>${r[1]}</b></td></tr>`).join(''); })() + '</table>';
+</script></body></html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#141a16" />
+  <title>Дом·Лес — 3D-конфигуратор деревянных домов</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 15 16 5l12 10v12H4z' fill='%23e8a34c'/%3E%3Crect x='13' y='19' width='6' height='8' fill='%23141a16'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="app">
+
+    <header id="topbar">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M3 15 16 4l13 11v13H3z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+          <path d="M9 28V17h14v11M9 21h14M9 24.5h14" stroke="currentColor" stroke-width="1.6" fill="none"/>
+        </svg>
+        <div class="brand-text">
+          <span class="brand-name">ДОМ·ЛЕС</span>
+          <span class="brand-sub">конфигуратор деревянных домов</span>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button id="btn-snapshot" class="btn btn-ghost" title="Сохранить снимок дома (PNG)">
+          <svg viewBox="0 0 24 24" class="ic"><path d="M4 8h3l2-3h6l2 3h3v11H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+          <span class="btn-label">Снимок</span>
+        </button>
+        <button id="btn-edit" class="btn">Планировка</button>
+        <button id="btn-walk" class="btn btn-primary">Прогулка</button>
+        <button id="btn-panel" class="btn btn-ghost btn-panel-toggle" title="Параметры дома">
+          <svg viewBox="0 0 24 24" class="ic"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <aside id="panel">
+      <div id="panel-head">
+        <div class="panel-title-row">
+          <h1 class="panel-title">Параметры дома</h1>
+          <div class="panel-actions">
+            <button id="btn-reset" class="icon-btn" title="Сбросить всё к начальному варианту">
+              <svg viewBox="0 0 24 24" class="ic"><path d="M5 12a7 7 0 1 0 2-4.9M5 4v4h4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button id="btn-random" class="icon-btn" title="Случайный вариант дома">
+              <svg viewBox="0 0 24 24" class="ic"><rect x="4" y="4" width="16" height="16" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="15" r="1.4" fill="currentColor"/><circle cx="15" cy="9" r="1.4" fill="currentColor"/><circle cx="9" cy="15" r="1.4" fill="currentColor"/></svg>
+            </button>
+            <button id="btn-export" class="icon-btn" title="Скачать проект (JSON) — отправьте его строителям">
+              <svg viewBox="0 0 24 24" class="ic"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+        <p class="panel-hint">Крутите модель мышью, колесо — масштаб. Меняйте параметры — дом пересобирается instantly.</p>
+      </div>
+      <div id="controls-scroll"></div>
+      <div id="footer"></div>
+    </aside>
+
+    <div id="editor-panel">
+      <div class="toolbar">
+        <button id="tool-wall" class="tool-btn">🧱 Стена</button>
+        <button id="tool-fence" class="tool-btn">🚧 Забор</button>
+        <button id="tool-door" class="tool-btn">🚪 Дверь</button>
+        <button id="tool-window" class="tool-btn">🪟 Окно</button>
+        <button id="tool-light" class="tool-btn">💡 Свет</button>
+        <button id="tool-stairs" class="tool-btn">🪜 Лестница</button>
+        <button id="tool-column" class="tool-btn">🏛️ Столб</button>
+        <button id="tool-delete" class="tool-btn tool-danger">🗑️ Удалить</button>
+        <span class="toolbar-sep"></span>
+        <span class="floor-label">Этаж:</span>
+        <button id="floor-1" class="floor-btn">1</button>
+        <button id="floor-2" class="floor-btn">2</button>
+        <button id="floor-3" class="floor-btn">3</button>
+      </div>
+      <div class="editor-hint">Зажмите ЛКМ и тяните стену · клик — поставить объект · «Удалить» + клик по внешней стене — снос 2 м под веранду</div>
+    </div>
+
+    <div id="submenu-panel"></div>
+
+    <div id="walk-hud">
+      <div class="crosshair"></div>
+      <div class="walk-hints">
+        <span><b>WASD</b> идти</span><span><b>Shift</b> бег</span><span><b>Клик</b> дверь</span><span><b>ESC</b> выйти</span>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <div id="loader">
+      <svg viewBox="0 0 32 32" class="loader-house"><path d="M4 15 16 5l12 10v12H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="13" y="19" width="6" height="8" fill="currentColor"/></svg>
+      <div class="loader-text">Собираем сруб…</div>
+    </div>
+
+  </div>
+  <noscript><div style="position:fixed;inset:0;background:#141a16;color:#e9e4d8;display:flex;align-items:center;justify-content:center;font-family:sans-serif;z-index:999">Для конфигуратора нужен JavaScript и WebGL.</div></noscript>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Передача проекта · кровельный узел · ДОМ·ЛЕС</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a110e;--sf:#121c17;--sf2:#19241e;--ov:#202e26;--ln:#293830;--ln2:#3f5347;
+  --tx:#eef4ec;--dim:#a1b4a7;--mute:#6f8377;
+  --timber:#e0913f;--hi:#ffc477;--deep:#9d5a17;
+  --steel:#7fb2d8;--blue:#4cc9f0;--acid:#a3e635;--violet:#b07cf0;--mag:#f472b6;
+  --red:#f4645f;--green:#4ade80;--warn:#fbbf24;
+  --f:'Manrope',system-ui,sans-serif;--d:'Unbounded',sans-serif;--m:'JetBrains Mono',monospace;
+  --bar:60px;--filt:56px;--nav:274px;--fs:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--tx);font:var(--fs)/1.65 var(--f);overflow:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(820px 480px at 2% -8%,rgba(224,145,63,.16),transparent 62%),
+  radial-gradient(700px 460px at 100% 0,rgba(76,201,240,.11),transparent 60%),
+  radial-gradient(900px 640px at 40% 118%,rgba(163,230,53,.06),transparent 62%),
+  linear-gradient(180deg,#0d1712,#0a110e 46%,#080f0c)}
+body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.38;pointer-events:none;
+  background-image:linear-gradient(rgba(63,83,71,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(63,83,71,.16) 1px,transparent 1px);
+  background-size:46px 46px;mask-image:radial-gradient(circle at 40% 22%,#000 14%,transparent 72%)}
+::selection{background:var(--timber);color:#1a1206}
+.sc{scrollbar-width:thin;scrollbar-color:var(--deep) var(--sf)}
+.sc::-webkit-scrollbar{width:11px;height:11px}
+.sc::-webkit-scrollbar-track{background:var(--sf);border-radius:9px}
+.sc::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--timber),var(--deep));border-radius:9px;border:2px solid var(--sf)}
+.sc::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--hi),var(--timber))}
+
+#bar{position:fixed;inset:0 0 auto 0;height:var(--bar);z-index:60;display:flex;align-items:center;gap:12px;padding:0 16px;
+  background:linear-gradient(180deg,rgba(10,17,14,.97),rgba(10,17,14,.86));backdrop-filter:blur(14px);border-bottom:1px solid var(--ln)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand svg{width:28px;height:28px;color:var(--timber);flex:none;filter:drop-shadow(0 0 11px rgba(224,145,63,.5))}
+.bn{font-family:var(--d);font-weight:700;font-size:12.5px;letter-spacing:.05em;white-space:nowrap}
+.bs{font-size:10px;color:var(--mute);white-space:nowrap}
+#bar .grow{flex:1}
+.btn{border:1px solid var(--ln2);border-radius:9px;background:#1e2b24;color:var(--tx);font:700 11.5px var(--f);
+  padding:8px 12px;cursor:pointer;transition:.15s cubic-bezier(.2,.8,.3,1);white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--timber);background:#2c3b33;transform:translateY(-1px)}
+.btn.p{background:linear-gradient(180deg,var(--hi),var(--timber) 55%,var(--deep));color:#241708;border-color:#c8802e;font-weight:800}
+.btn:focus-visible,input:focus-visible,.chip:focus-visible,.seg button:focus-visible,.toc a:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(224,145,63,.32)}
+#prog{position:fixed;top:var(--bar);left:0;height:2px;z-index:61;width:0;background:linear-gradient(90deg,var(--hi),var(--acid));transition:width .15s}
+
+#filt{position:fixed;top:var(--bar);left:0;right:0;z-index:55;display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+  padding:9px 16px;min-height:var(--filt);background:linear-gradient(180deg,rgba(18,28,23,.96),rgba(13,21,17,.92));
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--ln)}
+.search{position:relative;flex:0 1 250px;min-width:150px}
+.search input{width:100%;padding:8px 10px 8px 30px;font:600 12px var(--f);color:var(--tx);background:#1b2721;border:1px solid var(--ln2);border-radius:9px}
+.search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--mute)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:8px;border:1px solid var(--ln);
+  background:#1a2620;font:700 10.5px var(--f);color:var(--mute);cursor:pointer;transition:.14s;white-space:nowrap}
+.chip:hover{color:var(--tx);border-color:var(--ln2)}
+.chip.on{color:var(--tx);border-color:var(--ln2);background:var(--ov)}
+.chip i{width:8px;height:8px;border-radius:2.5px;background:#3b4a41;display:block}
+.sep{width:1px;height:22px;background:var(--ln);flex:none}
+.seg{display:flex;border:1px solid var(--ln2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:#1a2620;color:var(--mute);font:700 10.5px var(--f);padding:7px 11px;cursor:pointer}
+.seg button.on{background:linear-gradient(180deg,var(--hi),var(--timber));color:#241708}
+.mini{display:flex;align-items:center;gap:7px;font:700 10px var(--f);color:var(--mute);white-space:nowrap}
+.mini input[type=range]{width:78px;height:16px;-webkit-appearance:none;background:none;cursor:pointer}
+.mini input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:3px;background:linear-gradient(90deg,var(--deep),var(--ln))}
+.mini input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;margin-top:-4.5px;border-radius:50%;
+  background:radial-gradient(circle at 34% 28%,var(--hi),var(--timber) 56%,var(--deep));border:2px solid #1a1206}
+.mini b{font:800 10px var(--m);color:var(--hi);min-width:30px;text-align:right}
+
+#shell{position:fixed;top:calc(var(--bar) + var(--filt));left:0;right:0;bottom:0;display:grid;grid-template-columns:var(--nav) 1fr}
+#nav{border-right:1px solid var(--ln);overflow-y:auto;padding:14px 12px 30px;
+  background:linear-gradient(180deg,rgba(18,28,23,.95),rgba(13,21,17,.95))}
+.toc h4{margin:0 0 7px;font:800 8.5px var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.toc a{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:8px;margin-bottom:3px;
+  font:600 11.5px var(--f);color:var(--dim);text-decoration:none;transition:.14s;border:1px solid transparent}
+.toc a:hover{background:#1f2c25;color:var(--tx)}
+.toc a.on{background:linear-gradient(90deg,rgba(224,145,63,.16),transparent);border-color:var(--ln2);color:var(--hi)}
+.toc a i{font-style:normal;font:800 9px var(--m);color:var(--mute);width:16px;flex:none}
+.toc a em{margin-left:auto;font-style:normal;font:700 9px var(--m);color:var(--mute)}
+#nav .legend{margin-top:16px;border-top:1px solid var(--ln);padding-top:12px;font:500 10.5px/1.6 var(--f);color:var(--mute)}
+#nav .legend b{color:var(--dim)}
+
+#main{overflow-y:auto;padding:20px 26px 60px;scroll-behavior:smooth}
+.wrap{max-width:1000px;margin:0 auto}
+.hero{margin-bottom:22px}
+.hero h1{font:800 27px/1.2 var(--f);margin:0 0 8px;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;background:linear-gradient(96deg,var(--hi),var(--acid) 52%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--dim);font-size:13.5px;max-width:88ch}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:16px 0 0}
+.mc{border:1px solid var(--ln);border-radius:12px;background:linear-gradient(165deg,var(--sf2),var(--sf));padding:11px 13px;position:relative;overflow:hidden}
+.mc::after{content:'';position:absolute;inset:0 auto 0 0;width:3px;background:var(--timber)}
+.mc.bad::after{background:var(--red)}.mc.good::after{background:var(--green)}.mc.warn::after{background:var(--warn)}
+.mc b{display:block;font:800 21px/1.05 var(--m);color:var(--hi)}
+.mc.bad b{color:var(--red)}.mc.good b{color:var(--green)}.mc.warn b{color:var(--warn)}
+.mc span{display:block;font:800 8px var(--f);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-top:4px}
+.mc em{display:block;font-style:normal;font:600 10px var(--m);color:var(--dim);margin-top:3px}
+
+section{margin-bottom:26px;scroll-margin-top:20px}
+.sh{display:flex;align-items:center;gap:11px;margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(--ln)}
+.sh i{font-style:normal;width:26px;height:26px;border-radius:8px;background:linear-gradient(180deg,var(--hi),var(--deep));
+  color:#241708;font:800 11px var(--m);display:grid;place-items:center;flex:none}
+.sh h2{margin:0;font:800 18px var(--f);flex:1}
+.sh em{font-style:normal;font:600 10.5px var(--m);color:var(--mute)}
+.body{font-size:var(--fs)}
+.body p{margin:0 0 11px;color:var(--dim)}
+.body p b,.body li b{color:var(--tx)}
+.body code{font:700 .88em var(--m);color:var(--hi);background:rgba(224,145,63,.11);padding:1px 5px;border-radius:4px;white-space:nowrap}
+.body ul,.body ol{margin:0 0 12px;padding-left:20px;color:var(--dim)}
+.body li{margin-bottom:6px}
+.body h3{margin:18px 0 8px;font:800 13px var(--f);color:var(--hi)}
+pre{margin:0 0 12px;padding:11px 13px;border-radius:10px;background:rgba(0,0,0,.34);border:1px solid var(--ln);
+  overflow-x:auto;font:600 11.5px/1.6 var(--m);color:var(--dim)}
+pre .c{color:var(--mute)}
+.note{border-radius:10px;padding:10px 13px;margin:0 0 12px;font-size:12.5px;line-height:1.6;
+  background:rgba(76,201,240,.06);border:1px solid rgba(76,201,240,.22);color:var(--dim)}
+.note b{color:var(--blue)}
+.note.warn{background:rgba(251,191,36,.07);border-color:rgba(251,191,36,.28)}
+.note.warn b{color:var(--warn)}
+.note.bad{background:rgba(244,100,95,.07);border-color:rgba(244,100,95,.3)}
+.note.bad b{color:var(--red)}
+.note.good{background:rgba(74,222,128,.06);border-color:rgba(74,222,128,.24)}
+.note.good b{color:var(--green)}
+table{width:100%;border-collapse:collapse;font:600 11.5px var(--m);margin-bottom:12px}
+th{text-align:left;font:800 8.5px var(--f);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);
+  padding:8px;border-bottom:1px solid var(--ln);vertical-align:bottom}
+td{padding:7px 8px;border-bottom:1px solid rgba(41,56,48,.5);color:var(--dim);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+td.n{color:var(--hi);white-space:nowrap;font-weight:700}
+td.f{font-family:var(--m);color:var(--steel);white-space:nowrap}
+tbody tr:hover td{background:rgba(255,255,255,.022)}
+.tag{display:inline-block;font:800 8px var(--f);letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:5px;white-space:nowrap}
+.t-ok{background:rgba(74,222,128,.15);color:var(--green)}
+.t-no{background:rgba(244,100,95,.16);color:var(--red)}
+.t-part{background:rgba(251,191,36,.15);color:var(--warn)}
+.t-dead{background:rgba(176,124,240,.15);color:var(--violet)}
+.t-info{background:rgba(127,178,216,.14);color:var(--steel)}
+.card{border:1px solid var(--ln);border-radius:12px;background:linear-gradient(180deg,var(--sf2),var(--sf));padding:12px 14px;margin-bottom:10px}
+.card.broke{border-left:3px solid var(--red)}
+.card.ok{border-left:3px solid var(--green)}
+.card .ch{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:6px}
+.card .ch b{font:700 12.5px var(--m);color:var(--hi)}
+.card .flow{font:700 9.5px var(--m);color:var(--steel)}
+.card p{margin:0;font-size:12.5px;color:var(--dim)}
+.card .was{margin-top:6px;font:600 11px var(--f);color:var(--red)}
+.card .fix{margin-top:6px;font:600 11px var(--f);color:var(--green)}
+.pipe{display:flex;align-items:stretch;overflow-x:auto;padding:2px 0 12px;margin-bottom:6px}
+.pn{flex:none;min-width:106px;border:1px solid var(--ln2);border-radius:11px;padding:9px 11px;background:linear-gradient(165deg,var(--sf2),var(--sf))}
+.pn b{display:block;font:700 11px var(--m);color:var(--hi)}
+.pn span{display:block;font:600 9.5px var(--f);color:var(--mute);margin-top:3px;line-height:1.35}
+.pa{flex:none;display:grid;place-items:center;width:24px;color:var(--ln2);font-size:15px}
+.empty{text-align:center;padding:50px 20px;color:var(--mute)}
+.empty b{display:block;font:800 15px var(--f);color:var(--dim);margin-bottom:6px}
+.compact .body{font-size:12.5px}
+.compact .card{padding:9px 11px}
+.compact td,.compact th{padding:5px 7px}
+.compact section{margin-bottom:18px}
+mark{background:rgba(224,145,63,.3);color:var(--hi);border-radius:3px;padding:0 2px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,14px);z-index:70;opacity:0;pointer-events:none;
+  padding:10px 18px;border-radius:11px;background:linear-gradient(135deg,var(--ov),var(--sf2));border:1px solid var(--timber);
+  font:700 12px var(--f);box-shadow:0 14px 34px rgba(0,0,0,.6);transition:.22s}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:960px){:root{--nav:0px}#nav{display:none}.bs{display:none}#main{padding:14px}}
+@media print{
+  body{overflow:visible;background:#fff;color:#111}
+  #bar,#filt,#nav,#prog,#toast{display:none!important}
+  #shell{position:static;display:block}#main{overflow:visible;padding:0}
+  body::before,body::after{display:none}
+  .body p,.body li,td{color:#333}.sh h2,.card .ch b,td.n{color:#7a4a10}
+  pre{background:#f4f2ee;border-color:#ccc;color:#333}
+  section{break-inside:avoid;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header id="bar">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 16 16 5l14 11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M6 16v12h20V16M9 28V19M16 12v16M23 28V19M6 22h20" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+    <div><div class="bn">ПЕРЕДАЧА ПРОЕКТА</div><div class="bs">кровельный узел · что сделано и куда копать</div></div>
+  </div>
+  <div class="grow"></div>
+  <button class="btn" id="bPrint" type="button">🖨 Печать</button>
+  <button class="btn" id="bJson" type="button">⤓ JSON</button>
+  <button class="btn p" id="bMd" type="button">⤓ HANDOFF.md</button>
+</header>
+<div id="prog"></div>
+
+<div id="filt">
+  <label class="search">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11 11l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+    <input id="q" type="search" placeholder="Поиск по документу…" aria-label="Поиск">
+  </label>
+  <div class="sep"></div>
+  <div class="seg" id="views">
+    <button data-v="all" class="on" type="button">Всё</button>
+    <button data-v="cheat" type="button">Шпаргалка</button>
+    <button data-v="contracts" type="button">Контракты</button>
+    <button data-v="status" type="button">Статус</button>
+    <button data-v="todo" type="button">Куда копать</button>
+  </div>
+  <div class="sep"></div>
+  <button class="chip" id="tOpen" type="button" aria-pressed="false"><i></i>Только незакрытое</button>
+  <button class="chip" id="tCompact" type="button" aria-pressed="false"><i></i>Компактно</button>
+  <div class="mini"><span>Текст</span><input type="range" id="cFs" min="12" max="17" step="1" value="14"><b id="vFs">14px</b></div>
+  <button class="btn" id="bReset" type="button">↺ Сброс</button>
+</div>
+
+<div id="shell">
+  <aside id="nav" class="sc"><div class="toc" id="toc"></div>
+    <div class="legend">
+      <b>Как читать.</b> Разделы 1–4 — что это и как запустить. Раздел 5 — карта файлов. Раздел 6 — контракты, на них ломалось почти всё. Раздел 7 — что реально подтверждено тестами. Разделы 8–11 — куда копать и как не наступить на те же грабли.
+    </div>
+  </aside>
+  <section id="main" class="sc"><div class="wrap" id="doc"></div></section>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ═════════════════════ СОДЕРЖИМОЕ ДОКУМЕНТА ═════════════════════ */
+const MODULES = [
+  ['vec3.js','ядро','Vec3, v3, eulerBasis','Мини-вектор без three.js. Ядро считает на нём, рендер приводит к THREE.Vector3 через T3(). Флага isVector3 нет намеренно.','live'],
+  ['format.js','ядро','fin, cl, fmt, f1, f2, f3, mm, deg','Guards чисел и форматирование. Всё, что уходит в геометрию, проходит через fin/cl.','live'],
+  ['roof-params.js','ядро','ROOF_DEFAULTS, SEATS, TIEMODE, COVERS, RAFTER_MAX, SNOW, WIND, GRADE, RHO','Единый источник параметров и нормативных таблиц. Ничего не считает.','live'],
+  ['roof-stages.js','ядро','ROOF_STAGES, PIECE_GROUPS','14 этапов сборки и справочник групп деталей: аббревиатура марки, латинский код, этап, название.','live'],
+  ['roof-prices.js','ядро','RATES_DEF, RATES, loadRates, saveRates, resetRates','Ставки сметы. verified:true — подтверждено застройщиком, false — ориентир. localStorage: domles.roof.rates.v8.','live'],
+  ['roof-mansard.js','расчёт','MANSARD_SCHEMES, GL, RAFTER_SECTIONS, snowMu, slopeLineLoad, checkRafterSection, pickRafterSection, solveMansard','Четыре схемы мансарды без центральных опор. Геометрия ведётся ОТ КОМНАТЫ. Отдаёт членов как данные (parts), не как меши.','live'],
+  ['roof-model.js','расчёт','computeRoofModel','Главная геометрия: скаты, стропила, накосные, ригели, стойки, объёмы. Каждый скат несёт СВОЮ геометрию.','live'],
+  ['roof-structure.js','расчёт','computeRoofStructure','Нагрузки и несущая способность. Для ломаного ската берёт худший из двух. Раскладка болтов EC5.','live'],
+  ['roof-long.js','расчёт','LONG_STRATEGIES, analyzeLong, purlinXs, hipNeedsSupport, planLongMembers','Длинные детали: прогоны, подкладки, стойки, шпренгели, стыки. Мутирует pieces и r.joints.','live'],
+  ['roof-pieces.js','производство','computeRoofPieces','Ведомость: группировка одинаковых, марки, штрихкоды, углы резов. Члены мансарды берёт из parts по mk.','live'],
+  ['roof-nesting.js','производство','nestRoofPieces','Раскрой по заготовкам, first-fit по убыванию длины, учёт пропила.','live'],
+  ['roof-bom.js','производство','roofBOM, roofPrice','Смета: объёмы и погонаж в строки со ставками.','live'],
+  ['roof-checks.js','производство','roofChecks','Человекочитаемые проверки с кнопками быстрого исправления.','live'],
+  ['roof-barcode.js','производство','code39','Code 39 для этикеток на торец детали.','live'],
+  ['roof-export.js','производство','cutCSV, nestCSV, assemblyCSV, packageJSON, download','Выгрузки для лесопилки и площадки.','live'],
+  ['roof-controller.js','состояние','createRoof','Мемоизированный вывод в строгом порядке. План опор считается ВНУТРИ, чтобы его детали попали в раскрой и смету.','live'],
+  ['index.js','состояние','барель','Единая точка импорта. Добавил модуль — не забудь ре-экспорт.','live'],
+  ['roof-context.js','состояние','roofFromHouse','Мост от конфигуратора дома. В автономной лаборатории не используется.','dead'],
+  ['roof-hardware.js','визуал','buildHardware, HARDWARE_NOTES','Реальные узлы крепления. Инстансы для крепежа, меши с отверстиями для пластин. Секции обёрнуты в safe().','live'],
+  ['roof-render.js','визуал','createRoofStage, ROOF_LAYERS, rejectedCount','Сцена three.js: 17 слоёв, этапы, разрез, разлёт, пикинг, камера. Проставляет userData для аудита.','live'],
+  ['roof.css','визуал','дизайн-система','Палитра, кнопки, поля, панели, блок мансарды, оверлеи сцены, печать.','live'],
+  ['lab.js','приложение','SPEC, renderCtl, renderRight, window.__roofTest','Приложение: панель конструктива, 6 вкладок, сцена, сборка по этапам, этикетки, выгрузки, хук для автотеста.','live'],
+  ['roof-mansard-ui.js','приложение','initMansardPanel','Отдельная панель мансарды. Устарела: контролы переехали в SPEC приложения. Никем не импортируется.','dead'],
+  ['roof-audit.js','тесты','AUDIT_GROUPS, deriveAll, auditCore, auditScene, AUDIT_MATRIX, auditConfig, runMatrix','Аудит конструктива и сцены на 32 конфигурациях. Отделяет баги кода от намеренных нарушений норм.','live'],
+  ['ui-test.js','тесты','CFG_DEFAULTS, Driver, SCENARIOS, runSuite','Автотест интерфейса: нажимает контролы в iframe, ждёт остановки камеры, снимает пиксели, считает цветовую сигнатуру.','live']
+];
+
+const CONTRACTS = [
+  {n:'MS.parts[] — box и brace',from:'roof-mansard',to:'roof-model, roof-pieces, roof-render',broke:true,
+   d:'Брус: {t:"box", s:[w,h,d], p:[x,y,z], zs, mat, tag, st, mk}. Подкос: {t:"brace", a:[x,y], b:[x,y], depth, thick, zs, mat, tag, st, mk}. У подкоса НЕТ поля s.',
+   was:'roof-model читал q.s[0] у подкоса → TypeError в reduce, каскадом убивал весь вывод при каждом наведении мыши.',
+   fix:'partLen/partSect читают обе схемы с проверкой Array.isArray. Последняя правка отправлена, подтверждающий прогон не получен.'},
+  {n:'q.mk = [группа, длина]',from:'roof-mansard',to:'roof-pieces',broke:true,
+   d:'Единственный мост между тем, что нарисовано, и тем, что уйдёт на лесопилку. Группа обязана существовать в PIECE_GROUPS.',
+   was:'Без mk прогон перелома и потолочный пояс рисовались, но в ведомость не попадали.',
+   fix:'mk добавлен всем несущим членам; roof-pieces читает его напрямую.'},
+  {n:'Геометрия каждого ската',from:'roof-model',to:'roof-render',broke:true,
+   d:'f.rl / f.a / f.sa / f.ca / f.ta / f.deg / f.mu / f.rlPie / f.isBreakEnd / f.snowRows / f.basis. У ломаного ската четыре разных набора.',
+   was:'Рендер брал глобальный m.rl и m.ta → дырки на переломе и снегозадержатели, улетающие за верхний скат.',
+   fix:'Цикл скатов читает только f.*. Верхний скат имеет rlPie = rl + lap (нахлёст 220 мм), без подрезки под лобовую доску.'},
+  {n:'upperZ — узлы фермы над потолком',from:'roof-model',to:'roof-render, roof-pieces',broke:true,
+   d:'Выводится из parts.some(q => q.zs === "upper") и шага upperStep.',
+   was:'Строился от удалённого поля MS.upper → пустой массив → ферма не рисовалась и не попадала в распил.',
+   fix:'needsUpper считается по самим parts.'},
+  {n:'r.joints[] — стыки стропил',from:'roof-long',to:'roof-render, roof-hardware',broke:true,
+   d:'Позиции стыков считаются один раз и лежат на самой стропиле. Рендер режет разрыв 4 мм, крепёж ставит накладку — по одному источнику.',
+   was:'Сдвиг «вразбежку» считался по разным индексам в рендере и крепеже → разрыв в одном месте, накладка в другом.',
+   fix:'Сдвиг убран: на общем прогоне все стыки в одном сечении, это правильно.'},
+  {n:'Vec3 → THREE.Vector3',from:'vec3',to:'roof-render, roof-hardware',broke:true,
+   d:'Ядро отдаёт свой вектор без флага isVector3. На границе рендера обязателен T3(v).',
+   was:'ax.clone().negate is not a function — обрыв сборки прогонов и накладок, крепёж исчезал целиком.',
+   fix:'Vec3.negate добавлен, T3() приводит на входе в Batch и во всех местах смешивания.'},
+  {n:'userData сцены',from:'roof-render',to:'roof-audit',broke:true,
+   d:'st — этап, mk — марка, msPart — член мансарды, vertSupport — стойка, culled — снят страховкой, joint — ключ стыка, faceTag — тег ската.',
+   was:'Без vertSupport аудит принимал крутые контробрешётки на 62° за висящие стойки — 86 ложных падений R08.',
+   fix:'vertSupport проставляется явно; геометрический критерий ужесточён до s.x<0.26 && s.z<0.26.'},
+  {n:'Порядок вывода в контроллере',from:'roof-controller',to:'всё приложение',broke:true,
+   d:'model → structure → pieces → plan → nesting → lines(+plan.bom) → estimate → checks.',
+   was:'План считался после раскроя → опорные детали не попадали ни в распил, ни в смету.',
+   fix:'planLongMembers вызывается внутри derived() до nesting.'},
+  {n:'Фон селекта длинными свойствами',from:'roof.css',to:'lab',broke:true,
+   d:'background-image со списком слоёв ЧЕРЕЗ ЗАПЯТУЮ, отдельно color/repeat/position/size.',
+   was:'Сокращение background из двух слоёв без запятой невалидно → декларация отбрасывалась, селект становился белым, а на hover темнел.',
+   fix:'Все поля переведены на длинные свойства.'},
+  {n:'S.boltLayout.positions[]',from:'roof-structure',to:'roof-hardware',broke:false,
+   d:'Готовые координаты болтов в мировых осях. Крепёж только зеркалит по сторонам ригеля.',was:'',fix:''},
+  {n:'params.__pieces / __struct / __long',from:'lab',to:'roof-render → roof-hardware',broke:false,
+   d:'Служебные поля, которыми приложение передаёт ведомость, расчёт и план опор в сцену. Без них марки и крепёж не строятся.',was:'',fix:''},
+  {n:'m.ridgeBeamSect',from:'roof-model',to:'roof-render, roof-audit',broke:false,
+   d:'Сечение конькового прогона в мм. В схеме «на фронтонах» — клеёное, подобранное по h/b ≤ 4.5.',was:'',fix:''}
+];
+
+const STATUS = [
+  ['Двускатная и вальма, все конфигурации','ok','roof-audit','0 багов в последних прогонах. Геометрия, расчёт, ведомость, раскрой, сцена.'],
+  ['Стыки длинных стропил','ok','roof-audit P01–P05','52 и 66 стыков, 104 и 132 накладок — сходится. Каждый стык на прогоне.'],
+  ['Опорные детали в ведомости','ok','roof-audit P14, C06','марки 10 / 51 / 2 по конфигурациям, все в раскрое.'],
+  ['Мансарда: комната и потолок','ok','roof-audit R11–R16','Аттиковая стенка, прогон перелома на 2.400, ригель верхом точно в 2.400. Совпадает с чертежом-образцом.'],
+  ['Сцена: NaN, этапы, марки, крепёж','ok','roof-audit R02–R07','0 повреждённых, 0 без этапа, 0 пустых групп, 4368–6388 элементов крепежа.'],
+  ['Прогиб согласован с моментом','ok','roof-audit S10','q⊥·Ls²/8 = q·Lh²/8 выполняется во всех последних прогонах.'],
+  ['Краш partVol на подкосах','part','правка отправлена','Исправление последней схемой parts отправлено, но подтверждающий прогон обоих тестов не получен. В roof-ui-test (1).json ещё видны panel/loop: Cannot read properties of undefined (reading 0) — это ДО правки.'],
+  ['Мансардные конфигурации: остаточные баги','part','roof-audit.json','В последнем чистом отчёте у части мансардных сборок bugs:3 и bugs:1. Какие именно ID — в отчёте не видно, нужен свежий прогон.'],
+  ['Клеёный прогон 90×800','part','правка отправлена','Ограничение h/b ≤ 4.5 добавлено, но в отчётах ещё встречается 90×800 и 90×500. Проверить, что подбор идёт по площади, а не по возрастанию ширины.'],
+  ['Четыре схемы мансарды различимы','part','ui-test S05','Наборы членов разведены, но подтверждающий прогон S05 после правки не получен.'],
+  ['Дрейф камеры при пересборке','part','ui-test V02','cameraStill() добавлен в драйвер. Прежнее падение было измерительным: инерция OrbitControls, а не сброс вида.'],
+  ['Смена покрытия меняет кадр','part','ui-test G06','Сигнатура кадра переведена на куб RGB + сетка яркости. Прежние 2% были из-за сравнения только по яркости.'],
+  ['Мёртвые файлы','no','audit-project.mjs','roof-mansard-ui.js и roof-context.js недостижимы из точек входа. Удалить или подключить.'],
+  ['Цены','part','—','Подтверждены только три ставки: пиломатериал 17000, брус 23000, кладка 8500. Остальное помечено verified:false и в интерфейсе жёлтым.'],
+  ['Вальма + мансарда','no','roof-model','Мансарда принудительно считается двускатной. Вальма с ломаным скатом требует отдельных ферм — не реализовано.']
+];
+
+const BACKLOG = [
+  ['P0','Прогнать оба теста после последней правки','roof-audit.html и roof-ui-test.html','Пока не сделано, статус мансарды неизвестен. Это первое, что надо сделать: node audit-project.mjs, затем обе страницы, затем прислать CSV/JSON.'],
+  ['P0','Разобрать остаточные bugs:3 / bugs:1 в мансарде','roof-audit.js AUDIT_MATRIX','В отчёте видны счётчики, но не ID. Открыть вкладку «Обзор» в roof-audit.html, раскрыть красные строки мансардных сборок.'],
+  ['P1','Удалить или подключить мёртвые модули','roof-mansard-ui.js, roof-context.js','Панель мансарды дублирует SPEC и CSS. Мост от дома не задействован. Держать два источника управления опасно.'],
+  ['P1','Проверить подбор клеёного прогона','roof-mansard.js sizeRidgeBeam','В отчётах 90×800. Убедиться, что pool сортируется по площади и фильтр h/b ≤ 4.5 применяется до выбора.'],
+  ['P1','Объединить снегозадержатели','roof-hardware.js + roof-render.js','Сейчас разделено: для обычной кровли рисует hardware по m.snowRows, для мансарды — render по f.snowRows. Дублирование логики, легко разъезжается.'],
+  ['P2','Вальма с ломаным скатом','roof-model.js, roof-mansard.js','Сейчас тип принудительно gable. Нужны отдельные фермы по каждому скату и свои шпренгели в углах.'],
+  ['P2','Сохранение параметров','roof-controller.js','В localStorage живут только ставки. Параметры не сохраняются, нет undo/redo, нет ссылок на вариант.'],
+  ['P2','Оптимизация раскроя','roof-nesting.js','First-fit по убыванию. Отход 14–25%. Можно better-fit или группировка по длинам, экономия реальная.'],
+  ['P2','Проверки, которых нет','roof-structure.js','Нет расчёта устойчивости клеёной балки из плоскости, смятия под углом к волокнам, податливости соединений, огнестойкости, сейсмики.'],
+  ['P3','Мобильная раскладка','roof.css, lab.js','Панели — выдвижные ящики. Орбита одним пальцем работает, но жесты не настроены, нет pinch-zoom по сцене.'],
+  ['P3','Локализация','везде','Русский зашит в строки. Вынести в словарь, если нужен английский.'],
+  ['P3','Печать','roof.css @media print','Печатаются только этикетки. Ведомость и смета на печать не выведены.']
+];
+
+const TRAPS = [
+  ['renderCtl() стирает контейнер','lab.js делает #ctlBody.innerHTML = "". Всё, что смонтировано туда извне, уничтожается при первой перерисовке. Поэтому контролы мансарды — обычная секция SPEC, а не отдельный виджет.'],
+  ['Камера выставляется один раз','В rebuild стоит флаг framed. Не убирай его: иначе каждое движение ползунка возвращает вид в начало. Вернуть камеру можно только кнопкой frame().'],
+  ['setFromUnitVectors даёт крен','Для подкоса в плоскости фермы нельзя строить BoxGeometry и поворачивать через setFromUnitVectors — локальная Y уходит из плоскости. Только braceXY: профиль в XY, выдавливание по Z.'],
+  ['background из двух слоёв','В CSS список слоёв разделяется ЗАПЯТОЙ. Без неё декларация невалидна и отбрасывается целиком. Лучше длинные свойства.'],
+  ['Стрелочная функция в объекте','Запись {id, g, n, async D => {}} — синтаксическая ошибка. Нужен ключ: run: async D => {}. Это ломало весь ui-test.js.'],
+  ['Глобальная геометрия внутри цикла скатов','m.rl / m.ta / m.rlPie — только для основного ската. Внутри m.faces.forEach читать f.*, иначе ломаный скат собирается неправильно.'],
+  ['Мутирование входных данных','planLongMembers дописывает в pieces и проставляет r.joints. Идемпотентность держится на флаге __support. Не вызывай его вне порядка контроллера.'],
+  ['Контур кровли выпуклый','Область под скатом выпукла, поэтому если оба конца балки внутри — вся балка внутри. На этом построена страховка. Но граница по Z — m.L/2 (фронтон), а не length/2: аттиковая стенка законно доходит до фронтона.'],
+  ['Пропил и припуск в раскрое','cutLen = round(len*1000) + allow. Детали длиннее заготовки тоже потребляют материал — иначе отход завышается.'],
+  ['Снег по фактическому уклону','μ берётся от уклона ПРОВЕРЯЕМОГО ската, не от параметра pitch. На 62° μ=0, и нижний скат мансарды почти не нагружен.']
+];
+
+const RECIPES = [
+  ['Новый параметр','roof-params.js → ROOF_DEFAULTS; lab.js → SPEC (секция и контрол с data-k); если влияет на геометрию — roof-model.js; если на прочность — roof-structure.js; проверка в roof-checks.js; сценарий в ui-test.js.'],
+  ['Новая группа деталей','roof-stages.js → PIECE_GROUPS {ab, lat, st, n}; затем add(группа, ...) в roof-pieces.js. Без записи в PIECE_GROUPS деталь молча выпадет из ведомости.'],
+  ['Новый слой сцены','roof-render.js → ROOF_LAYERS {id, n, c, s, st}; рисовать в LG[id]; добавить в layerExists() условие существования; в lab.js → порядок в renderLayers().'],
+  ['Новый член мансарды','roof-mansard.js → buildParts: box() или brace() с обязательным mk:[группа, длина]. Рендер и ведомость подхватят сами. Не забыть проверить конец по roofAt().'],
+  ['Новая проверка аудита','roof-audit.js → auditCore или auditScene, ID по домену (X/M/S/P/N/C/R); при намеренно слабой конфигурации добавить ID в expect записи AUDIT_MATRIX.'],
+  ['Новый сценарий UI-теста','ui-test.js → SCENARIOS.push({id, g, n, run: async D => {...}}). Внутри D.mark для подсветки, D.measure для замера изменения кадра, D.cameraStill перед замером камеры.']
+];
+
+const SECTIONS = [
+  {id:'about',n:'Что это',cheat:true,body:[
+    ['p','Параметрический конфигуратор деревянной кровли с выходом на лесопилку. Из габаритов и нагрузок считает геометрию, несущую способность, ведомость деталей с марками и штрихкодами, раскрой по заготовкам, смету и сборку по этапам. Показывает всё в 3D с разрезом, разлётом слоёв и наведением на деталь.'],
+    ['p','Три формы: <b>двускатная</b>, <b>вальмовая</b>, <b>мансарда</b> в четырёх схемах (ломаный скат, висячие с затяжкой, коньковый прогон на фронтонах, заводская ферма). Мансарда принципиально без центральных опор — стойка посередине это колонна в комнате.'],
+    ['cards',[
+      ['25','модулей в src/roof'],
+      ['4','страницы: lab, audit, ui-test, map'],
+      ['32','конфигурации аудита конструктива'],
+      ['51','сценарий автотеста интерфейса']
+    ]]
+  ]},
+  {id:'run',n:'Как запустить',cheat:true,body:[
+    ['code','npm i\nnpm run dev\n# приложение      http://localhost:5173/roof-lab.html\n# аудит ядра    http://localhost:5173/roof-audit.html\n# автотест UI   http://localhost:5173/roof-ui-test.html\n# карта проекта http://localhost:5173/roof-map.html'],
+    ['p','Отдельно стоит скрипт статического аудита — кладётся в корень и читает реальные файлы:'],
+    ['code','node audit-project.mjs                 # скан + граф + контракты + рантайм + 3 отчёта\nnode audit-project.mjs --no-runtime    # только статика, быстро\nnode audit-project.mjs --fail-on warn  # для CI\nnode audit-project.mjs --quiet --no-html'],
+    ['note','warn','Скрипт токенизирует JS, а не ищет регэкспом по тексту: комментарии, строки, шаблоны и регулярки распознаются честно. Проверяет разрешение импортов, существование именованных экспортов по цепочке реэкспортов, циклы Тарьяном, мёртвые файлы обходом от точек входа, и <b>контракты данных</b> — читает ли потребитель поле, которого нет во всех вариантах формы.'],
+    ['p','Зависимости: <code>three</code> и <code>Vite</code>. Ядро (<code>vec3</code>, <code>format</code>, <code>roof-params</code>, <code>roof-stages</code>, <code>roof-prices</code>, <code>roof-mansard</code>, <code>roof-model</code>, <code>roof-structure</code>, <code>roof-long</code>, <code>roof-pieces</code>, <code>roof-nesting</code>, <code>roof-bom</code>, <code>roof-checks</code>, <code>roof-barcode</code>, <code>roof-controller</code>) чистое и исполняется в Node — этим пользуется рантайм-проба аудита.']
+  ]},
+  {id:'pipe',n:'Конвейер данных',cheat:true,body:[
+    ['pipe',[['параметры','что задано'],['геометрия','скаты, стропила'],['расчёт','нагрузки, усилия'],['детали','марки, резы'],['опоры','прогоны, стыки'],['раскрой','заготовки'],['смета','деньги'],['проверки','что не так'],['сцена','что видно']]],
+    ['p','Порядок жёсткий и зашит в <code>roof-controller.js → derived()</code>:'],
+    ['code','model → structure → pieces → plan → nesting → lines(+plan.bom) → estimate → checks'],
+    ['note','bad','<b>План опор обязан считаться ДО раскроя.</b> Он дописывает свои детали в pieces. Если считать после — прогоны, стойки, шпренгели и накладки не попадут ни в распил, ни в смету. На этом уже ломались.'],
+    ['p','Обратная связь одна: <code>roof-structure</code> импортирует <code>purlinXs</code> из <code>roof-long</code>, чтобы знать, что прогон разгрузил пролёт. Цикла нет, но связь неочевидная — не разрывай её.']
+  ]},
+  {id:'files',n:'Карта модулей',cheat:true,body:[
+    ['p','Слои снизу вверх: ядро → расчёт → производство → состояние → визуал → приложение → тесты. Импорты идут только вверх, кроме отмеченной обратной связи.'],
+    ['modules']
+  ]},
+  {id:'contracts',n:'Контракты между модулями',body:[
+    ['note','bad','<b>Почти все поломки были здесь, а не в математике.</b> Схема данных менялась в одном файле, а читали её по-старому в другом. Ниже — все известные контракты, что ломалось и чем закрыто.'],
+    ['contracts']
+  ]},
+  {id:'engineering',n:'Инженерные решения и почему так',body:[
+    ['note','warn','Это не баги. Если новое прочтение нормы противоречит пункту ниже — сначала разберись в обосновании, потом меняй.'],
+    ['h3','Прогиб наклонной стропилы'],
+    ['p','Нормальная к оси составляющая вертикальной нагрузки: <code>q⊥ = q·cos²α</code>. Проверка согласованности: <code>q⊥·Ls²/8 = q·cos²α·(Lh/cosα)²/8 = q·Lh²/8</code> — ровно тот момент, который считается от вертикальной нагрузки на горизонтальный пролёт. Прежняя формула <code>q/ca</code> завышала прогиб в <code>1/ca³</code> раз: на 45° в 2.8 раза. Тест S10 держит это тождество.'],
+    ['h3','Врубка и опорный брусок'],
+    ['p','Глубина врубки = <code>ширина_площадки × sin(уклона)</code>. Поднять опору — не значит уменьшить врубку. Уменьшить можно только сузив площадку. СП 64: не более ¼ сечения.'],
+    ['p','Опорный брусок — это брусок с <b>седлом и вертикальным упором</b>, а не гладкая рампа. По рампе стропило съезжает: распор не воспринимается. Площадка сужена так, что врубка ≈12.5%, пятка упирается в выступ бруска.'],
+    ['h3','Накосное стропило'],
+    ['p','Это <b>пакет досок 50 мм</b>, а не монолит. Пилорама даёт прямоугольные доски, скос верхней кромки делается по месту после сбивки. В сцене — отдельные доски с тёмными швами, гвозди вразбежку с двух сторон и болты насквозь через 1.2 м. Высота подбирается из стандартного ряда, чтобы доску можно было купить.'],
+    ['h3','Клеёный прогон'],
+    ['p','Ограничение <code>h/b ≤ 4.5</code>. Сечение 90×800 проходит по прочности, но нестрогаемо и неустойчиво из плоскости. Подбор идёт по минимальной площади среди проходящих, а не по первому passing при возрастании ширины.'],
+    ['h3','Мансарда'],
+    ['p','Геометрия ведётся <b>от комнаты</b>: высота потолка задаёт уровень перелома. Ригель в переломе — это потолок, а не пол. Пол — балки перекрытия, они же нижняя затяжка. Крутой нижний скат почти не даёт распора: плечо большое, горизонтальный прогон мал. Снег на 62° по СП 20 имеет μ=0, поэтому нижний скат разгружен и там хватает меньшего сечения.'],
+    ['p','Верхний скат заходит за перелом на <b>220 мм внахлёст</b>, сверху переломная планка. Подрезки под лобовую доску у верхнего ската нет — его дальний конец это перелом, не карниз.'],
+    ['h3','Стыки и опоры'],
+    ['p','Стык структурного элемента — <b>только над опорой</b>. В пролёте запрещено. Накладки двусторонние, толщина каждой ≥ ½ толщины элемента, минимум 2 болта на сторону = 4 на стык, от стыка до первого болта 7d, шаг вдоль 7d.'],
+    ['p','<b>Вразбежку на общем прогоне не делается.</b> Все стыки лежат на нём в одном сечении — это правильно, а не упрощение. Вразбежку бывает при стыковке над стеной, где каждому стыку можно дать свою опору.'],
+    ['p','Шпренгель ставится <b>только если накосное не проходит расчётом</b>, а не по фиксированной длине. Шаг стоек под прогоном — по несущей способности прогона, а не фиксированные 2.5 м. Это и есть лечение избытка материала.']
+  ]},
+  {id:'status',n:'Что подтверждено, а что нет',status:true,body:[
+    ['note','warn','Раздел честный. «Отправлено» означает: правка написана и передана, но прогон тестов после неё не получен. Не считай это проверенным.'],
+    ['status']
+  ]},
+  {id:'todo',n:'Куда копать',todo:true,body:[
+    ['p','Приоритеты: P0 — блокирует понимание состояния, P1 — известные дефекты и дубли, P2 — функциональные пробелы, P3 — удобство.'],
+    ['backlog']
+  ]},
+  {id:'traps',n:'Грабли, на которые уже наступили',cheat:true,body:[
+    ['traps']
+  ]},
+  {id:'recipes',n:'Как добавлять новое',cheat:true,body:[
+    ['recipes']
+  ]},
+  {id:'tests',n:'Тесты: что ловят',cheat:true,body:[
+    ['h3','roof-audit.html — аудит конструктива'],
+    ['p','32 конфигурации × ~60 проверок ядра + проверки сцены. Домены: <code>X</code> целостность, <code>M</code> геометрия, <code>S</code> несущая способность, <code>P</code> опоры и стыки, <code>N</code> мансарда, <code>C</code> ведомость и раскрой, <code>R</code> сцена.'],
+    ['p','Отделяет <b>баг кода</b> от <b>намеренного нарушения нормы</b>: у записи матрицы есть <code>expect</code> со списком ID, которые обязаны падать (запил 33%, снег VIII на 3 сорте, клеёнка 50×200 на 5.9 м). Красное — код врёт, жёлтое — расчёт верен, конфигурация слабая.'],
+    ['h3','roof-ui-test.html — автотест интерфейса'],
+    ['p','51 сценарий. Приложение открывается в iframe, драйвер находит контролы по <code>data-k</code>, двигает ползунки настоящими событиями <code>input</code>, переключает схемы, крутит камеру указателем, меняет размер окна. После каждого действия снимает пиксели и считает <b>цветовую сигнатуру</b> — куб RGB 3×3×3 плюс сетка яркости 8×8.'],
+    ['note','warn','Перед замером камеры обязателен <code>cameraStill()</code>: инерция OrbitControls докатывается после отпускания и читается как сброс вида. Это давало ложное падение V02.'],
+    ['h3','audit-project.mjs — статический аудит'],
+    ['p','Читает файлы, строит граф, проверяет экспорты, циклы, мёртвые файлы, контракты форм данных, сверяет с <code>roof-map.html</code>, и реально исполняет чистые модули на 12 конфигурациях. Если в проекте есть <code>roof-audit.js</code> с <code>runMatrix</code> — запускает и его.'],
+    ['h3','Что тесты НЕ ловят'],
+    ['list',['Визуальную красоту: пропорции, читаемость, «похоже ли на крышу». Только пиксельные сигнатуры и геометрию.',
+      'Правильность норм, заложенных в код. Если формула неверна, но согласована сама с собой — тест зелёный.',
+      'Реальные цены и наличие материала у поставщика.',
+      'Производительность на слабом железе и мобильных GPU.']]
+  ]},
+  {id:'glossary',n:'Словарь',cheat:true,body:[
+    ['table',['термин','что значит'],[
+      ['мауэрлат','брус по верху стены, на него садятся стропила'],
+      ['лежень','брус под стойки, распределяет нагрузку на балки перекрытия'],
+      ['прогон','горизонтальная балка вдоль конька или ската, несёт стропила'],
+      ['ригель','горизонтальный элемент между стропилами; в мансарде — потолок и затяжка'],
+      ['затяжка','нижний элемент замкнутого треугольника, воспринимает распор'],
+      ['накосное','диагональное стропило вальмы, пакет досок'],
+      ['полунога','укороченное стропило, упирается в накосное косым резом'],
+      ['шпренгель','диагональная балка через угол на два мауэрлата, несёт накосное'],
+      ['бабка','вертикальный элемент фермы от конька вниз к затяжке'],
+      ['подкос','наклонный элемент, разгружает стропило или накосное'],
+      ['прибоина','короткий брусок, восстанавливает сечение или даёт упор'],
+      ['черепной брусок','брусок по бокам балки, несёт накат — к опиранию стропил не относится'],
+      ['врубка','запил в стропиле для опирания; глубина = площадка × sin(уклона)'],
+      ['седло','вырез в опорном бруске под стропило'],
+      ['нахлёст','заход верхнего ската за перелом, 220 мм'],
+      ['Code 39','штрихкод на этикетке детали, только A–Z 0–9 дефис точка пробел']
+    ]]
+  ]}
+];
+
+/* ═════════════════════ СОСТОЯНИЕ И РЕНДЕР ═════════════════════ */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const raw=s=>String(s==null?'':s);
+const F={q:'',view:'all',open:false,compact:false,fs:14};
+let tT; const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tT);tT=setTimeout(()=>e.classList.remove('on'),2400)};
+
+function hi(html){
+  if(!F.q) return html;
+  const q=F.q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return html.replace(new RegExp('('+q+')','gi'),'<mark>$1</mark>');
+}
+function textOf(b){
+  const k=b[0];
+  if(k==='p'||k==='h3') return String(b[1]);
+  if(k==='code') return String(b[1]);
+  if(k==='note') return String(b[2]);
+  if(k==='list') return b[1].join(' ');
+  if(k==='table') return b[1].join(' ')+' '+b[2].map(r=>r.join(' ')).join(' ');
+  if(k==='cards') return b[1].map(r=>r.join(' ')).join(' ');
+  if(k==='pipe') return b[1].map(r=>r.join(' ')).join(' ');
+  return '';
+}
+function secText(s){
+  let t=s.n+' '+s.body.map(textOf).join(' ');
+  if(s.body.some(b=>b[0]==='modules')) t+=' '+MODULES.map(m=>m.join(' ')).join(' ');
+  if(s.body.some(b=>b[0]==='contracts')) t+=' '+CONTRACTS.map(c=>c.n+' '+c.from+' '+c.to+' '+c.d+' '+c.was+' '+c.fix).join(' ');
+  if(s.body.some(b=>b[0]==='status')) t+=' '+STATUS.map(r=>r.join(' ')).join(' ');
+  if(s.body.some(b=>b[0]==='backlog')) t+=' '+BACKLOG.map(r=>r.join(' ')).join(' ');
+  if(s.body.some(b=>b[0]==='traps')) t+=' '+TRAPS.map(r=>r.join(' ')).join(' ');
+  if(s.body.some(b=>b[0]==='recipes')) t+=' '+RECIPES.map(r=>r.join(' ')).join(' ');
+  return t.toLowerCase();
+}
+function visibleSections(){
+  return SECTIONS.filter(s=>{
+    if(F.view==='cheat'&&!s.cheat) return false;
+    if(F.view==='contracts'&&s.id!=='contracts') return false;
+    if(F.view==='status'&&s.id!=='status') return false;
+    if(F.view==='todo'&&s.id!=='todo') return false;
+    if(F.q&&secText(s).indexOf(F.q)<0) return false;
+    return true;
+  });
+}
+function renderBlock(b){
+  const k=b[0];
+  if(k==='p') return '<p>'+hi(b[1])+'</p>';
+  if(k==='h3') return '<h3>'+hi(esc(b[1]))+'</h3>';
+  if(k==='code') return '<pre>'+hi(esc(b[1]))+'</pre>';
+  if(k==='note') return '<div class="note '+(b[1]==='warn'?'warn':b[1]==='bad'?'bad':b[1]==='good'?'good':'')+'">'+hi(b[2])+'</div>';
+  if(k==='list') return '<ul>'+b[1].map(x=>'<li>'+hi(x)+'</li>').join('')+'</ul>';
+  if(k==='cards') return '<div class="metagrid">'+b[1].map(c=>'<div class="mc"><b>'+esc(c[0])+'</b><span>'+esc(c[1])+'</span></div>').join('')+'</div>';
+  if(k==='pipe') return '<div class="pipe">'+b[1].map((n,i)=>(i?'<div class="pa">→</div>':'')+'<div class="pn"><b>'+esc(n[0])+'</b><span>'+esc(n[1])+'</span></div>').join('')+'</div>';
+  if(k==='table') return '<table><thead><tr>'+b[1].map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+
+    b[2].map(r=>'<tr>'+r.map((c,i)=>'<td'+(i===0?' class="n"':'')+'>'+hi(esc(c))+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
+  if(k==='modules'){
+    const rows=MODULES.filter(m=>!F.open||m[4]==='dead');
+    const layers=[...new Set(rows.map(m=>m[1]))];
+    return layers.map(L=>{
+      const rs=rows.filter(m=>m[1]===L);
+      return '<h3>'+esc(L)+' <span style="font:600 10px var(--m);color:var(--mute)">'+rs.length+'</span></h3>'+
+        '<table><thead><tr><th>файл</th><th>экспорты</th><th>за что отвечает</th></tr></thead><tbody>'+
+        rs.map(m=>'<tr><td class="f">'+hi(esc(m[0]))+(m[4]==='dead'?' <span class="tag t-dead">мёртв</span>':'')+'</td>'+
+          '<td style="font-size:10.5px;color:var(--steel)">'+hi(esc(m[2]))+'</td><td>'+hi(esc(m[3]))+'</td></tr>').join('')+'</tbody></table>';
+    }).join('')||'<div class="empty"><b>Под фильтр ничего не попало</b></div>';
+  }
+  if(k==='contracts'){
+    const list=CONTRACTS.filter(c=>!F.open||c.broke);
+    return list.map(c=>'<div class="card '+(c.broke?'broke':'ok')+'">'+
+      '<div class="ch"><b>'+hi(esc(c.n))+'</b><span class="flow">'+esc(c.from)+' → '+esc(c.to)+'</span>'+
+      (c.broke?'<span class="tag t-no">ломался</span>':'<span class="tag t-ok">стабилен</span>')+'</div>'+
+      '<p>'+hi(esc(c.d))+'</p>'+
+      (c.was?'<div class="was">Ломалось: '+hi(esc(c.was))+'</div>':'')+
+      (c.fix?'<div class="fix">Закрыто: '+hi(esc(c.fix))+'</div>':'')+'</div>').join('');
+  }
+  if(k==='status'){
+    const rows=STATUS.filter(r=>!F.open||r[1]!=='ok');
+    const lbl={ok:'подтверждено',part:'не перепроверено',no:'не сделано'};
+    const cls={ok:'t-ok',part:'t-part',no:'t-no'};
+    return '<table><thead><tr><th>что</th><th>статус</th><th>чем проверено</th><th>подробность</th></tr></thead><tbody>'+
+      rows.map(r=>'<tr><td class="n">'+hi(esc(r[0]))+'</td><td><span class="tag '+cls[r[1]]+'">'+lbl[r[1]]+'</span></td>'+
+        '<td class="f">'+hi(esc(r[2]))+'</td><td>'+hi(esc(r[3]))+'</td></tr>').join('')+'</tbody></table>';
+  }
+  if(k==='backlog'){
+    const rows=BACKLOG.filter(r=>!F.open||r[0]==='P0'||r[0]==='P1');
+    const cls={P0:'t-no',P1:'t-part',P2:'t-info',P3:'t-dead'};
+    return '<table><thead><tr><th>приор</th><th>задача</th><th>где</th><th>что делать</th></tr></thead><tbody>'+
+      rows.map(r=>'<tr><td><span class="tag '+cls[r[0]]+'">'+r[0]+'</span></td><td class="n">'+hi(esc(r[1]))+'</td>'+
+        '<td class="f">'+hi(esc(r[2]))+'</td><td>'+hi(esc(r[3]))+'</td></tr>').join('')+'</tbody></table>';
+  }
+  if(k==='traps') return TRAPS.map(t=>'<div class="card broke"><div class="ch"><b>'+hi(esc(t[0]))+'</b></div><p>'+hi(esc(t[1]))+'</p></div>').join('');
+  if(k==='recipes') return '<table><thead><tr><th>что добавить</th><th>шаги</th></tr></thead><tbody>'+
+    RECIPES.map(r=>'<tr><td class="n">'+hi(esc(r[0]))+'</td><td>'+hi(esc(r[1]))+'</td></tr>').join('')+'</tbody></table>';
+  return '';
+}
+function render(){
+  const vis=visibleSections();
+  const doc=$('#doc');
+  const openCount=STATUS.filter(r=>r[1]!=='ok').length;
+  doc.innerHTML='<div class="hero"><h1>Кровельный узел · <em>документ передачи</em></h1>'+
+    '<p>Что построено, что за что отвечает, что реально подтверждено тестами и куда копать дальше. Кнопка «⤓ HANDOFF.md» отдаёт этот же документ markdown-ом для коммита в репозиторий.</p>'+
+    '<div class="metagrid">'+
+      '<div class="mc"><b>25</b><span>модулей</span><em>src/roof</em></div>'+
+      '<div class="mc good"><b>'+STATUS.filter(r=>r[1]==='ok').length+'</b><span>подтверждено</span><em>тестами</em></div>'+
+      '<div class="mc warn"><b>'+STATUS.filter(r=>r[1]==='part').length+'</b><span>не перепроверено</span><em>правки отправлены</em></div>'+
+      '<div class="mc bad"><b>'+STATUS.filter(r=>r[1]==='no').length+'</b><span>не сделано</span><em>в бэклоге</em></div>'+
+      '<div class="mc"><b>'+CONTRACTS.filter(c=>c.broke).length+'</b><span>контрактов ломалось</span><em>из '+CONTRACTS.length+'</em></div>'+
+      '<div class="mc"><b>2</b><span>мёртвых файла</span><em>удалить или подключить</em></div>'+
+    '</div></div>'+
+    (vis.length?vis.map((s,i)=>'<section id="'+s.id+'"><div class="sh"><i>'+(i+1)+'</i><h2>'+esc(s.n)+'</h2>'+
+      '<em>'+s.id+'</em></div><div class="body">'+s.body.map(renderBlock).join('')+'</div></section>').join('')
+      :'<div class="empty"><b>Под фильтр ничего не попало</b>Очистите поиск или переключите вид.</div>');
+
+  const toc=$('#toc');
+  toc.innerHTML='<h4>Разделы</h4>'+vis.map((s,i)=>'<a href="#'+s.id+'" data-id="'+s.id+'"><i>'+(i+1)+'</i>'+esc(s.n)+'</a>').join('');
+  document.body.classList.toggle('compact',F.compact);
+  document.documentElement.style.setProperty('--fs',F.fs+'px');
+  syncChips();
+  observe();
+}
+function syncChips(){
+  document.querySelectorAll('#views button').forEach(b=>b.classList.toggle('on',b.dataset.v===F.view));
+  [['tOpen','open'],['tCompact','compact']].forEach(p=>{
+    const e=document.getElementById(p[0]); e.classList.toggle('on',F[p[1]]);
+    e.setAttribute('aria-pressed',String(F[p[1]]));
+    e.querySelector('i').style.background=F[p[1]]?'var(--acid)':'#3b4a41';
+  });
+}
+let io=null;
+function observe(){
+  if(io) io.disconnect();
+  const links=[...document.querySelectorAll('.toc a')];
+  io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        links.forEach(a=>a.classList.toggle('on',a.dataset.id===e.target.id));
+        const idx=links.findIndex(a=>a.dataset.id===e.target.id);
+        $('#prog').style.width=(links.length?((idx+1)/links.length*100):0)+'%';
+      }
+    });
+  },{root:$('#main'),rootMargin:'-10% 0px -80% 0px'});
+  document.querySelectorAll('section').forEach(s=>io.observe(s));
+}
+
+/* ═════════════════════ MARKDOWN ═════════════════════ */
+function mdInline(s){return String(s).replace(/<br\s*\/?>/g,' ').replace(/<[^>]+>/g,'')}
+function toMd(){
+  const L=[];
+  L.push('# Кровельный узел — документ передачи','');
+  L.push('Параметрический конфигуратор деревянной кровли с выходом на лесопилку. 25 модулей в `src/roof`, 4 страницы, 32 конфигурации аудита конструктива, 51 сценарий автотеста интерфейса.','');
+  L.push('> Документ описывает состояние на момент передачи. Раздел «Что подтверждено, а что нет» разделяет проверенное тестами и заявленное но не перепроверенное.','');
+  SECTIONS.forEach((s,i)=>{
+    L.push('## '+(i+1)+'. '+s.n,'');
+    s.body.forEach(b=>{
+      const k=b[0];
+      if(k==='p') L.push(mdInline(b[1]),'');
+      else if(k==='h3') L.push('### '+mdInline(b[1]),'');
+      else if(k==='code') L.push('```',b[1],'```','');
+      else if(k==='note') L.push('> **'+(b[1]==='bad'?'Важно':b[1]==='warn'?'Внимание':b[1]==='good'?'Готово':'Заметка')+'.** '+mdInline(b[2]),'');
+      else if(k==='list'){b[1].forEach(x=>L.push('- '+mdInline(x)));L.push('')}
+      else if(k==='cards'){L.push('| показатель | значение |','|---|---|');b[1].forEach(c=>L.push('| '+c[1]+' | '+c[0]+' |'));L.push('')}
+      else if(k==='pipe'){L.push('```',b[1].map(n=>n[0]).join(' → '),'```','')}
+      else if(k==='table'){L.push('| '+b[1].join(' | ')+' |','|'+b[1].map(()=>'---').join('|')+'|');
+        b[2].forEach(r=>L.push('| '+r.map(c=>mdInline(c).replace(/\|/g,'\\|')).join(' | ')+' |'));L.push('')}
+      else if(k==='modules'){
+        const layers=[...new Set(MODULES.map(m=>m[1]))];
+        layers.forEach(l=>{
+          L.push('### Слой: '+l,'');
+          L.push('| файл | экспорты | за что отвечает |','|---|---|---|');
+          MODULES.filter(m=>m[1]===l).forEach(m=>L.push('| `'+m[0]+'`'+(m[4]==='dead'?' **(мёртв)**':'')+' | `'+m[2]+'` | '+m[3]+' |'));
+          L.push('');
+        });
+      }
+      else if(k==='contracts'){
+        CONTRACTS.forEach(c=>{
+          L.push('### '+c.n+(c.broke?' — ЛОМАЛСЯ':' — стабилен'));
+          L.push('`'+c.from+'` → `'+c.to+'`','',mdInline(c.d),'');
+          if(c.was) L.push('**Ломалось:** '+c.was,'');
+          if(c.fix) L.push('**Закрыто:** '+c.fix,'');
+        });
+      }
+      else if(k==='status'){
+        const lbl={ok:'подтверждено',part:'НЕ перепроверено',no:'не сделано'};
+        L.push('| что | статус | чем проверено | подробность |','|---|---|---|---|');
+        STATUS.forEach(r=>L.push('| '+r[0]+' | '+lbl[r[1]]+' | '+r[2]+' | '+r[3]+' |'));L.push('');
+      }
+      else if(k==='backlog'){
+        L.push('| приор | задача | где | что делать |','|---|---|---|---|');
+        BACKLOG.forEach(r=>L.push('| '+r[0]+' | '+r[1]+' | `'+r[2]+'` | '+r[3]+' |'));L.push('');
+      }
+      else if(k==='traps'){TRAPS.forEach(t=>{L.push('### '+t[0]);L.push(t[1],'')})}
+      else if(k==='recipes'){L.push('| что добавить | шаги |','|---|---|');
+        RECIPES.forEach(r=>L.push('| '+r[0]+' | '+mdInline(r[1])+' |'));L.push('')}
+    });
+  });
+  L.push('---','','Сгенерировано из `roof-handoff.html`. Обновляй данные в блоке MODULES / CONTRACTS / STATUS / BACKLOG / TRAPS / RECIPES внутри страницы, затем выгружай markdown заново.');
+  return L.join('\n');
+}
+function dl(n,t,m){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
+$('#bMd').onclick=()=>{dl('HANDOFF.md',toMd(),'text/markdown;charset=utf-8');toast('HANDOFF.md выгружен — можно коммитить')};
+$('#bJson').onclick=()=>{dl('handoff.json',JSON.stringify({generated:new Date().toISOString(),modules:MODULES,contracts:CONTRACTS,status:STATUS,backlog:BACKLOG,traps:TRAPS,recipes:RECIPES,sections:SECTIONS.map(s=>({id:s.id,n:s.n}))},null,2),'application/json');toast('JSON выгружен')};
+$('#bPrint').onclick=()=>window.print();
+document.querySelectorAll('#views button').forEach(b=>b.onclick=()=>{F.view=b.dataset.v;render()});
+$('#q').oninput=e=>{F.q=e.target.value.trim().toLowerCase();render()};
+$('#tOpen').onclick=()=>{F.open=!F.open;render()};
+$('#tCompact').onclick=()=>{F.compact=!F.compact;render()};
+$('#cFs').oninput=e=>{F.fs=+e.target.value;$('#vFs').textContent=F.fs+'px';document.documentElement.style.setProperty('--fs',F.fs+'px')};
+$('#bReset').onclick=()=>{F.q='';$('#q').value='';F.view='all';F.open=false;F.compact=false;F.fs=14;
+  $('#cFs').value=14;$('#vFs').textContent='14px';render();toast('Показан весь документ')};
+addEventListener('keydown',e=>{
+  if(/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)){if(e.key==='Escape'){e.target.value='';F.q='';render();e.target.blur()}return}
+  const k=e.key.toLowerCase();
+  if(k==='/'){e.preventDefault();$('#q').focus()}
+  if(k==='m')$('#bMd').click();
+  if(k==='p')window.print();
+});
+render();
+</script>
+</body>
+</html>

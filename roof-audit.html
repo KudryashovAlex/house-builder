@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Кровельный аудит — диагностическая консоль · ДОМ·ЛЕС</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a110e; --surface:#121c17; --surface2:#19241e; --overlay:#202e26; --scrim:rgba(8,14,11,.78);
+  --line:#293830; --line-hi:#3f5347;
+  --text:#eef4ec; --dim:#a1b4a7; --mute:#6f8377;
+  --timber:#e0913f; --timber-hi:#ffc477; --timber-deep:#9d5a17;
+  --steel:#7fb2d8; --blue:#4cc9f0; --acid:#a3e635; --violet:#b07cf0;
+  --red:#f4645f; --green:#4ade80; --warn:#fbbf24;
+  --f:'Manrope',system-ui,sans-serif; --d:'Unbounded','Manrope',sans-serif; --m:'JetBrains Mono',ui-monospace,monospace;
+  --bar:60px; --filt:56px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--bg); color:var(--text); font:14px/1.55 var(--f);
+  -webkit-font-smoothing:antialiased; padding:0 0 60px; overflow-x:hidden;
+}
+body::before{
+  content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 8% -8%, rgba(224,145,63,.16), transparent 62%),
+    radial-gradient(760px 520px at 96% 8%, rgba(76,201,240,.11), transparent 60%),
+    radial-gradient(1000px 700px at 50% 108%, rgba(163,230,53,.07), transparent 62%),
+    linear-gradient(180deg,#0d1712,#0a110e 45%,#080f0c);
+}
+body::after{
+  content:''; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.5;
+  background-image:
+    linear-gradient(rgba(63,83,71,.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(63,83,71,.16) 1px, transparent 1px);
+  background-size:46px 46px; mask-image:radial-gradient(circle at 50% 30%, #000 20%, transparent 78%);
+}
+::selection{background:var(--timber);color:#1a1206}
+.scroll{scrollbar-width:thin;scrollbar-color:var(--timber-deep) var(--surface)}
+.scroll::-webkit-scrollbar{width:11px;height:11px}
+.scroll::-webkit-scrollbar-track{background:var(--surface);border-radius:9px}
+.scroll::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--timber),var(--timber-deep));border-radius:9px;border:2px solid var(--surface)}
+.scroll::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--timber-hi),var(--timber))}
+body::-webkit-scrollbar{width:12px}
+body::-webkit-scrollbar-track{background:#0d1712}
+body::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--timber),var(--timber-deep));border-radius:9px;border:3px solid #0d1712}
+
+#bar{
+  position:fixed; inset:0 0 auto 0; height:var(--bar); z-index:60;
+  display:flex; align-items:center; gap:14px; padding:0 18px;
+  background:linear-gradient(180deg,rgba(10,17,14,.97),rgba(10,17,14,.86));
+  backdrop-filter:blur(14px); border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand svg{width:30px;height:30px;color:var(--timber);flex:none;filter:drop-shadow(0 0 12px rgba(224,145,63,.5))}
+.bname{font-family:var(--d);font-weight:700;font-size:13px;letter-spacing:.05em;white-space:nowrap}
+.bsub{font-size:10px;color:var(--mute);letter-spacing:.05em;white-space:nowrap}
+#bar .grow{flex:1}
+.btn{border:1px solid var(--line);background:var(--surface2);color:var(--text);font:700 12px var(--f);
+  padding:9px 13px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s;white-space:nowrap}
+.btn:hover{border-color:var(--timber);background:var(--overlay);transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn.p{background:linear-gradient(135deg,var(--timber-hi),var(--timber) 58%,var(--timber-deep));color:#20150a;border-color:transparent;font-weight:800}
+.btn.p:hover{box-shadow:0 7px 22px rgba(224,145,63,.34)}
+.btn.s{padding:7px 10px;font-size:11px}
+.btn:disabled{opacity:.45;cursor:progress;transform:none}
+.btn:focus-visible,input:focus-visible,select:focus-visible,.chip:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(224,145,63,.3);border-color:var(--timber)}
+#status{font:600 11px var(--m);color:var(--dim);white-space:nowrap}
+#prog{position:fixed;top:var(--bar);left:0;height:2px;z-index:61;width:0;
+  background:linear-gradient(90deg,var(--timber-hi),var(--acid));transition:width .18s;box-shadow:0 0 10px rgba(224,145,63,.6)}
+
+#filt{
+  position:fixed; top:var(--bar); left:0; right:0; z-index:55; min-height:var(--filt);
+  display:flex; align-items:center; gap:9px; flex-wrap:wrap; padding:10px 18px;
+  background:linear-gradient(180deg,rgba(18,28,23,.96),rgba(13,21,17,.92));
+  backdrop-filter:blur(12px); border-bottom:1px solid var(--line);
+}
+.search{position:relative;flex:0 1 260px;min-width:170px}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--mute);pointer-events:none}
+.search input{width:100%;padding:8px 10px 8px 31px;font:600 12px var(--f);color:var(--text);
+  background:var(--surface2);border:1px solid var(--line);border-radius:9px}
+.search input::placeholder{color:var(--mute)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--surface2);font:700 11px var(--f);color:var(--mute);transition:.14s;white-space:nowrap}
+.chip:hover{color:var(--text);border-color:var(--line-hi)}
+.chip i{width:8px;height:8px;border-radius:2.5px;background:#3b4a41;display:block;flex:none;transition:.14s}
+.chip.on{color:var(--text);border-color:var(--line-hi);background:var(--overlay)}
+.sep{width:1px;height:24px;background:var(--line);flex:none}
+select{padding:7px 26px 7px 10px;font:700 11px var(--f);color:var(--text);background:var(--surface2)
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23e0913f' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center;
+  border:1px solid var(--line);border-radius:8px;appearance:none;-webkit-appearance:none;cursor:pointer}
+option{background:var(--surface2)}
+
+main{max-width:1360px;margin:0 auto;padding:calc(var(--bar) + var(--filt) + 22px) 18px 0}
+.hero{margin-bottom:18px}
+.hero h1{font:800 25px/1.2 var(--f);margin:0 0 6px;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;background:linear-gradient(96deg,var(--timber-hi),var(--acid) 55%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--dim);font-size:12.5px;max-width:88ch}
+.hero p code{font:700 11.5px var(--m);color:var(--timber-hi);background:rgba(224,145,63,.1);padding:1px 5px;border-radius:4px}
+
+#sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px;margin:16px 0 10px}
+.card{background:linear-gradient(165deg,var(--surface2),var(--surface));border:1px solid var(--line);
+  border-radius:13px;padding:12px 14px;position:relative;overflow:hidden}
+.card::after{content:'';position:absolute;inset:0 auto 0 0;width:3px;background:var(--timber);opacity:.75}
+.card.bad::after{background:var(--red)}.card.good::after{background:var(--green)}
+.card.warn::after{background:var(--warn)}.card.skip::after{background:var(--violet)}
+.card b{display:block;font:800 26px/1.05 var(--m);color:var(--timber-hi);font-variant-numeric:tabular-nums}
+.card.bad b{color:var(--red)}.card.good b{color:var(--green)}.card.warn b{color:var(--warn)}.card.skip b{color:var(--violet)}
+.card span{font:800 8.5px var(--f);letter-spacing:.13em;text-transform:uppercase;color:var(--mute);display:block;margin-top:5px}
+
+#ratewrap{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:12px 15px;margin-bottom:20px}
+#ratewrap .rh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px;flex-wrap:wrap}
+#ratewrap .rh b{font:800 12px var(--f)}
+#ratewrap .rh em{font-style:normal;font:700 11px var(--m);color:var(--dim)}
+#rate{height:9px;border-radius:5px;overflow:hidden;display:flex;background:#243128}
+#rate i{display:block;height:100%;transition:width .5s cubic-bezier(.4,0,.2,1)}
+#rate .ok{background:linear-gradient(90deg,#3fbf6d,var(--green))}
+#rate .no{background:linear-gradient(90deg,var(--warn),#e0a020)}
+#rate .bg{background:linear-gradient(90deg,#d94b46,var(--red))}
+#rate .sk{background:#4a4258}
+#legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font:600 10.5px var(--f);color:var(--mute)}
+#legend span{display:inline-flex;align-items:center;gap:5px}
+#legend i{width:9px;height:9px;border-radius:3px;display:block}
+
+#out{display:flex;flex-direction:column;gap:10px}
+.cfg{border:1px solid var(--line);border-radius:13px;background:linear-gradient(180deg,var(--surface2),var(--surface));
+  overflow:hidden;position:relative;animation:rise .34s cubic-bezier(.2,.8,.3,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.cfg::before{content:'';position:absolute;inset:0 auto 0 0;width:3px;background:var(--green)}
+.cfg.hasbug::before{background:var(--red)}
+.cfg.hasnorm::before{background:var(--warn)}
+.cfg.coreonly::before{background:linear-gradient(180deg,var(--violet),var(--green))}
+.cfgh{display:flex;align-items:center;gap:10px;padding:12px 15px 12px 17px;cursor:pointer;flex-wrap:wrap;background:none;border:0;width:100%;text-align:left;color:inherit;font:inherit}
+.cfgh:hover{background:rgba(255,255,255,.028)}
+.cfgh .nm{flex:1;font:700 13.5px var(--f);min-width:190px}
+.cfgh .ar{color:var(--mute);font-size:10px;transition:transform .22s;flex:none}
+.cfg.open .cfgh .ar{transform:rotate(90deg)}
+.pill{font:800 10px var(--m);padding:3px 9px;border-radius:6px;white-space:nowrap;letter-spacing:.02em}
+.pill.ok{background:rgba(74,222,128,.15);color:var(--green);border:1px solid rgba(74,222,128,.28)}
+.pill.bad{background:rgba(244,100,95,.17);color:var(--red);border:1px solid rgba(244,100,95,.32)}
+.pill.warn{background:rgba(251,191,36,.15);color:var(--warn);border:1px solid rgba(251,191,36,.3)}
+.pill.skip{background:rgba(176,124,240,.15);color:var(--violet);border:1px solid rgba(176,124,240,.3)}
+.pill.dim{background:rgba(161,180,167,.09);color:var(--mute);border:1px solid var(--line)}
+.tags{display:flex;gap:5px;flex-wrap:wrap;padding:0 15px 11px 17px}
+.tags i{font-style:normal;font:700 9.5px var(--m);color:var(--steel);background:rgba(127,178,216,.09);
+  border:1px solid rgba(127,178,216,.22);border-radius:5px;padding:2px 6px}
+.tags i.hi{color:var(--timber-hi);background:rgba(224,145,63,.11);border-color:rgba(224,145,63,.28)}
+.tags i.mn{color:var(--violet);background:rgba(176,124,240,.1);border-color:rgba(176,124,240,.26)}
+.cfgb{display:none;padding:0 15px 14px 17px}
+.cfg.open .cfgb{display:block}
+.gsec{margin-bottom:11px}
+.gsec:last-child{margin-bottom:0}
+.gsec h4{margin:0 0 5px;font:800 8.5px var(--f);letter-spacing:.14em;text-transform:uppercase;
+  display:flex;align-items:center;gap:7px;color:var(--dim)}
+.gsec h4 i{width:9px;height:9px;border-radius:3px;display:block}
+.gsec h4 em{font-style:normal;color:var(--mute);font:700 9.5px var(--m);letter-spacing:0}
+table{width:100%;border-collapse:collapse;font:600 11.5px var(--m)}
+td{padding:5px 8px;border-bottom:1px solid rgba(41,56,48,.55);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.st{width:26px;text-align:center;font-weight:800;font-size:12px}
+td.id{width:44px;color:var(--steel);white-space:nowrap;font-weight:700}
+td.nm{color:var(--dim)}
+td.dt{color:var(--mute);font-size:10.5px;text-align:right;max-width:46%}
+tr.pass td.st{color:var(--green)}
+tr.fail td.st{color:var(--red)}
+tr.fail td.nm{color:var(--text);font-weight:700}
+tr.fail td.dt{color:var(--warn)}
+tr.fail{background:rgba(244,100,95,.055)}
+tr.exp td.st{color:var(--warn)}
+tr.exp td.dt{color:var(--warn)}
+tr.skip td.st{color:var(--mute)}
+tr.skip td.nm,tr.skip td.dt{color:var(--mute)}
+.compact .cfg .tags{display:none}
+.compact .cfg.open .tags{display:flex}
+.compact td{padding:3px 8px;font-size:11px}
+.compact .cfgh{padding:9px 15px 9px 17px}
+
+#empty{display:none;text-align:center;padding:56px 20px;color:var(--mute)}
+#empty.on{display:block}
+#empty b{display:block;font:800 15px var(--f);color:var(--dim);margin-bottom:6px}
+footer{max-width:1360px;margin:26px auto 0;padding:0 18px;font:600 10.5px var(--f);color:var(--mute);
+  display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+kbd{font:700 10px var(--m);background:var(--surface2);border:1px solid var(--line);border-bottom-width:2px;
+  border-radius:5px;padding:2px 6px;color:var(--dim)}
+#off{position:fixed;left:-9999px;top:0;width:960px;height:640px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,14px);z-index:70;opacity:0;pointer-events:none;
+  padding:10px 18px;border-radius:11px;background:linear-gradient(135deg,var(--overlay),var(--surface2));
+  border:1px solid var(--timber);font:700 12px var(--f);box-shadow:0 14px 34px rgba(0,0,0,.6);transition:.22s}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:860px){
+  :root{--filt:104px}
+  .bsub{display:none}
+  .hero h1{font-size:20px}
+  td.dt{max-width:38%}
+  #bar{gap:9px;padding:0 12px}
+  #filt{padding:9px 12px}
+  main{padding-left:12px;padding-right:12px}
+}
+</style>
+</head>
+<body class="scroll">
+
+<header id="bar">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 16 16 5l14 11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M6 16v12h20V16M9 28V19M16 12v16M23 28V19M6 22h20" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+    <div><div class="bname">КРОВЕЛЬНЫЙ АУДИТ</div><div class="bsub">конструктив · опоры · мансарда · раскрой · сцена</div></div>
+  </div>
+  <div class="grow"></div>
+  <span id="status">готово</span>
+  <button class="btn s" id="bCore" type="button">Только ядро</button>
+  <button class="btn p" id="bScene" type="button">▶ Ядро + сцена</button>
+  <button class="btn s" id="bCsv" type="button">⤓ CSV</button>
+  <button class="btn s" id="bJson" type="button">⤓ JSON</button>
+</header>
+<div id="prog"></div>
+
+<div id="filt">
+  <label class="search">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11 11l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+    <input id="q" type="search" placeholder="Поиск: ID, проверка, деталь…" aria-label="Поиск по проверкам">
+  </label>
+  <div class="sep"></div>
+  <button class="chip on" data-sev="bug" type="button" aria-pressed="true"><i style="background:var(--red)"></i>Баги</button>
+  <button class="chip on" data-sev="norm" type="button" aria-pressed="true"><i style="background:var(--warn)"></i>Нормы</button>
+  <button class="chip on" data-sev="pass" type="button" aria-pressed="true"><i style="background:var(--green)"></i>Пройдено</button>
+  <button class="chip on" data-sev="skip" type="button" aria-pressed="true"><i style="background:var(--violet)"></i>Пропуск</button>
+  <div class="sep"></div>
+  <button class="chip on" data-form="gable" type="button" aria-pressed="true"><i style="background:var(--timber)"></i>Двускатные</button>
+  <button class="chip on" data-form="hip" type="button" aria-pressed="true"><i style="background:var(--steel)"></i>Вальмы</button>
+  <button class="chip on" data-form="mansard" type="button" aria-pressed="true"><i style="background:var(--violet)"></i>Мансарды</button>
+  <div class="sep"></div>
+  <select id="grp" aria-label="Домен проверок">
+    <option value="">Все домены</option>
+    <option value="X">Целостность</option>
+    <option value="M">Геометрия</option>
+    <option value="S">Несущая способность</option>
+    <option value="P">Опоры и стыки</option>
+    <option value="N">Мансарда</option>
+    <option value="C">Ведомость и раскрой</option>
+    <option value="R">Сцена</option>
+  </select>
+  <select id="sort" aria-label="Сортировка">
+    <option value="bug">Сначала проблемные</option>
+    <option value="name">По названию</option>
+    <option value="checks">По числу проверок</option>
+    <option value="form">По форме крыши</option>
+  </select>
+  <button class="chip" id="cCompact" type="button" aria-pressed="false"><i></i>Компактно</button>
+  <button class="chip" id="cExpand" type="button" aria-pressed="false"><i></i>Раскрыть всё</button>
+  <button class="btn s" id="bReset" type="button">↺ Сброс фильтров</button>
+</div>
+
+<main>
+  <section class="hero">
+    <h1>Диагностика <em>кровельного конструктива</em></h1>
+    <p>Каждая сборка прогоняется через ядро и, где схема отрисовывается, через сцену. <b style="color:var(--red)">Баг</b> — код считает неправильно. <b style="color:var(--warn)">Норма</b> — конфигурация намеренно слабая, расчёт верен (<code>запил 33%</code>, <code>снег VIII на 3 сорте</code>, <code>клеёнка 50×200 на 5.9 м</code>). <b style="color:var(--violet)">Пропуск</b> — проверка неприменима: хорды заводской фермы считает завод, ломаный скат пока без отрисовки.</p>
+  </section>
+
+  <section id="sum"></section>
+
+  <section id="ratewrap">
+    <div class="rh"><b>Распределение проверок</b><em id="ratetxt">—</em></div>
+    <div id="rate"><i class="ok" style="width:0"></i><i class="no" style="width:0"></i><i class="bg" style="width:0"></i><i class="sk" style="width:0"></i></div>
+    <div id="legend">
+      <span><i style="background:var(--green)"></i>пройдено</span>
+      <span><i style="background:var(--warn)"></i>нарушение нормы в слабой конфигурации</span>
+      <span><i style="background:var(--red)"></i>баг кода</span>
+      <span><i style="background:#4a4258"></i>неприменимо</span>
+    </div>
+  </section>
+
+  <div id="out"></div>
+  <div id="empty"><b>Ничего не найдено</b>Смягчите фильтры или очистите поиск.</div>
+</main>
+
+<footer>
+  <span><kbd>/</kbd> поиск</span><span><kbd>E</kbd> раскрыть</span><span><kbd>C</kbd> свернуть</span>
+  <span><kbd>R</kbd> пересчитать</span><span><kbd>Esc</kbd> сброс поиска</span>
+  <span style="margin-left:auto">ДОМ·ЛЕС · инженерная проверка кровли</span>
+</footer>
+
+<div id="off"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.169.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.169.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { auditConfig, auditScene, deriveAll, AUDIT_MATRIX, AUDIT_GROUPS } from './src/roof/roof-audit.js';
+import { createRoofStage } from './src/roof/roof-render.js';
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+let ROWS = [], stage = null, running = false, lastMode = true;
+const F = { q:'', sev:new Set(['bug','norm','pass','skip']), form:new Set(['gable','hip','mansard']), grp:'', sort:'bug', compact:false, expandAll:false };
+const open = new Set();
+
+let tT;
+const toast = t => { const e=$('#toast'); e.textContent=t; e.classList.add('on'); clearTimeout(tT); tT=setTimeout(()=>e.classList.remove('on'),2400); };
+const frame = () => new Promise(r => requestAnimationFrame(() => r()));
+
+function sceneRunner(params) {
+  const d = deriveAll(params);
+  if (!stage) stage = createRoofStage($('#off'));
+  const res = stage.rebuild(d.model, { ...params, __pieces:d.pieces, __struct:d.structure, __long:d.plan });
+  return auditScene(THREE, res.root, d.model, d.pieces, d.plan, params, res.errors, res);
+}
+
+async function run(withScene) {
+  if (running) return;
+  running = true; lastMode = withScene;
+  $('#bScene').disabled = $('#bCore').disabled = true;
+  ROWS = []; open.clear();
+  const n = AUDIT_MATRIX.length;
+  for (let i = 0; i < n; i++) {
+    $('#status').textContent = `${i + 1} / ${n} · ${AUDIT_MATRIX[i].name}`;
+    $('#prog').style.width = (i / n * 100) + '%';
+    await frame();
+    let row;
+    try { row = auditConfig(AUDIT_MATRIX[i], withScene ? sceneRunner : null); }
+    catch (e) {
+      row = { name:AUDIT_MATRIX[i].name, params:{...AUDIT_MATRIX[i].p}, form:AUDIT_MATRIX[i].p.mansard?'mansard':(AUDIT_MATRIX[i].p.type==='hip'?'hip':'gable'),
+        coreOnly:!!AUDIT_MATRIX[i].coreOnly, all:[{id:'X00',name:'Сборка конфигурации',pass:false,detail:String(e&&e.message||e),group:'X'}],
+        resolved:null, bugs:1, violations:0, skipped:0, passed:0 };
+    }
+    ROWS.push(row);
+    if (row.bugs || row.violations) open.add(row.name);
+    render();
+  }
+  $('#prog').style.width = '100%';
+  setTimeout(() => { $('#prog').style.width = '0'; }, 420);
+  const bugs = ROWS.reduce((s, r) => s + r.bugs, 0);
+  $('#status').textContent = withScene ? 'ядро и сцена проверены' : 'ядро проверено';
+  $('#bScene').disabled = $('#bCore').disabled = false;
+  running = false;
+  toast(bugs ? `Найдено багов: ${bugs}` : 'Багов нет — все проверки пройдены или помечены как нормы');
+}
+
+const sevOf = x => x.skipped ? 'skip' : x.pass ? 'pass' : x.expected ? 'norm' : 'bug';
+
+function tagsOf(r) {
+  const p = r.params, m = r.resolved && r.resolved.model, S = r.resolved && r.resolved.structure;
+  const t = [];
+  t.push({ v: p.mansard ? 'мансарда · двускат' : (p.type === 'hip' ? 'вальма' : 'двускат'), c: 'hi' });
+  if (p.mansard) { t.push({ v: 'схема ' + p.mansardScheme, c: 'mn' }); t.push({ v: 'аттик ' + (p.mansardKnee ?? 0.9) + ' м', c: 'mn' }); }
+  if (p.mansard && p.mansardScheme === 'broken') t.push({ v: `низ ${p.mansardLowPitch ?? 62}° / верх ${p.mansardHighPitch ?? 28}°`, c: 'mn' });
+  t.push({ v: `${p.span ?? 8}×${p.length ?? 10} м` });
+  if (!p.mansard) t.push({ v: 'уклон ' + (p.pitch ?? 26) + '°' });
+  if (m) t.push({ v: `стропило ${Math.round(m.rt * 1000)}×${Math.round(m.rd * 1000)}`, c: 'hi' });
+  if (m && m.mansardOn) t.push({ v: `комната ${m.mansard.roomHeight.toFixed(2)} м · полезн. ${m.mansard.usableWidth.toFixed(2)} м`, c: 'mn' });
+  if (m && m.mansardOn && m.mansard.ridgeBeam) t.push({ v: `прогон ${m.mansard.ridgeBeam.sect.join('×')} клеёный`, c: 'mn' });
+  if (S && !S.skipRafter) t.push({ v: `пролёт ${S.runHoriz.toFixed(2)} м · μ ${S.mu.toFixed(2)}` });
+  t.push({ v: 'опирание ' + (p.seat ?? 'block') });
+  t.push({ v: 'заготовка ' + (p.stock ?? 6000) });
+  if (p.longStrategy && p.longStrategy !== 'support') t.push({ v: 'длинные: ' + p.longStrategy });
+  if (+(p.insul ?? 0)) t.push({ v: 'утепл. ' + p.insul + ' мм' });
+  return t;
+}
+
+function match(x) {
+  if (!F.sev.has(sevOf(x))) return false;
+  if (F.grp && x.group !== F.grp) return false;
+  if (F.q) {
+    const s = (x.id + ' ' + x.name + ' ' + x.detail).toLowerCase();
+    if (!s.includes(F.q)) return false;
+  }
+  return true;
+}
+
+function render() {
+  const out = $('#out');
+  let total = 0, bugs = 0, norms = 0, skipped = 0, passed = 0, cfgBad = 0;
+  ROWS.forEach(r => {
+    bugs += r.bugs; norms += r.violations; skipped += r.skipped; passed += r.passed;
+    total += r.all.filter(x => !x.skipped).length;
+    if (r.bugs) cfgBad++;
+  });
+
+  $('#sum').innerHTML = `
+    <div class="card"><b>${ROWS.length}</b><span>Конфигураций</span></div>
+    <div class="card"><b>${total}</b><span>Проверок</span></div>
+    <div class="card ${bugs ? 'bad' : 'good'}"><b>${bugs}</b><span>Багов кода</span></div>
+    <div class="card ${norms ? 'warn' : 'good'}"><b>${norms}</b><span>Нарушений норм</span></div>
+    <div class="card skip"><b>${skipped}</b><span>Неприменимо</span></div>
+    <div class="card ${cfgBad ? 'bad' : 'good'}"><b>${cfgBad}</b><span>Проблемных сборок</span></div>`;
+
+  const den = Math.max(1, passed + norms + bugs + skipped);
+  const bars = $('#rate').children;
+  bars[0].style.width = (passed / den * 100) + '%';
+  bars[1].style.width = (norms / den * 100) + '%';
+  bars[2].style.width = (bugs / den * 100) + '%';
+  bars[3].style.width = (skipped / den * 100) + '%';
+  $('#ratetxt').textContent = `${passed} пройдено · ${norms} норм · ${bugs} багов · ${skipped} пропуск · ${Math.round(passed / den * 100)}% чистых`;
+
+  let rows = ROWS.filter(r => F.form.has(r.form));
+  rows = rows.map(r => ({ r, hits: r.all.filter(match) })).filter(o => o.hits.length);
+  if (F.sort === 'bug') rows.sort((a, b) => (b.r.bugs - a.r.bugs) || (b.r.violations - a.r.violations) || a.r.name.localeCompare(b.r.name, 'ru'));
+  else if (F.sort === 'name') rows.sort((a, b) => a.r.name.localeCompare(b.r.name, 'ru'));
+  else if (F.sort === 'checks') rows.sort((a, b) => b.r.all.length - a.r.all.length);
+  else rows.sort((a, b) => a.r.form.localeCompare(b.r.form) || a.r.name.localeCompare(b.r.name, 'ru'));
+
+  out.innerHTML = '';
+  $('#empty').classList.toggle('on', rows.length === 0);
+  document.body.classList.toggle('compact', F.compact);
+
+  rows.forEach(({ r, hits }, i) => {
+    const isOpen = F.expandAll || open.has(r.name);
+    const el = document.createElement('div');
+    el.className = 'cfg' + (r.bugs ? ' hasbug' : r.violations ? ' hasnorm' : '') + (r.coreOnly ? ' coreonly' : '') + (isOpen ? ' open' : '');
+    el.style.animationDelay = Math.min(i * 18, 260) + 'ms';
+
+    const head = document.createElement('button');
+    head.type = 'button'; head.className = 'cfgh'; head.setAttribute('aria-expanded', String(isOpen));
+    head.innerHTML = `<span class="ar">▶</span><span class="nm">${esc(r.name)}</span>` +
+      (r.bugs ? `<span class="pill bad">${r.bugs} багов</span>` : '') +
+      (r.violations ? `<span class="pill warn">${r.violations} норм</span>` : '') +
+      (r.skipped ? `<span class="pill skip">${r.skipped} пропуск</span>` : '') +
+      (!r.bugs && !r.violations ? `<span class="pill ok">чисто</span>` : '') +
+      `<span class="pill dim">${hits.length}/${r.all.length}</span>`;
+    head.onclick = () => { if (open.has(r.name)) open.delete(r.name); else open.add(r.name); F.expandAll = false; syncChips(); render(); };
+    el.appendChild(head);
+
+    const tags = document.createElement('div'); tags.className = 'tags';
+    tags.innerHTML = tagsOf(r).map(t => `<i class="${t.c || ''}">${esc(t.v)}</i>`).join('');
+    el.appendChild(tags);
+
+    const body = document.createElement('div'); body.className = 'cfgb';
+    const byG = {};
+    hits.forEach(x => { (byG[x.group] = byG[x.group] || []).push(x); });
+    Object.keys(AUDIT_GROUPS).forEach(g => {
+      if (!byG[g]) return;
+      const G = AUDIT_GROUPS[g];
+      const bad = byG[g].filter(x => !x.pass && !x.expected && !x.skipped).length;
+      const sec = document.createElement('div'); sec.className = 'gsec';
+      sec.innerHTML = `<h4><i style="background:${G.c}"></i>${G.n}<em>${byG[g].length}${bad ? ' · ' + bad + ' падений' : ''}</em></h4>`;
+      const tb = document.createElement('table');
+      tb.innerHTML = '<tbody>' + byG[g].map(x => {
+        const s = sevOf(x);
+        const cls = s === 'pass' ? 'pass' : s === 'skip' ? 'skip' : s === 'norm' ? 'exp' : 'fail';
+        const sign = s === 'pass' ? '✓' : s === 'skip' ? '—' : s === 'norm' ? '!' : '✕';
+        return `<tr class="${cls}"><td class="st">${sign}</td><td class="id">${esc(x.id)}</td><td class="nm">${esc(x.name)}</td><td class="dt">${esc(x.detail)}</td></tr>`;
+      }).join('') + '</tbody>';
+      sec.appendChild(tb); body.appendChild(sec);
+    });
+    el.appendChild(body);
+    out.appendChild(el);
+  });
+}
+
+function syncChips() {
+  document.querySelectorAll('[data-sev]').forEach(b => { const on = F.sev.has(b.dataset.sev); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.querySelector('i').style.background = on ? ({bug:'var(--red)',norm:'var(--warn)',pass:'var(--green)',skip:'var(--violet)'})[b.dataset.sev] : '#3b4a41'; });
+  document.querySelectorAll('[data-form]').forEach(b => { const on = F.form.has(b.dataset.form); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.querySelector('i').style.background = on ? ({gable:'var(--timber)',hip:'var(--steel)',mansard:'var(--violet)'})[b.dataset.form] : '#3b4a41'; });
+  $('#cCompact').classList.toggle('on', F.compact); $('#cCompact').setAttribute('aria-pressed', String(F.compact));
+  $('#cCompact').querySelector('i').style.background = F.compact ? 'var(--acid)' : '#3b4a41';
+  $('#cExpand').classList.toggle('on', F.expandAll); $('#cExpand').setAttribute('aria-pressed', String(F.expandAll));
+  $('#cExpand').querySelector('i').style.background = F.expandAll ? 'var(--acid)' : '#3b4a41';
+}
+
+document.querySelectorAll('[data-sev]').forEach(b => b.onclick = () => { const k = b.dataset.sev; F.sev.has(k) ? F.sev.delete(k) : F.sev.add(k); syncChips(); render(); });
+document.querySelectorAll('[data-form]').forEach(b => b.onclick = () => { const k = b.dataset.form; F.form.has(k) ? F.form.delete(k) : F.form.add(k); syncChips(); render(); });
+$('#q').oninput = e => { F.q = e.target.value.trim().toLowerCase(); render(); };
+$('#grp').onchange = e => { F.grp = e.target.value; render(); };
+$('#sort').onchange = e => { F.sort = e.target.value; render(); };
+$('#cCompact').onclick = () => { F.compact = !F.compact; syncChips(); render(); };
+$('#cExpand').onclick = () => { F.expandAll = !F.expandAll; if (F.expandAll) ROWS.forEach(r => open.add(r.name)); else open.clear(); syncChips(); render(); };
+$('#bReset').onclick = () => {
+  F.q = ''; $('#q').value = ''; F.grp = ''; $('#grp').value = ''; F.sort = 'bug'; $('#sort').value = 'bug';
+  F.sev = new Set(['bug','norm','pass','skip']); F.form = new Set(['gable','hip','mansard']);
+  F.compact = false; F.expandAll = false; open.clear();
+  ROWS.forEach(r => { if (r.bugs || r.violations) open.add(r.name); });
+  syncChips(); render(); toast('Фильтры сброшены');
+};
+$('#bScene').onclick = () => run(true);
+$('#bCore').onclick = () => run(false);
+
+function dl(name, text, mime) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: mime }));
+  a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+}
+$('#bCsv').onclick = () => {
+  const rows = [['Конфигурация','Форма','Схема мансарды','Стропило','Домен','ID','Проверка','Статус','Детали']];
+  ROWS.forEach(r => {
+    const m = r.resolved && r.resolved.model;
+    const sect = m ? `${Math.round(m.rt*1000)}×${Math.round(m.rd*1000)}` : '';
+    r.all.forEach(x => rows.push([r.name, r.form, r.params.mansard ? r.params.mansardScheme : '', sect,
+      (AUDIT_GROUPS[x.group]||{}).n || '', x.id, x.name,
+      x.skipped ? 'ПРОПУСК' : x.pass ? 'OK' : x.expected ? 'НОРМА' : 'БАГ', x.detail || '']));
+  });
+  dl('roof-audit.csv', '\uFEFF' + rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(';')).join('\n'), 'text/csv;charset=utf-8');
+  toast('CSV выгружен');
+};
+$('#bJson').onclick = () => {
+  dl('roof-audit.json', JSON.stringify({
+    generated: new Date().toISOString(), mode: lastMode ? 'core+scene' : 'core',
+    totals: { configs: ROWS.length, bugs: ROWS.reduce((s,r)=>s+r.bugs,0), norms: ROWS.reduce((s,r)=>s+r.violations,0), skipped: ROWS.reduce((s,r)=>s+r.skipped,0) },
+    configs: ROWS.map(r => ({ name: r.name, form: r.form, params: r.params, bugs: r.bugs, violations: r.violations,
+      checks: r.all.map(x => ({ id:x.id, group:x.group, name:x.name, status: x.skipped?'skip':x.pass?'ok':x.expected?'norm':'bug', detail:x.detail })) }))
+  }, null, 2), 'application/json');
+  toast('JSON выгружен');
+};
+
+addEventListener('keydown', e => {
+  const typing = /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName);
+  if (e.key === '/' && !typing) { e.preventDefault(); $('#q').focus(); return; }
+  if (e.key === 'Escape') { $('#q').value = ''; F.q = ''; render(); $('#q').blur(); return; }
+  if (typing) return;
+  const k = e.key.toLowerCase();
+  if (k === 'e') { F.expandAll = true; ROWS.forEach(r => open.add(r.name)); syncChips(); render(); }
+  if (k === 'c') { F.expandAll = false; open.clear(); syncChips(); render(); }
+  if (k === 'r') run(lastMode);
+});
+
+syncChips();
+run(true);
+</script>
+</body>
+</html>
