@@ -357,9 +357,12 @@ export function createRoofStage(host){
             if(q.t==='box'&&Array.isArray(q.s)) me=box(q.s[0],q.s[1],q.s[2],mm_,q.p[0],q.p[1],q.zs?z:q.p[2]);
             else if(q.t==='brace') me=braceXY(q.a,q.b,q.depth,q.thick,mm_,z);
             if(!me) return;
-            me.userData[q.tag]=true; me.userData.msPart=q.tag;
+                        me.userData[q.tag]=true; me.userData.msPart=q.tag;
             if(VERT_TAGS.has(q.tag)) me.userData.vertSupport=true;
             if(q.tag==='gableBearing') me.position.y=m.beamTop-m.ridgeBeamSect[1]/1000-.012;
+            /* Осевые точки детали в её локальных координатах: у бруса — верх по центру,
+               у раскоса — оба конца. Именно их солвер держит под кровлей. */
+            me.userData.msAxis=q.t==='box'?[[0,q.s[1]/2,0]]:[[q.a[0],q.a[1],0],[q.b[0],q.b[1],0]];
             put(layer,me,q.st,mk);
           });
         });
@@ -645,16 +648,22 @@ export function createRoofStage(host){
     /* Контур: аттиковая стенка законно доходит до фронтона (L/2),
        а не до длины дома — раньше она снималась ошибочно. */
     if(MSD && roofAtW){
-      const zLim=m.L/2+.35, culled=[];
+      const zLim=m.L/2+.35, culled=[], av=new THREE.Vector3();
       root.traverse(o=>{
         if(!o.isMesh||!o.userData.msPart) return;
         o.updateWorldMatrix(true,false);
         const bb=new THREE.Box3().setFromObject(o);
         if(bb.isEmpty()){ o.userData.culled=true; culled.push(o.userData.msPart); return; }
-        const cx=(bb.min.x+bb.max.x)/2;
-        if(bb.max.y-roofAtW(cx)>.16 || bb.min.y<-.06 || bb.min.z<-zLim || bb.max.z>zLim){
-          o.userData.culled=true; culled.push(o.userData.msPart);
-        } else o.userData.culled=false;
+        /* bbox раскоса врёт: верхняя точка стоит у малого X, а центр коробки — посередине
+           пролёта, где кровля уже низкая. Проверяем осевые точки самой детали. */
+        let out=bb.min.y<-.06||bb.min.z<-zLim||bb.max.z>zLim;
+        const axis=o.userData.msAxis;
+        if(!out&&Array.isArray(axis)){
+          for(const pt of axis){ av.fromArray(pt).applyMatrix4(o.matrixWorld);
+            if(av.y-roofAtW(av.x)>.16){ out=true; break; } }
+        } else if(!out) out=bb.max.y-roofAtW((bb.min.x+bb.max.x)/2)>.16;
+        if(out){ o.userData.culled=true; culled.push(o.userData.msPart); }
+        else o.userData.culled=false;
       });
       if(culled.length) hwErrors.push('вне контура снято: '+[...new Set(culled)].join(', '));
     }

@@ -256,9 +256,11 @@ export const SCENARIOS = [
     const a=D.T.summary().rafters; await D.select('step',1); const b=D.T.summary().rafters;
     await D.select('step',.6); return A(b<a,`шаг 600: ${a} ног, шаг 1000: ${b} ног`); } },
   { id:'G06',g:'Геометрия',n:'Смена покрытия меняет кадр',run:async D=>{
+    const b0=D.T.builds();
     const d=await D.measure(async()=>{ await D.select('cover','shingle'); });
+    const cov=D.T.params().cover, built=D.T.builds()-b0;
     await D.select('cover','metaltile');
-    return A(d>D.cfg.pixelTol*.5,`кадр ${pc(d)} (цвет+яркость)`,{d}); } },
+    return A(cov==='shingle'&&built>=1&&d>.005,`покрытие ${cov}, пересборок ${built}, кадр ${pc(d)}`,{d}); } },
 
   { id:'V01',g:'Вид',n:'Орбита указателем поворачивает камеру',run:async D=>{
     const a=D.T.camera(); await D.orbit(160,30); const b=D.T.camera();
