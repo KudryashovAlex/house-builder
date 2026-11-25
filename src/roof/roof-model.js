@@ -1,6 +1,6 @@
 import { v3, eulerBasis } from './vec3.js';
 import { cl, fin, deg } from './format.js';
-import { SEATS, TIEMODE, COVERS, RAFTER_MAX, SNOW, GRADE } from './roof-params.js';
+import { SEATS, TIEMODE, COVERS, RAFTER_MAX, SNOW, GRADE, RHO } from './roof-params.js';
 import { solveMansard, snowMu } from './roof-mansard.js';
 
 const STD_DEPTHS = [100,125,150,175,200,225,250,300,350,400];
@@ -27,22 +27,34 @@ export function computeRoofModel(p) {
   const it = cl(insulMM,0,400)/1000;
   const seatMode = SEATS[p.seat] ? p.seat : 'notch';
   const seatW0 = seatMode==='notch' ? pw : Math.min(pw, Math.max(.05,(rr0[1]*.125)/Math.max(.05,sa)));
-  const deadKgOf = rd => cv.kg + (solid?7.5:6) + 4 + rd*2.5 + (warm?it*40+11:0) + .6;
+  const deadKgOf = (rt, rd) => cv.kg + (solid?7.5:.025*.10*RHO/Math.max(.2,cv.module||.35))+ .05*.05*RHO/step + rt*rd*RHO/step + (warm?it*40+11:0) + .6;
 
   const memT=.005, cntH=.05, batT=.025, deckT=.012, covT=.028;
   const fasciaOut=.035;
 
   let MS=null, rt=rr0[0]||.05, rd=rr0[1]||.2;
   if (mansardOn) {
-    MS = solveMansard(p, { half, length, eave, pitch, deadKN: deadKgOf(rd)*9.81/1000, Sg, step, G,
-      tieSect:[Math.round(tt*1000),Math.round(th*1000)], boltD:cl(p.boltD,8,20), boltN:cl(p.boltN,2,8),
-      seatWmm:Math.round(seatW0*1000), minSect:[Math.round(rt*1000),Math.round(rd*1000)],
-      th, pw, ph, plateLenZ: length + 2*rake });
-    if (autoSect && MS.sect) { rt=MS.sect[0]/1000; rd=MS.sect[1]/1000; }
-    MS.autoSection = autoSect;
-    MS.requestedSect = [Math.round(rr0[0]*1000), Math.round(rr0[1]*1000)];
-    MS.finalSect = [Math.round(rt*1000), Math.round(rd*1000)];
-    MS.deadKN = deadKgOf(rd)*9.81/1000;
+
+    let deadEst = deadKgOf(rt, rd) * 9.81 / 1000;
+    for (let iter = 0; iter < 4; iter++) {
+      MS = solveMansard(p, {
+        half, length, eave, pitch, deadKN: deadKgOf(rd) * 9.81 / 1000, Sg, step, G,
+        tieSect: [Math.round(tt * 1000), Math.round(th * 1000)], boltD: cl(p.boltD, 8, 20), boltN: cl(p.boltN, 2, 8),
+        seatWmm: Math.round(seatW0 * 1000), minSect: [Math.round(rt * 1000), Math.round(rd * 1000)],
+        th, pw, ph, plateLenZ: length + 2 * rake
+      });
+      if (autoSect && MS.sect) {
+        rt = MS.sect[0] / 1000;
+        rd = MS.sect[1] / 1000;
+      }
+      const next = deadKgOf(rt, rd) * 9.81 / 1000;
+      if (Math.abs(next - deadEst) < 1e-6) break;
+      deadEst = next;
+      MS.autoSection = autoSect;
+      MS.requestedSect = [Math.round(rr0[0] * 1000), Math.round(rr0[1] * 1000)];
+      MS.finalSect = [Math.round(rt * 1000), Math.round(rd * 1000)];
+      MS.deadKN = deadKgOf(rd) * 9.81 / 1000;
+    }
   }
 
   const bw=.10, plumbH=rd/ca, bh=Math.max(.15, Math.ceil(plumbH/.05)*.05);
