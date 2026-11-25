@@ -27,7 +27,13 @@ export function computeRoofModel(p) {
   const it = cl(insulMM,0,400)/1000;
   const seatMode = SEATS[p.seat] ? p.seat : 'notch';
   const seatW0 = seatMode==='notch' ? pw : Math.min(pw, Math.max(.05,(rr0[1]*.125)/Math.max(.05,sa)));
-  const deadKgOf = (rt, rd) => cv.kg + (solid?7.5:.025*.10*RHO/Math.max(.2,cv.module||.35))+ .05*.05*RHO/step + rt*rd*RHO/step + (warm?it*40+11:0) + .6;
+  const deadKgOf = (a, b) => {
+    const bR = fin(a) ? a : .05, hR = fin(b) ? b : .2;
+    const rho = fin(RHO) ? RHO : 500;
+    const st = fin(p.step) ? cl(p.step, .3, 1.2) : .6;
+    const deck = solid ? 7.5 : .025 * .10 * rho / Math.max(.2, fin(cv.module) ? cv.module : .35);
+    return cv.kg + deck + .05 * .05 * rho / st + bR * hR * rho / st + (warm ? it * 40 + 11 : 0) + .6;
+  };
 
   const memT=.005, cntH=.05, batT=.025, deckT=.012, covT=.028;
   const fasciaOut=.035;
