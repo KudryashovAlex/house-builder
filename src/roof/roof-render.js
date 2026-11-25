@@ -322,7 +322,7 @@ export function createRoofStage(host){
       mLin=mat('#d9b382',{r:.8}),mMem=mat('#b07cf0',{r:.4,t:1,o:.6,side:THREE.DoubleSide}),
       mCnt=mat('#7dd3fc',{r:.7}),mBat=mat('#e0913f',{r:.8}),mDeck=mat('#caa472',{r:.85}),
       mCov=mat(cv.col,{r:params.cover==='shingle'?.92:.34,m:params.cover==='shingle'?0:.6,map:coverTex(params.cover),side:THREE.DoubleSide}),
-      mRidge=mat('#f4645f',{r:.38,m:.45}),mJoint=mat('#e05a55',{r:.36,m:.5}),
+      mRidge=mat(new THREE.Color(cv.col).offsetHSL(0,-.05,.08).getStyle(),{r:.32,m:.58}),mJoint=mat('#e05a55',{r:.36,m:.5}),
       mTrim=mat('#cbd5cf',{r:.6,m:.15}),mGut=mat('#4cc9f0',{r:.3,m:.6}),mSof=mat('#d6cfc0',{r:.75});
     const MATS={frame:mFrame,web:mWeb,glulam:mGlulam,steel:mLam,purlin:mPurlin,knee:mKnee,plate:mPlate,floor:mFloor,ceil:mCeil};
     const LAYER_OF={2:'joists',1:'plate',5:'frame',6:'frame',7:'frame',8:'frame',10:'lining'};
@@ -474,7 +474,8 @@ export function createRoofStage(host){
               const xa=bounds[si],xb=bounds[si+1]; if(!(xb-xa>.06)) continue;
               const notch=(seat&&xa<seat.xsi-.02&&seat.xso<xb-.02)
                 ?[[seat.xsi,0],[seat.xsi+m.seatW*f.ca,m.seatW*f.sa],[seat.xso,0]]:[];
-              const seg=extrude([[xa,0],...notch,[xb,0],[xb-D*ta,D],[xa-D*ta,D]],m.rt,mFrame);
+              const xaTop=Math.min(Math.max(xa-D*ta,Number.isFinite(f.xTopLimit)?f.xTopLimit:-1e9),xb-D*ta-.01);
+              const seg=extrude([[xa,0],...notch,[xb,0],[xb-D*ta,D],[xaTop,D]],m.rt,mFrame);
               if(seg){seg.position.z=r.z-m.rt/2;seg.userData.st=st;seg.userData.mk=mk;
                 seg.userData.segLen=+(xb-xa).toFixed(4);seg.userData.faceTag=f.tag;rf.push(seg);}}
           } else {me.userData.st=st;me.userData.mk=mk;me.userData.segLen=+r.len.toFixed(4);me.userData.faceTag=f.tag;rf.push(me);}
@@ -519,11 +520,7 @@ export function createRoofStage(host){
         const cm=extrude(poly(xTop,fPie),m.covT,mCov,'y');
         if(cm){uvRotate90(cm.geometry);cm.position.y=m.covY;cm.userData.faceTag=f.tag;addTo('cover',cm,12);}
 
-        if(f.isBreakEnd){
-          const lapW=Math.min(.34,(MSD.lap||.22)+.10);
-          const fl=box(lapW,.014,2*zh(fRL),mJoint,fRL+(MSD.lap||.22)/2-.02,m.coverTop+.022,0);
-          if(fl){fl.userData.breakFlashing=true;addTo('ridge',fl,13);}
-        }
+
 
         if(params.snow && f.snowRows && f.snowRows.length){
           const sn=[];
@@ -549,10 +546,26 @@ export function createRoofStage(host){
           });
           addAll('snow',sn,13);
         }
-        addTo('trim',box(.13,.02,2*zh(fPie),mTrim,fPie-.02,m.coverTop+.018,0),9);
+        if(!f.isBreakEnd) addTo('trim',box(.13,.02,2*zh(fPie),mTrim,fPie-.02,m.coverTop+.018,0),9);
         if(m.type==='gable'){const rakeMk=markLen('rake',fRL);
           [-1,1].forEach(q=>addTo('trim',box(fRL,m.rd*.8,.025,mTrim,fRL/2,m.rd*.4-.02,q*(f.zBot+.016)),9,rakeMk));}
       });
+
+      /* Переломная планка: гнутый лист, лежащий на обоих скатах, с подъёмом по излому. */
+      if(broken && MSD && Number.isFinite(m.msMiter)){
+        const hiA=MSD.highA, loA=MSD.lowA, t=m.coverTop, s=m.msMiter;
+        const cH=Math.cos(hiA), sH=Math.sin(hiA), cL=Math.cos(loA), sL=Math.sin(loA);
+        const dOut=-s*cL+t*sL;
+        const mx=MSD.breakX+dOut, my=MSD.breakY+t/cH-dOut*Math.tan(hiA);
+        const lu=.18, ll=.24, lift=.014, th=.012, len=m.L;
+        [-1,1].forEach(sg=>{
+          const P=(dx,dy)=>[sg*(mx+dx),my+dy];
+          const band=e=>[P(-cH*lu+sH*e, sH*lu+cH*e), P(0,lift*1.7+(e-lift)), P(cL*ll+sL*e, -sL*ll+cL*e)];
+          const prof=[...band(lift),...band(lift-th).reverse()];
+          const me=extrude(prof,len,mRidge);
+          if(me){me.geometry.translate(0,0,-len/2);me.userData.breakFlashing=true;put(L.ridge,me,13);}
+        });
+      }
 
       const LIFT=.018,CAP_TH=.030,TENT_LIFT=.034,TENT_TH=.030,TENT_L=.36;
       const apexY=m.apex+m.coverTop/upCa+LIFT;

@@ -122,6 +122,24 @@ export function computeRoofModel(p) {
     faces.push(mk(v3(0,apex,ridgeHalf),{x:0,y:-Math.PI/2,z:-a},0,W/2,'tri',{sz:1}));
     faces.push(mk(v3(0,apex,-ridgeHalf),{x:0,y:Math.PI/2,z:-a},0,W/2,'tri',{sz:-1}));
   }
+  /* Перелом ломаного ската: верхние грани пирогов обоих скатов обязаны сойтись
+     в одну линию. Без этого нижний скат выступает ступенькой над верхним,
+     а верхний висит полкой в воздухе. Смещение — из толщины пирога и уклонов. */
+  let msMiter = 0;
+  if (mansardOn && MS.scheme === 'broken') {
+    const hiA = MS.highA, loA = MS.lowA;
+    const den = Math.sin(loA) - Math.cos(loA)*Math.tan(hiA);
+    if (den > 1e-4) {
+      const k = (1/Math.cos(hiA) - Math.cos(loA) - Math.sin(loA)*Math.tan(hiA))/den;
+      msMiter = cl(coverTop*k, 0, .6);
+      const dOut = -msMiter*Math.cos(loA) + coverTop*Math.sin(loA);
+      faces.forEach(f => {
+        if (f.tag === 'upper') { f.rlPie = f.rl + (dOut - coverTop*Math.sin(hiA))/Math.cos(hiA); f.isBreakEnd = true; }
+        else if (f.tag === 'lower') { f.xPie0 = -msMiter; f.xTopLimit = -cl(rd*k, 0, .6); }
+      });
+    }
+  }
+
   const zHalf=(f,x)=>f.zTop+(cl(x,0,f.rl)/f.rl)*(f.zBot-f.zTop);
   const zHalfPie=(f,x)=>f.zTop+(cl(x,0,f.rlPie)/Math.max(.01,f.rl))*(f.zBot-f.zTop);
   const xMin=(f,z)=>f.zBot<=f.zTop+1e-6?0:cl((z-f.zTop)/(f.zBot-f.zTop)*f.rl,0,f.rl);
@@ -334,5 +352,5 @@ export function computeRoofModel(p) {
     hipW,hipDepth,hipLam,hipBoardT,hips,jackJoints,seatRuns,bearR,cleatLen,
     rise,tieFrac,tieHalf,topPlaneC,ovLo,ovHi,fullLo,fullHi,overlap,fullOverlap,
     underEdgeLo:ovLo,underEdgeHi:tieHalf,boltD,boltN,bearingY,
-    mansard:MS,mansardOn,joistsOn,ridgeBeamSect,qArea,deadKg,deadKN,insulMM,autoSect };
+    mansard:MS,mansardOn,joistsOn,ridgeBeamSect,qArea,deadKg,deadKN,insulMM,autoSect,msMiter };
 }
