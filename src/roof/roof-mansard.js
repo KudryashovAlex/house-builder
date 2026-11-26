@@ -82,11 +82,14 @@ function buildParts(o){
     const zl=Math.min(s[2]/2,zLim);
     P.push({t:'box',s:[s[0],h,zl*2],p:[p[0],y,cl(p[2],-zLim+zl,zLim-zl)],zs,mat,tag,st,mk});
   };
-  const brace=(a,b,depth,thick,zs,mat,tag,st,mk)=>{
-    const A=clampPt(a,.06), B=clampPt(b,.06);
+  const brace=(a,b,depth,thick,zs,mat,tag,st,mk,clear)=>{
+    /* Зазор до кровли задаётся вызовом: подкос упирается углом и не должен
+       оттягиваться общим запасом 60 мм — иначе контакт теряется. */
+    const c=Number.isFinite(clear)?clear:.06;
+    const A=clampPt(a,c), B=clampPt(b,c);
     const len=Math.hypot(B[0]-A[0],B[1]-A[1]);
     if(!(len>.22)){rejected.push(tag);return;}
-    if(A[1]>roofAt(A[0])-.03||B[1]>roofAt(B[0])-.03){rejected.push(tag);return;}
+    if(A[1]>roofAt(A[0])-c/2||B[1]>roofAt(B[0])-c/2){rejected.push(tag);return;}
     P.push({t:'brace',a:A,b:B,depth,thick,zs,mat,tag,st,mk:mk?[mk[0],len]:null});
   };
   const plate=(p,zs,tag,st,s=[.16,.004,.16])=>{ const c=clampPt([p[0],p[1]],.014);
@@ -118,22 +121,23 @@ function buildParts(o){
     [-1,1].forEach(s=>box([BP_W,BP_D,plateLenZ],[s*ceilHalf,roomH-BP_D/2,0],null,'purlin','breakPurlin',5,['breakBeam',plateLenZ]));
     const hU=ridgeY-roomH;
     if(hU>=.75&&ceilHalf>=1.1){
-      /* Бабка подвешена к коньковому прогону: доводим до оси конька,
-         прогон сам подрежет по месту — зазора 28 мм больше нет. */
-      const kLen=Math.max(.2,hU-(tieLift||0)-.08);
-      /* 150 — высота сечения В ПЛОСКОСТИ фермы (по X), 50 — толщина по Z,
-         как у стропил и подкосов. Раньше 150 шло по Z: бабка была втрое шире узлов. */
-      box([KING[1]/1000,kLen,KING[0]/1000],[0,base+kLen/2,0],'upper','web','upperKing',8,['post',kLen]);
+      /* Бабка подвешена к коньковому прогону: доводим до оси конька, box() сам
+         подрежет по кровле — зазора 28 мм до низа прогона больше нет. */
+      const kLen=Math.max(.2,hU-(tieLift||0)+.02);
+      box([KING[0]/1000,kLen,KING[1]/1000],[0,base+kLen/2,0],'upper','web','upperKing',8,['post',kLen]);
       plate([0,ridgeY-.10,0],'upper','trussPlate',8,[.2,.004,.2]);
-            /* Упор подкоса — на 30% ската ОТ КОНЬКА: и tx, и ty считаем от конька.
-         Угол выходит ~38° вместо 13° — подкос работает, а не распирает. */
-      const t=(ceilHalf/Math.cos(highA))*.30;
-      const tx=t*Math.cos(highA), ty=ridgeY-t*Math.sin(highA)-.07;
+      /* Подкос: пятка на ГРАНИ бабки, нижний угол на её пятке, дальний ВЕРХНИЙ
+         угол точно на низу стропилы. Угол 38°, длина — из условия контакта. */
+      const thS=38*Math.PI/180, cS=Math.cos(thS), sS=Math.sin(thS);
+      const hdS=BRACE[1]/2000, kx=KING[0]/2000;
       [-1,1].forEach(s=>{
-        brace([0,base+.14],[s*tx,ty],BRACE[1]/1000,BRACE[0]/1000,'upper','web','trussWeb',8,['brace',1]);
-        plate([s*tx,ty-.03,0],'upper','trussPlate',8);
+        const ax=s*(kx+hdS*sS), ay=base+hdS*cS;
+        const L=(ridgeY-Math.abs(ax)*tanH-ay+hdS*(sS*tanH-cS))/(sS+cS*tanH);
+        if(!(L>.25)) return;
+        const bx=ax+s*L*cS, by=ay+L*sS;
+        brace([ax,ay],[bx,by],BRACE[1]/1000,BRACE[0]/1000,'upper','web','trussWeb',8,['brace',1],.01);
+        plate([bx,by-.03,0],'upper','trussPlate',8);
       });
-
     }
   } else if(scheme==='tie'){
     const hU=ridgeY-roomH;
