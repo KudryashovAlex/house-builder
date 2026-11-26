@@ -135,7 +135,8 @@ export function computeRoofModel(p) {
       const dOut = -msMiter*Math.cos(loA) + coverTop*Math.sin(loA);
       faces.forEach(f => {
         if (f.tag === 'upper') { f.rlPie = f.rl + (dOut - coverTop*Math.sin(hiA))/Math.cos(hiA); f.isBreakEnd = true; }
-        else if (f.tag === 'lower') { f.xPie0 = -msMiter; f.xTopLimit = -cl(rd*k, 0, .6); }
+        else if (f.tag === 'lower') { f.xPie0 = -msMiter; f.xTopLimit = -cl(rd*k, 0, .6);
+          f.headSeat = (MS.breakPurlinW || .15)/2*f.ca; }
       });
     }
   }
@@ -176,7 +177,9 @@ export function computeRoofModel(p) {
     const bs=f.basis;
     const adj=hips.filter(h=>f.adj && ((f.adj.sx&&h.sx===f.adj.sx)||(f.adj.sz&&h.sz===f.adj.sz)));
     const zs=[], n = type==='gable'?Math.max(2,Math.ceil(L/step)+1):Math.max(2,Math.ceil(2*f.zBot/step)+1);
-    const fXb = f.tag==='main'?Xb:(bw/2)/f.ca;
+        /* Голова нижнего ската мансарды приходит в точку перелома и садится
+       на прогон горизонтальной площадкой — зазора между скатами быть не должно. */
+    const fXb = f.tag==='main'?Xb:f.tag==='lower'?0:(bw/2)/f.ca;
     for (let i=0;i<n;i++){
       const z = type==='gable' ? -L/2+L*i/(n-1) : -f.zBot+2*f.zBot*i/(n-1);
       zs.push(z);

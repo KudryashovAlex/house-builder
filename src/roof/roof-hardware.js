@@ -318,6 +318,34 @@ export function buildHardware(m, p, S) {
     }));
     b.flush(g, gs, mats);
   });
+  /* Узел перелома мансарды: верхняя и нижняя стропилы сходятся на прогоне
+     перелома. Двусторонние накладки и саморезы — как в ферменном узле. */
+  if (m.mansardOn && m.mansard && m.mansard.scheme === 'broken') safe('узел перелома', () => {
+    const { g, b } = mk('fix', 6);
+    const MS = m.mansard, pt = .010, half = m.rd / 2;
+    const cH = Math.cos(MS.highA), sH = Math.sin(MS.highA), cL = Math.cos(MS.lowA), sL = Math.sin(MS.lowA);
+    const node = [];
+    [.10, .20].forEach(t => {
+      node.push([MS.breakX - t * cH + half * sH, MS.breakY + t * sH + half * cH]);
+      node.push([MS.breakX + t * cL + half * sL, MS.breakY - t * sL + half * cL]);
+    });
+    /* Размер накладки — по фактическому узлу с отступом 70 мм под саморезы. */
+    const nx = node.map(q => q[0]), ny = node.map(q => q[1]), mg = .07;
+    const cx = (Math.min(...nx) + Math.max(...nx)) / 2, cy = (Math.min(...ny) + Math.max(...ny)) / 2;
+    const PW = Math.max(...nx) - Math.min(...nx) + 2 * mg, PH = Math.max(...ny) - Math.min(...ny) + 2 * mg;
+    const geo = plateGeo(PW, PH, pt, node.map(([x, y]) => [x - cx, y - cy, HOLE_R]));
+    [-1, 1].forEach(sx => {
+      (m.faceZ[0] || []).forEach(z => {
+        if (Math.abs(z) > m.length / 2 + 1e-6) return;
+        [-1, 1].forEach(sz => {
+          const N = V(0, 0, sz);
+          putPlate(g, mats.steel, geo, V(sx * cx, cy, z + sz * m.rt / 2), V(sx, 0, 0), UP, N);
+          node.forEach(([x, y]) => b.screw(V(sx * x, y, z + sz * (m.rt / 2 + pt)), N, .06));
+        });
+      });
+    });
+    b.flush(g, gs, mats);
+  });
 
   /* 8. Полуноги: скошенный уголок в накосное */
   if (m.hips.length) safe('полуноги', () => {

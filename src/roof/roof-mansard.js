@@ -107,7 +107,7 @@ function buildParts(o){
   });
 
   if(broken){
-    [-1,1].forEach(s=>box([.10,.20,plateLenZ],[s*ceilHalf,roomH-.10,0],null,'purlin','breakPurlin',5,['beam',plateLenZ]));
+    [-1,1].forEach(s=>box([.15,.25,plateLenZ],[s*ceilHalf,roomH-.125,0],null,'purlin','breakPurlin',5,['beam',plateLenZ]));
     const hU=ridgeY-roomH;
     if(hU>=.75&&ceilHalf>=1.1){
       const kLen=hU-.08;
@@ -199,6 +199,7 @@ export function solveMansard(p, ctx){
   out.lowerSpan=lowRL; out.upperSpan=highRL; out.upperRun=ceilHalf;
   out.studs=[-1,1].map(s=>({x:s*ceilHalf,y0:0,y1:ceilY,sect:[50,150],s}));
   out.lap=scheme==='broken'?.22:0;
+  out.breakPurlinW=.15;
 
   const cases = scheme==='broken'
     ? [{tag:'lower',runH:lowRun,caS:Math.cos(lowA),deg:lowDeg,qPair:slopeLineLoad(deadKN,Math.cos(lowA),lowDeg,Sg,step)},
