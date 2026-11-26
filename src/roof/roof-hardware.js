@@ -241,8 +241,17 @@ export function buildHardware(m, p, S) {
   const bearOf = f => {
     if (!MSD) return { xsi: m.Xsi, xso: m.Xso, yBot: -m.ph + .02 };
     if (f.tag === 'upper') return null;
-    const xsi = (m.half - m.pw / 2 - MSD.breakX) / f.ca;
-    return { xsi, xso: xsi + m.seatW / f.ca, yBot: MSD.kneeTop - m.ph + .02 };
+    /* Ломаный скат: нижняя стропила сидит на аттиковой стенке — опора там,
+       где она была. Остальные мансардные схемы (ригель, коньковый прогон,
+       фермы): стропило опирается НА МАУЭРЛАТ верхнего ряда венцов, поэтому
+       посадка считается от внутренней грани мауэрлата, а опорная полка
+       крепится к верхней плоскости мауэрлата (y=0), а не к карману аттика. */
+    if (MSD.scheme === 'broken') {
+      const xsi = (m.half - m.pw / 2 - MSD.breakX) / f.ca;
+      return { xsi, xso: xsi + m.seatW / f.ca, yBot: MSD.kneeTop - m.ph + .02 };
+    }
+    const xsi = (m.half - m.pw / 2) / f.ca;
+    return { xsi, xso: xsi + m.seatW / f.ca, yBot: -m.ph + .02 };
   };
   safe('опирание', () => {
     const { g, b } = mk('fix', 6);
@@ -256,6 +265,13 @@ export function buildHardware(m, p, S) {
       const P0 = L2W(f, Xs, Ys, r.z);
       const wallN = w.axisN.clone().multiplyScalar(Math.sign(P0.dot(w.axisN)) || 1);
       const cN = w.half + m.pw / 2 + PT / 2;
+      /* Опорная полка уголка обязана стоять на ТОЙ плоскости, на которую
+         реально опирается стропило. В мансардных схемах без аттиковой стенки
+         (ригель, коньковый прогон, фермы) мауэрлата на уровне ската нет —
+         полка ложится на перекрытие (верх решётки = потолок комнаты).
+         Иначе уголок висит в воздухе снаружи стены и вылетает за кровлю. */
+      const hasBearingWall = !MSD || MSD.scheme === 'broken' || MSD.kneeTop > .05;
+      const seatY = hasBearingWall ? bear.yBot : MSD.roomH - m.th;
       [-1, 1].forEach(sj => {
         const nJ = T3(f.basis.Z).multiplyScalar(sj);
         const C = wallN.clone().multiplyScalar(cN).addScaledVector(nJ, P0.dot(nJ) + m.rt / 2 + PT / 2);
@@ -267,7 +283,7 @@ export function buildHardware(m, p, S) {
           const sp = C.clone().addScaledVector(wallN, -LA * t); sp.y = yA + sy * HA * .20;
           b.screw(sp.addScaledVector(nJ, PT), nJ, .042);
         }));
-        const yTop = P0.y + .02, yBot = bear.yBot, HB = Math.max(.07, yTop - yBot), yB = (yTop + yBot) / 2;
+        const yTop = P0.y + .02, yBot = seatY, HB = Math.max(.07, yTop - yBot), yB = (yTop + yBot) / 2;
         const cB = C.clone().addScaledVector(nJ, LB / 2); cB.y = yB;
         putPlate(g, mats.steel, plateGeo(LB, HB, PT, [], [.013, .058, (P0.y - .038) - yB]), cB, nJ, UP, wallN);
         const sp = C.clone().addScaledVector(nJ, LB / 2); sp.y = P0.y - .038;
