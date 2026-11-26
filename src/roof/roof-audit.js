@@ -180,9 +180,12 @@ export function auditCore(params){
     R.push(ok('N19','Снег взят по фактическому уклону ската',
       MS.scheme!=='broken'||m.faces.filter(f=>f.tag==='lower').every(f=>f.mu===0),
       MS.scheme==='broken'?`низ ${MS.lowDeg.toFixed(0)}° μ=${m.faces.find(f=>f.tag==='lower').mu.toFixed(2)}`:'один уклон'));
-    R.push(ok('N21','Ригель мансарды в уровне потолка',
-      MS.scheme!=='broken'||Math.abs((m.tieY+m.th)-MS.breakY)<1e-6,
-      `верх ригеля ${(m.tieY+m.th).toFixed(3)} · перелом ${MS.breakY.toFixed(3)}`));
+    R.push(ok('N21','Ригель выше прогона и не касается его',
+      MS.scheme!=='broken'||(m.tieY-MS.breakY)>-1e-6,
+      `низ ригеля ${m.tieY.toFixed(3)} · верх прогона ${MS.breakY.toFixed(3)}`));
+    R.push(ok('N25','Ригель прошит в стропило, а не в прогон',
+      MS.scheme!=='broken'||(m.msTieBolts||[]).length>=1,
+      `болтов на конец ${(m.msTieBolts||[]).length}`));
     const withMk=(MS.parts||[]).filter(q=>Array.isArray(q.mk));
     const inCut=withMk.every(q=>pieces.some(x=>x.g===q.mk[0]&&Math.abs(x.len-q.mk[1])<.02));
     R.push(ok('N23','Члены мансарды попали в ведомость',inCut,`${withMk.length} членов с маркой`));
@@ -286,8 +289,9 @@ export function auditScene(THREE, root, model, pieces, plan, params, hwErrors, i
     const mt=meshes.filter(o=>o.userData.mansardTie);
     R.push(ok('R15','Ригель мансарды отрисован',mt.length===model.tieZ.length,`${mt.length} ригелей при ${model.tieZ.length} по плану`));
     if(MS.scheme==='broken'&&mt.length)
-      R.push(ok('R16','Ригель работает потолком на уровне перелома',mt.every(o=>Math.abs(o.userData.tieTop-MS.breakY)<1e-3),
-        `верх ригеля ${mt[0].userData.tieTop.toFixed(3)} · перелом ${MS.breakY.toFixed(3)}`));
+      R.push(ok('R16','Ригель накладной над прогоном, потолок по ригелю',
+        mt.every(o=>o.userData.tieTop>MS.breakY+1e-3),
+        `верх ригеля ${mt[0].userData.tieTop.toFixed(3)} · верх прогона ${MS.breakY.toFixed(3)}`));
     const rb=meshes.filter(o=>o.userData.ridgeBeam);
     R.push(ok('R17','Коньковый прогон отрисован нужным сечением',
       rb.length===1&&rb[0].userData.sect.join('×')===model.ridgeBeamSect.join('×'),

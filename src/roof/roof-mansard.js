@@ -63,7 +63,7 @@ function sizeRidgeBeam(wLine, spanM){
 /* Члены мансарды. Подкос — профиль в плоскости XY с толщиной по Z.
    Каждый член несёт mk:[группа, длина] — по нему он попадает в распил. */
 function buildParts(o){
-  const {scheme,half,length,ceilHalf,roomH,ridgeY,kneeTop,th,pw,ph,plateLenZ,lowA,highA}=o;
+  const {scheme,half,length,ceilHalf,roomH,ridgeY,kneeTop,th,pw,ph,plateLenZ,lowA,highA,tieLift}=o;
   const tanL=Math.tan(lowA), tanH=Math.tan(highA), broken=scheme==='broken';
   const roofAt = x => { const ax=Math.abs(x);
     return broken ? (ax<=ceilHalf ? ridgeY-ax*tanH : roomH-(ax-ceilHalf)*tanL) : ridgeY-ax*tanL; };
@@ -90,7 +90,7 @@ function buildParts(o){
     P.push({t:'box',s,p:[c[0],c[1],p[2]],zs,mat:'steel',tag,st}); };
 
   box([2*ceilHalf,.022,length],[0,.011,0],null,'floor','mansardFloor',2);
-  box([2*ceilHalf,.018,length],[0,roomH-th-.011,0],null,'ceil','mansardCeiling',10);
+  box([2*ceilHalf,.018,length],[0,roomH+(tieLift||0)-th-.011,0],null,'ceil','mansardCeiling',10);
 
   if(kneeTop>.05){
     const wallH=Math.max(.08,kneeTop-ph);
@@ -242,6 +242,10 @@ export function solveMansard(p, ctx){
     if(ch){out.sectLower=ch.sect;out.checksLower=ch.checks;}
   }
 
+   /* Ригель накладной на стропила, прогон перелома работает как мауэрлат и не сверлится.
+     Подъём даёт место болтам и в стропиле, и в ригеле; выше верхней грани не поднимаем. */
+  out.tieLift = scheme==='broken' ? Math.min(ctx.th+.10, (out.sect[1]/1000)/Math.cos(highA)) : 0;
+
   const hU=Math.max(.2,ridgeY-ceilY);
   out.tieForce=cases[cases.length-1].qPair*Math.pow(2*ceilHalf,2)/(8*hU);
   out.bottomTieForce=scheme==='ridge'?0:cases[0].qPair*Math.pow(2*half,2)/(8*Math.max(.3,ridgeY-knee));
@@ -267,7 +271,7 @@ export function solveMansard(p, ctx){
   if(out.exhausted) out.warnings.push('Ни одно стандартное сечение не проходит — уменьшите пролёт или шаг.');
 
   const built=buildParts({scheme,half,length,ceilHalf,roomH:ceilY,ridgeY,kneeTop:knee,
-    th:ctx.th,pw:ctx.pw,ph:ctx.ph,plateLenZ:ctx.plateLenZ,lowA,highA});
+    th:ctx.th,pw:ctx.pw,ph:ctx.ph,plateLenZ:ctx.plateLenZ,lowA,highA,tieLift:out.tieLift});
   out.parts=built.parts; out.rejectedParts=built.rejected;
   out.hasUpper=built.parts.some(q=>q.zs==='upper');
   if(built.rejected.length) out.warnings.push(`Решётка не размещена при этой геометрии: ${[...new Set(built.rejected)].join(', ')}. Поднимите уклон или опустите потолок.`);

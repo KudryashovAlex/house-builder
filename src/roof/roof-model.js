@@ -240,7 +240,9 @@ export function computeRoofModel(p) {
   const rise=apex-bearingY, tieFrac=cl(p.tiePos,.35,.8);
   let tieY,tieHalf,tieCeil;
   /* Ригель встаёт в торец прогона перелома, а не проходит сквозь него. */
-  if (mansardOn) { tieY=MS.roomH-th; tieHalf=MS.ceilHalf-(MS.breakPurlinW||.15)/2; tieCeil=()=>MS.roomH+.5; }
+  /* Ригель накладной: поднят над прогоном и пришит сбоку к верхним стропилам.
+     В прогон не входит и не сверлит его — прогон несёт стропила как мауэрлат. */
+  if (mansardOn) { tieY=MS.roomH+(MS.tieLift||0)-th; tieHalf=MS.ceilHalf; tieCeil=()=>MS.roomH+.5; }
   else { tieY=bearingY+rise*tieFrac; tieHalf=tieMode==='side'?(apex+rd/ca-tieY)/ta:(apex-tieY)/ta;
     tieCeil=z=>apex-ta*Math.max(0,Math.abs(fin(z))-ridgeHalf); }
   const topPlaneC=apex+rd/ca;
@@ -340,6 +342,17 @@ export function computeRoofModel(p) {
   for(const k in V) V[k]=Math.max(0,fin(V[k]));
   const wood=Object.values(V).reduce((s,v)=>s+v,0);
   const boltD=cl(p.boltD,8,20), boltN=cl(p.boltN,2,8);
+  /* Болты ригеля мансарды — по оси ригеля, внутри нахлёста со стропилом.
+     Отступы: 7d от торца ригеля, 3d от нижней кромки стропилы, 7d между болтами. */
+  const msTieBolts=[];
+  if(mansardOn&&MS.scheme==='broken'){
+    const d7=7*boltD/1000, d3=3*boltD/1000, tanU=Math.tan(MS.highA);
+    const yB=tieY+th/2, uMax=(yB-MS.breakY-d3)/tanU;
+    if(uMax>d7){
+      msTieBolts.push({x:MS.breakX-d7,y:yB});
+      if(d7*2<=uMax) msTieBolts.push({x:MS.breakX-d7*2,y:yB});
+    }
+  }
   const hipNails=hips.length?Math.max(2,Math.ceil(hipLen/hips.length/.4))*4*hips.length:0;
   const hipBolts=hips.length?Math.max(2,Math.ceil(hipLen/hips.length/1.2))*2*hips.length:0;
   const fix={ slide:bearR*2, angle:rafters.length*2+(p.braces&&postZ.length?postZ.length*4:0)+jackJoints*2+upperZ.length*4,
@@ -368,5 +381,5 @@ export function computeRoofModel(p) {
     hipW,hipDepth,hipLam,hipBoardT,hips,jackJoints,seatRuns,bearR,cleatLen,
     rise,tieFrac,tieHalf,topPlaneC,ovLo,ovHi,fullLo,fullHi,overlap,fullOverlap,
     underEdgeLo:ovLo,underEdgeHi:tieHalf,boltD,boltN,bearingY,
-    mansard:MS,mansardOn,joistsOn,ridgeBeamSect,qArea,deadKg,deadKN,insulMM,autoSect,msMiter,rdEave };
+    mansard:MS,mansardOn,joistsOn,ridgeBeamSect,qArea,deadKg,deadKN,insulMM,autoSect,msMiter,rdEave,msTieBolts };
 }

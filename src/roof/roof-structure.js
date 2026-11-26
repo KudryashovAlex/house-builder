@@ -92,7 +92,7 @@ export function computeRoofStructure(p, m) {
   const modeI=fh*t*d, k=My/(fh*d*t*t), modeIII=1.1*(fh*t*d)/3*(Math.sqrt(4+12*k)-1);
   const Fv=Math.min(modeI,modeIII)/1000, FvRd=Fv*0.9/1.3;
   const BL = m.tieMode==='side' && !m.mansardOn ? boltLayout(m) : null;
-  const nEff = BL&&BL.ok ? BL.positions.length : m.boltN;
+  const nEff = BL&&BL.ok ? BL.positions.length : (m.mansardOn&&MS&&MS.scheme==='broken' ? Math.max(1,(m.msTieBolts||[]).length) : m.boltN);
   const perEnd=tieN/2, capEnd=FvRd*nEff*m.tieSides, utilB=capEnd>0?perEnd/capEnd:9;
   const holesPerRow = BL&&BL.ok?BL.rows:Math.max(1,Math.round(m.boltN/2));
   const Anet=sectMM[0]*Math.max(1,sectMM[1]-holesPerRow*d), sigT=tieN*1000/Math.max(1,Anet);

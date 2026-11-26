@@ -274,7 +274,13 @@ export function buildHardware(m, p, S) {
         b.screw(sp.addScaledVector(wallN, PT), wallN, .055);
       });
     });
-    if (m.tieMode === 'side' && S && S.boltLayout && S.boltLayout.ok) {
+    if (m.mansardOn && m.mansard && m.mansard.scheme === 'broken') {
+      /* Накладной ригель: болт насквозь через стропило и ригель, поперёк тяги — на срез.
+         Прогон перелома не сверлим: он несёт стропила как мауэрлат. */
+      const rB = m.boltD / 2000, zOff = m.rt / 2 + m.tt / 2;
+      (m.msTieBolts || []).forEach(q => m.tieZ.forEach(z => [-1, 1].forEach(sx =>
+        b.bolt(V(sx * q.x, q.y, z - m.rt / 2), V(sx * q.x, q.y, z + zOff + m.tt / 2), rB))));
+    } else if (m.tieMode === 'side' && S && S.boltLayout && S.boltLayout.ok) {
       const r = m.boltD / 2000;
       m.tieZ.forEach(z => {
         for (let s = 0; s < m.tieSides; s++) {

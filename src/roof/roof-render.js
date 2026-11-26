@@ -404,9 +404,10 @@ export function createRoofStage(host){
 
       const tieMk=markLen('tie',2*m.tieHalf);
       m.tieZ.forEach(z=>{
-        if(MSD){ const me=box(2*m.tieHalf,m.th,m.tt,mTie,0,m.tieY+m.th/2,z);
+        if(MSD){ const zOff=MSD.scheme==='broken'?m.rt/2+m.tt/2:0;
+          const me=box(2*m.tieHalf,m.th,m.tt,mTie,0,m.tieY+m.th/2,z+zOff);
           if(me){me.userData.mansardTie=true;me.userData.tieTop=m.tieY+m.th;put(L.frame,me,6,tieMk);
-            marks.push({mark:tieMk,pos:V3(m.tieHalf*.7,m.tieY+m.th/2,z),st:6});} return; }
+            marks.push({mark:tieMk,pos:V3(m.tieHalf*.7,m.tieY+m.th/2,z+zOff),st:6});} return; }
         const xw=m.tieHalf+1;
         let poly=[[-xw,m.tieY],[xw,m.tieY],[xw,m.tieY+m.th],[-xw,m.tieY+m.th]];
         const ceil=m.tieCeil(z);
