@@ -480,10 +480,7 @@ export function createRoofStage(host){
               const notch=(seat&&xa<seat.xsi-.02&&seat.xso<xb-.02)
                 ?[[seat.xsi,0],[seat.xsi+m.seatW*f.ca,m.seatW*f.sa],[seat.xso,0]]:[];
               const xaTop=Math.min(Math.max(xa-D*ta,Number.isFinite(f.xTopLimit)?f.xTopLimit:-1e9),xb-D*ta-.01);
-              /* Площадка опирания на прогон перелома: горизонтальный рез по верху прогона. */
-              const hs=Number.isFinite(f.headSeat)?f.headSeat:0;
-              const headSeat=(hs>.004&&xa<1e-6&&xb>hs+.02)?[[hs,hs*ta],[hs,0]]:[];
-              const seg=extrude([[xa,0],...headSeat,...notch,[xb,0],[xb-D*ta,D],[xaTop,D]],m.rt,mFrame);
+              const seg=extrude([[xa,0],...notch,[xb,0],[xb-D*ta,D],[xaTop,D]],m.rt,mFrame);
               if(seg){seg.position.z=r.z-m.rt/2;seg.userData.st=st;seg.userData.mk=mk;
                 seg.userData.segLen=+(xb-xa).toFixed(4);seg.userData.faceTag=f.tag;rf.push(seg);}}
           } else {me.userData.st=st;me.userData.mk=mk;me.userData.segLen=+r.len.toFixed(4);me.userData.faceTag=f.tag;rf.push(me);}

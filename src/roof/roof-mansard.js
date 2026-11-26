@@ -64,10 +64,13 @@ function sizeRidgeBeam(wLine, spanM){
    Каждый член несёт mk:[группа, длина] — по нему он попадает в распил. */
 function buildParts(o){
   const {scheme,half,length,ceilHalf,roomH,ridgeY,kneeTop,th,pw,ph,plateLenZ,lowA,highA,tieLift}=o;
+  const base=roomH+(tieLift||0);   // верх ригеля — пятка всей решётки над потолком
   const tanL=Math.tan(lowA), tanH=Math.tan(highA), broken=scheme==='broken';
   const roofAt = x => { const ax=Math.abs(x);
     return broken ? (ax<=ceilHalf ? ridgeY-ax*tanH : roomH-(ax-ceilHalf)*tanL) : ridgeY-ax*tanL; };
-  const P=[], rejected=[], zLim=length/2-.02;
+  /* Несущие члены идут по длине КРОВЛИ (со свесами), а не дома:
+     иначе прогон и мауэрлат не доходят до крайних стропил. */
+  const P=[], rejected=[], zLim=Math.max(length,plateLenZ)/2-.02;
   const clampPt=(p,clear)=>{ const x=cl(p[0],-half+.05,half-.05);
     return [x, cl(p[1],.04,Math.max(.05,roofAt(x)-clear))]; };
   const box=(s,p,zs,mat,tag,st,mk)=>{
@@ -115,18 +118,22 @@ function buildParts(o){
     [-1,1].forEach(s=>box([BP_W,BP_D,plateLenZ],[s*ceilHalf,roomH-BP_D/2,0],null,'purlin','breakPurlin',5,['breakBeam',plateLenZ]));
     const hU=ridgeY-roomH;
     if(hU>=.75&&ceilHalf>=1.1){
-      const kLen=hU-.08;
-      box([KING[0]/1000,kLen,KING[1]/1000],[0,roomH+kLen/2,0],'upper','web','upperKing',8,['post',kLen]);
+      /* Бабка подвешена к коньковому прогону: доводим до оси конька,
+         прогон сам подрежет по месту — зазора 28 мм больше нет. */
+      const kLen=Math.max(.2,hU-(tieLift||0)-.08);
+      /* 150 — высота сечения В ПЛОСКОСТИ фермы (по X), 50 — толщина по Z,
+         как у стропил и подкосов. Раньше 150 шло по Z: бабка была втрое шире узлов. */
+      box([KING[1]/1000,kLen,KING[0]/1000],[0,base+kLen/2,0],'upper','web','upperKing',8,['post',kLen]);
       plate([0,ridgeY-.10,0],'upper','trussPlate',8,[.2,.004,.2]);
-      const t=(ceilHalf/Math.cos(highA))*.55;
-      const tx=Math.abs(ceilHalf-t*Math.cos(highA)), ty=ridgeY-t*Math.sin(highA)-.07;
+            /* Упор подкоса — на 30% ската ОТ КОНЬКА: и tx, и ty считаем от конька.
+         Угол выходит ~38° вместо 13° — подкос работает, а не распирает. */
+      const t=(ceilHalf/Math.cos(highA))*.30;
+      const tx=t*Math.cos(highA), ty=ridgeY-t*Math.sin(highA)-.07;
       [-1,1].forEach(s=>{
-        brace([0,roomH+.14],[s*tx,ty],BRACE[1]/1000,BRACE[0]/1000,'upper','web','trussWeb',8,['brace',1]);
+        brace([0,base+.14],[s*tx,ty],BRACE[1]/1000,BRACE[0]/1000,'upper','web','trussWeb',8,['brace',1]);
         plate([s*tx,ty-.03,0],'upper','trussPlate',8);
       });
-      const cy=roomH+hU*.60;
-      const chHalf=Math.min(Math.max(.25,(ridgeY-cy)/tanH-.10),ceilHalf-.12);
-      if(chHalf>.25) box([2*chHalf,COLLAR[1]/1000,COLLAR[0]/1000],[0,cy,0],'upper','web','trussCeiling',8,['tie',2*chHalf]);
+
     }
   } else if(scheme==='tie'){
     const hU=ridgeY-roomH;
@@ -204,6 +211,7 @@ export function solveMansard(p, ctx){
   out.lowerSpan=lowRL; out.upperSpan=highRL; out.upperRun=ceilHalf;
   out.studs=[-1,1].map(s=>({x:s*ceilHalf,y0:0,y1:ceilY,sect:[50,150],s}));
   out.lap=scheme==='broken'?.22:0;
+
   out.breakPurlinW=.15;
 
   const cases = scheme==='broken'
@@ -245,9 +253,21 @@ export function solveMansard(p, ctx){
    /* Ригель накладной на стропила, прогон перелома работает как мауэрлат и не сверлится.
      Подъём даёт место болтам и в стропиле, и в ригеле; выше верхней грани не поднимаем. */
   out.tieLift = scheme==='broken' ? Math.min(ctx.th+.10, (out.sect[1]/1000)/Math.cos(highA)) : 0;
-
   const hU=Math.max(.2,ridgeY-ceilY);
   out.tieForce=cases[cases.length-1].qPair*Math.pow(2*ceilHalf,2)/(8*hU);
+  /* Подкос подпирает верхнюю стропилу и распирает узел. Реакцию подпора берём
+     оценочно 0.4 от полной нагрузки на стропилу, горизонталь = V·run/rise.
+     Эту добавку замыкает ригель потолка — схватка для неё не нужна. */
+  out.strutThrust=0;
+  if(scheme==='broken'&&hU>=.75&&ceilHalf>=1.1){
+    const qU=cases[cases.length-1].qPair, tU=(ceilHalf/Math.cos(highA))*.30;
+    const run=tU*Math.cos(highA);
+    const rise=(ridgeY-tU*Math.sin(highA)-.07)-(ceilY+(out.tieLift||0)+.14);
+    if(run>.05&&rise>.05){
+      out.strutThrust=.4*qU*ceilHalf*run/rise;
+      out.tieForce+=out.strutThrust;
+    }
+  }
   out.bottomTieForce=scheme==='ridge'?0:cases[0].qPair*Math.pow(2*half,2)/(8*Math.max(.3,ridgeY-knee));
   if(scheme==='ridge'){
     const wLine=(deadKN/Math.cos(lowA)*1.1+Sg*snowMu(lowDeg)*1.4)*half;
