@@ -239,7 +239,8 @@ export function computeRoofModel(p) {
 
   const rise=apex-bearingY, tieFrac=cl(p.tiePos,.35,.8);
   let tieY,tieHalf,tieCeil;
-  if (mansardOn) { tieY=MS.roomH-th; tieHalf=MS.ceilHalf; tieCeil=()=>MS.roomH+.5; }
+  /* Ригель встаёт в торец прогона перелома, а не проходит сквозь него. */
+  if (mansardOn) { tieY=MS.roomH-th; tieHalf=MS.ceilHalf-(MS.breakPurlinW||.15)/2; tieCeil=()=>MS.roomH+.5; }
   else { tieY=bearingY+rise*tieFrac; tieHalf=tieMode==='side'?(apex+rd/ca-tieY)/ta:(apex-tieY)/ta;
     tieCeil=z=>apex-ta*Math.max(0,Math.abs(fin(z))-ridgeHalf); }
   const topPlaneC=apex+rd/ca;

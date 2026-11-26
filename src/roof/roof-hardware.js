@@ -330,9 +330,9 @@ export function buildHardware(m, p, S) {
       node.push([MS.breakX + t * cL + half * sL, MS.breakY - t * sL + half * cL]);
     });
     /* Размер накладки — по фактическому узлу с отступом 70 мм под саморезы. */
-    const nx = node.map(q => q[0]), ny = node.map(q => q[1]), mg = .07;
-    const cx = (Math.min(...nx) + Math.max(...nx)) / 2, cy = (Math.min(...ny) + Math.max(...ny)) / 2;
-    const PW = Math.max(...nx) - Math.min(...nx) + 2 * mg, PH = Math.max(...ny) - Math.min(...ny) + 2 * mg;
+    /* Узел опёрт на прогон — он не моментный. Накладка 160×200 лежит на древесине
+       обоих членов и на прогоне, а не парит по габариту узла. */
+    const cx = MS.breakX, cy = MS.breakY + .10, PW = .16, PH = .20;
     const geo = plateGeo(PW, PH, pt, node.map(([x, y]) => [x - cx, y - cy, HOLE_R]));
     [-1, 1].forEach(sx => {
       (m.faceZ[0] || []).forEach(z => {
@@ -340,7 +340,8 @@ export function buildHardware(m, p, S) {
         [-1, 1].forEach(sz => {
           const N = V(0, 0, sz);
           putPlate(g, mats.steel, geo, V(sx * cx, cy, z + sz * m.rt / 2), V(sx, 0, 0), UP, N);
-          node.forEach(([x, y]) => b.screw(V(sx * x, y, z + sz * (m.rt / 2 + pt)), N, .06));
+          [-1, 1].forEach(du => [-1, 1].forEach(dv =>
+            b.screw(V(sx * (cx + du * .045), cy + dv * .065, z + sz * (m.rt / 2 + pt)), N, .06)));
         });
       });
     });

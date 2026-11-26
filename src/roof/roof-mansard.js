@@ -18,6 +18,8 @@ export const GL = { Ri: 24, Rt: 16, Rsm: 2.6, E: 11500, n: 'Клеёная GL24h
 export const RAFTER_SECTIONS = [[50,150],[50,200],[60,200],[50,250],[60,250],[50,300],[60,300],[75,300],[100,300]];
 
 const KING=[50,150], BRACE=[50,150], COLLAR=[50,100], WEB=[45,145];
+/* Прогон перелома — обвязка по стойкам боковой стены комнаты, а не мауэрлат на затяжках. */
+const BP_W=.15, BP_D=.25;
 const rad = d => d*Math.PI/180;
 export const snowMu = d => d<=30?1:d>=60?0:(60-d)/30;
 export const slopeLineLoad = (deadKN,caS,slopeDeg,Sg,step) => ((deadKN/caS)*1.1 + Sg*snowMu(slopeDeg)*1.4)*step;
@@ -101,13 +103,16 @@ function buildParts(o){
     });
   }
   [-1,1].forEach(s=>{
-    const hStud=Math.max(.25,roomH-.03);
+    /* Стойка несёт прогон СНИЗУ: верх стойки = низ прогона.
+       Раньше стойка входила в прогон на 220 мм — опирания не было. */
+    const top=broken?roomH-BP_D:roomH-.03;
+    const hStud=Math.max(.25,top);
     box([.05,hStud,.15],[s*ceilHalf,hStud/2,0],'tie','web','roomStud',6,['post',hStud]);
     P.push({t:'box',s:[.05,.05,length],p:[s*ceilHalf,.028,0],zs:null,mat:'web',tag:'roomRail',st:6});
   });
 
   if(broken){
-    [-1,1].forEach(s=>box([.15,.25,plateLenZ],[s*ceilHalf,roomH-.125,0],null,'purlin','breakPurlin',5,['breakBeam',plateLenZ]));
+    [-1,1].forEach(s=>box([BP_W,BP_D,plateLenZ],[s*ceilHalf,roomH-BP_D/2,0],null,'purlin','breakPurlin',5,['breakBeam',plateLenZ]));
     const hU=ridgeY-roomH;
     if(hU>=.75&&ceilHalf>=1.1){
       const kLen=hU-.08;
