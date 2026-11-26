@@ -234,15 +234,25 @@ export function buildHardware(m, p, S) {
     b.flush(g, gs, mats);
   });
 
-  /* 6. Скользящие опоры стропил + болты ригеля */
+  /* 6. Скользящие опоры стропил + болты ригеля.
+     Опирание считается ПО СКАТУ: у мансарды нижний скат стоит на аттиковой
+     стенке, верхний опёрт на прогон перелома и стены под собой не имеет. */
+  const MSD = m.mansardOn ? m.mansard : null;
+  const bearOf = f => {
+    if (!MSD) return { xsi: m.Xsi, xso: m.Xso, yBot: -m.ph + .02 };
+    if (f.tag === 'upper') return null;
+    const xsi = (m.half - m.pw / 2 - MSD.breakX) / f.ca;
+    return { xsi, xso: xsi + m.seatW / f.ca, yBot: MSD.kneeTop - m.ph + .02 };
+  };
   safe('опирание', () => {
     const { g, b } = mk('fix', 6);
     const LA = .11, LB = .08, HA = .15;
     m.rafters.filter(r => !r.jack).forEach(r => {
-      const f = r.f, w = wallOf(m, f);
-      const notch = m.seatMode === 'notch';
-      const Xs = notch ? m.Xsi + m.seatW * m.ca / 2 : (m.Xsi + m.Xso) / 2;
-      const Ys = notch ? m.seatW * m.sa / 2 : 0;
+      const f = r.f, w = wallOf(m, f), bear = bearOf(f);
+      if (!bear) return;
+      const notch = !MSD && m.seatMode === 'notch';
+      const Xs = notch ? bear.xsi + m.seatW * f.ca / 2 : (bear.xsi + bear.xso) / 2;
+      const Ys = notch ? m.seatW * f.sa / 2 : 0;
       const P0 = L2W(f, Xs, Ys, r.z);
       const wallN = w.axisN.clone().multiplyScalar(Math.sign(P0.dot(w.axisN)) || 1);
       const cN = w.half + m.pw / 2 + PT / 2;
@@ -257,7 +267,7 @@ export function buildHardware(m, p, S) {
           const sp = C.clone().addScaledVector(wallN, -LA * t); sp.y = yA + sy * HA * .20;
           b.screw(sp.addScaledVector(nJ, PT), nJ, .042);
         }));
-        const yTop = P0.y + .02, yBot = -m.ph + .02, HB = Math.max(.07, yTop - yBot), yB = (yTop + yBot) / 2;
+        const yTop = P0.y + .02, yBot = bear.yBot, HB = Math.max(.07, yTop - yBot), yB = (yTop + yBot) / 2;
         const cB = C.clone().addScaledVector(nJ, LB / 2); cB.y = yB;
         putPlate(g, mats.steel, plateGeo(LB, HB, PT, [], [.013, .058, (P0.y - .038) - yB]), cB, nJ, UP, wallN);
         const sp = C.clone().addScaledVector(nJ, LB / 2); sp.y = P0.y - .038;
