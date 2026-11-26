@@ -1,0 +1,42 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>Аудит бруса</title>
+<body style="background:#101a17;color:#ece7da;font:14px/1.6 monospace;padding:20px">
+<h3>Аудит профилированного бруса</h3><pre id="out">считаю…</pre>
+<script type="module">
+import { profile, areas, courseRuns, coursesFor, wallSummary, TIMBER_WIDTHS, TIMBER_H, JOINT_SHIFT } from './src/house/timber.js';
+const L=[]; let bad=0;
+const ok=(n,c,d)=>{ if(!c)bad++; L.push(`${c?'PASS':'FAIL'}  ${n}${d?'  — '+d:''}`); };
+const polyArea=p=>{let s=0;for(let i=0;i<p.length;i++){const j=(i+1)%p.length;s+=p[i][0]*p[j][1]-p[j][0]*p[i][1];}return s/2;};
+const sgn=(a,b,c)=>Math.sign((b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]));
+const hit=(p,q,r,t)=>sgn(p,q,r)!==sgn(p,q,t)&&sgn(r,t,p)!==sgn(r,t,q);
+for(const w of TIMBER_WIDTHS){
+  const pr=profile(w), pts=pr.pts, n=pts.length; let cross=0;
+  for(let i=0;i<n;i++)for(let j=i+2;j<n;j++){ if(i===0&&j===n-1)continue;
+    if(hit(pts[i],pts[(i+1)%n],pts[j],pts[(j+1)%n]))cross++; }
+  ok(`${w}×${TIMBER_H} профиль не самопересекается`, cross===0, `пересечений ${cross}`);
+  ok(`${w}×${TIMBER_H} площадь полигона = формула`, Math.abs(polyArea(pts)-areas(w).net)<1e-6,
+     `${polyArea(pts).toFixed(0)} / ${areas(w).net.toFixed(0)} мм²`);
+  ok(`${w}×${TIMBER_H} шип не достаёт дна паза`, pr.g-pr.t>=1, `зазор ${pr.g-pr.t} мм`);
+  ok(`${w}×${TIMBER_H} боковой зазор шипа`, pr.side>=1, `${pr.side} мм`);
+  ok(`${w}×${TIMBER_H} площадки шире зазоров`, pr.land>2*pr.side, `площадка ${pr.land.toFixed(1)} мм`);
+}
+ok('шаг венца = высота тела', coursesFor(2800).step===TIMBER_H, `${TIMBER_H} мм`);
+let sum=0,over=0,short=0,clash=0,noShift=0,tot=0;
+for(const stock of [5000,6000]) for(let len=3000;len<=15000;len+=250){
+  const a=courseRuns(len,stock,0), b=courseRuns(len,stock,1);
+  for(const r of [a,b]){ tot++;
+    if(r.pieces.reduce((s,v)=>s+v,0)!==r.need)sum++;
+    if(r.pieces.some(v=>v>stock))over++;
+    if(r.pieces.some(v=>v<1200))short++;
+    if(!r.staggered)noShift++; }
+  if(a.joints.some(j=>b.joints.some(k=>Math.abs(j-k)<JOINT_SHIFT)))clash++;
+}
+ok('сумма кусков = длина венца', sum===0, `${tot} венцов, ошибок ${sum}`);
+ok('кусок не длиннее заготовки', over===0, `${over}`);
+ok('кусок не короче 1200 мм', short===0, `${short}`);
+ok('стыки соседних венцов разнесены ≥1 м', clash===0, `нарушений ${clash}, неразнесённых ${noShift}`);
+const s=wallSummary({beamWidth:140,beamStock:6000,width:8,length:6,wallHeight:2.7,floors:1});
+L.push('', `8×6, 140×140, 6 м: венцов ${s.courses}, высота ${s.wallHeight} мм (Δ${s.delta}), `
+  +`погонаж ${(s.runMm/1000).toFixed(1)} м, заготовок ${s.blanks}, ${s.volume.toFixed(2)} м³`);
+L.push('', bad?`ИТОГ: ПРОВАЛОВ ${bad}`:'ИТОГ: ВСЁ ЗЕЛЁНОЕ');
+document.getElementById('out').textContent=L.join('\n');
+</script></body></html>

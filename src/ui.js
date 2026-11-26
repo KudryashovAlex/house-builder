@@ -48,9 +48,14 @@ const SECTIONS = [
       { id: 'material', label: 'Материал стен', type: 'select', options: [
         { value: 'brus', label: 'Профилированный брус' }, { value: 'brevno', label: 'Оцилиндрованное бревно' },
       ] },
-      { id: 'beamWidth', label: 'Толщина / диаметр', type: 'select', options: [
-        { value: '100', label: '100 мм' }, { value: '120', label: '120 мм' },
-        { value: '150', label: '150 мм' }, { value: '180', label: '180 мм' }, { value: '200', label: '200 мм' },
+      { id: 'beamWidth', label: 'Толщина стены', type: 'select', options: [
+        { value: '90', label: '90 × 140 мм' },
+        { value: '140', label: '140 × 140 мм' },
+        { value: '190', label: '190 × 140 мм' },
+      ] },
+      { id: 'beamStock', label: 'Длина заготовки', type: 'select', options: [
+        { value: '5000', label: '5 м — дешевле' },
+        { value: '6000', label: '6 м — дороже, меньше стыков' },
       ] },
     ],
   },
@@ -279,6 +284,7 @@ function calculatePrice(params) {
   let base = floorArea * baseRate;
   base *= PRICES.materialCoef[params.material] || 1;
   base *= PRICES.beamWidthCoef[params.beamWidth] || 1;
+  base *= PRICES.beamStockCoef?.[params.beamStock] || 1;
   base *= PRICES.foundationCoef[params.foundation] || 1;
   base *= PRICES.windowCoef[params.windows] || 1;
 
