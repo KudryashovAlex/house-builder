@@ -15,7 +15,7 @@ const MS_NOTE = {
 };
 const MS_SECT = {
   roomStud:[50,150], kneeStud:[50,150], upperKing:[50,150], tieKing:[50,150],
-  trussCeiling:[50,100], breakPurlin:[100,200]
+  trussCeiling:[50,100], breakPurlin:[150,250]
 };
 
 export function computeRoofPieces(p, m) {
@@ -62,7 +62,7 @@ export function computeRoofPieces(p, m) {
     const notch = (MS || m.seatMode!=='notch') && r.cheek ? null
       : (!MS && m.seatMode!=='notch' ? null
         : (r.x0<xsi-.02 && xsi<1e8 ? {t:'седло',w:mm(m.seatW),d:mm(m.seatW*f.sa),at:mm(Math.max(0,xsi-r.x0)),a:+fa.toFixed(1)} : null));
-    add(r.jack?'jack':'rafter',[mm(m.rt),mm(m.rd)],r.len,
+    add(r.jack?'jack':'rafter',[mm(f.rt||m.rt),mm(f.rd||m.rd)],r.len,
       r.jack?{t:'косой (cheek)',a:+(90-fa).toFixed(1),saw:+fa.toFixed(1),cheek:45}:pl,
       pl,notch, r.jack?'упор в накосное':(MS?(f.tag==='upper'?'верхний скат мансарды':f.tag==='lower'?'нижний скат мансарды':'скат мансарды'):''));
   });

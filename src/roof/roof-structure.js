@@ -71,7 +71,9 @@ export function computeRoofStructure(p, m) {
     cases=[{tag:'main',runH:Math.max(.3,run),caS:m.ca,deg:m.pitch,
       qPair:((deadKN/m.ca)*1.1+Sg*snowMu(m.pitch)*1.4)*m.step, supports:s}];
   }
-  const checks = cases.map(c => checkRafterSection(sectMM, c.runH, c.caS, c.qPair, G, seatWmm, c));
+  /* Нижний скат мансарды проверяется СВОИМ сечением, а не общим максимумом. */
+  const sectOf=c=>(m.mansardOn&&MS&&MS.scheme==='broken'&&c.tag==='lower'&&Array.isArray(MS.sectLower))?MS.sectLower:sectMM;
+  const checks=cases.map(c=>checkRafterSection(sectOf(c),c.runH,c.caS,c.qPair,G,seatWmm,c));
   const gov = checks.reduce((w,c)=>Math.max(c.utilR,c.utilD,c.utilSm)>Math.max(w.utilR,w.utilD,w.utilSm)?c:w, checks[0]);
   const runHoriz = Number.isFinite(gov.runH) ? gov.runH : m.half;
   const caS = Number.isFinite(gov.caS) ? gov.caS : m.ca;

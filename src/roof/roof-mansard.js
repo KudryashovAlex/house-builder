@@ -107,7 +107,7 @@ function buildParts(o){
   });
 
   if(broken){
-    [-1,1].forEach(s=>box([.15,.25,plateLenZ],[s*ceilHalf,roomH-.125,0],null,'purlin','breakPurlin',5,['beam',plateLenZ]));
+    [-1,1].forEach(s=>box([.15,.25,plateLenZ],[s*ceilHalf,roomH-.125,0],null,'purlin','breakPurlin',5,['breakBeam',plateLenZ]));
     const hU=ridgeY-roomH;
     if(hU>=.75&&ceilHalf>=1.1){
       const kLen=hU-.08;
@@ -214,10 +214,27 @@ export function solveMansard(p, ctx){
     out.trussDepth=Math.round((2*half)/12*1000/50)*50; out.trussLoad=cases[0].qPair;
     out.notes.push(`Ферма: пролёт ${(2*half).toFixed(1)} м, высота ≈${out.trussDepth} мм, потолочный пояс ${ceilY.toFixed(2)} м.`);
     out.notes.push('Хорды и решётку рассчитывает завод (СП 64 разд. 9). Сечение в модели — габарит заготовки.');
-  } else {
+  }else{
     const pick=pickRafterSection(cases,G,seatWmm,ctx.minSect);
-    out.sect=pick.sect; out.checks=pick.cases; out.exhausted=!!pick.exhausted; out.autoPicked=true;
+    out.sect=pick.sect;out.checks=pick.cases;out.exhausted=!!pick.exhausted;out.autoPicked=true;
     out.notes.push(`Сечение стропил — минимальное проходящее: ${pick.sect[0]}×${pick.sect[1]} мм.`);
+  }
+  /* Нижний крутой скат пилятся из СВОЕГО сечения: при 62° снег μ=0, пролёт короткий.
+     Глубина ограничена смыканием излома: rd_низ/cos α_низ ≤ rd_верх/cos α_верх.
+     При выключенном автоподборе ничего не меняем — сечение задал инженер. */
+  out.sectLower=out.sect; out.checksLower=out.checks;
+  if(scheme==='broken'&&ctx.autoSect){
+    const cap=out.sect[1]*Math.cos(lowA)/Math.cos(highA);
+    const lo=cases.filter(c=>c.tag==='lower');
+    const tryPool=pool=>{
+      for(const s of pool){const r=lo.map(c=>checkRafterSection(s,c.runH,c.caS,c.qPair,G,seatWmm,c));
+        if(r.every(x=>x.ok))return{sect:s,checks:r};}
+      return null;};
+    let ch=tryPool(RAFTER_SECTIONS.filter(s=>s[1]<=cap+1e-6));
+    if(ch)out.notes.push(`Нижний скат ${ch.sect[0]}×${ch.sect[1]} мм — своё сечение, верхние грани смыкаются на изломе.`);
+    else{ch=tryPool(RAFTER_SECTIONS);
+      if(ch)out.notes.push(`Нижний скат ${ch.sect[0]}×${ch.sect[1]} мм — своё сечение по нагрузке; остаток излома добирается митером пирога.`);}
+    if(ch){out.sectLower=ch.sect;out.checksLower=ch.checks;}
   }
 
   const hU=Math.max(.2,ridgeY-ceilY);

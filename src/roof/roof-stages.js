@@ -22,6 +22,7 @@ export const PIECE_GROUPS = {
   sleeper: { ab: 'Л',   lat: 'L',   n: 'Лежень',              st: 3 },
   post:    { ab: 'СТ',  lat: 'ST',  n: 'Стойка',              st: 4 },
   beam:    { ab: 'ПР',  lat: 'PR',  n: 'Прогон коньковый',    st: 4 },
+  breakBeam: {ab: 'ПП', lat: 'PP', n: 'Прогон перелома', st: 5},
   hip:     { ab: 'Н',   lat: 'N',   n: 'Накосное стропило',   st: 5 },
   rafter:  { ab: 'С',   lat: 'S',   n: 'Стропило',            st: 6 },
   tie:     { ab: 'Р',   lat: 'R',   n: 'Ригель накладной',    st: 6 },

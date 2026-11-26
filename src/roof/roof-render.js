@@ -452,6 +452,10 @@ export function createRoofStage(host){
         if(lg.children.length){lg.traverse(o=>{if(o.isMesh||o.isInstancedMesh){o.userData.st=5;o.userData.hw=true;}});L.frame.add(lg);}}
 
       m.faces.forEach((f,fi)=>{
+        /* Сечение и уровни пирога — свои на скат: нижний крутой скат мансарды
+           пилятся из меньшей глубины, пирог лежит на ЕГО верхней грани. */
+        const m={...M,rt:f.rt||M.rt,rd:f.rd||M.rd,yMem:f.yMem??M.yMem,yCnt:f.yCnt??M.yCnt,
+          yBat:f.yBat??M.yBat,covY:f.covY??M.covY,coverTop:f.coverTop??M.coverTop};
         const addTo=(id,me,st,mk)=>{if(!me)return;const fr=frameOf(f);fr.add(me);me.userData.st=st;if(mk)me.userData.mk=mk;L[id].add(fr);};
         const addAll=(id,a2,st)=>{if(!a2.length)return;const fr=frameOf(f);a2.forEach(a=>{a.userData.st=st;fr.add(a);});L[id].add(fr);};
         const fRL=f.rl,fPie=f.rlPie;
@@ -613,7 +617,8 @@ export function createRoofStage(host){
         if(geoOK(knob)){const sp=new THREE.Mesh(knob,mJoint);sp.position.copy(A0).add(V3(0,.012,0));sp.castShadow=true;put(L.ridge,sp,13);}
       });
 
-      const ez=m.L/2,ex=m.W/2,fH=m.rd/lowCa+.05,fY=m.eaveY+m.rd/(2*lowCa)-.02;
+      const rE=m.rdEave||m.rd;
+      const ez=m.L/2,ex=m.W/2,fH=rE/lowCa+.05,fY=m.eaveY+rE/(2*lowCa)-.02;
       [-1,1].forEach(s=>put(L.trim,box(.03,fH,m.L,mTrim,s*(ex+.016),fY,0),9,markLen('fascia',m.L)));
       if(m.type==='hip') [-1,1].forEach(s=>put(L.trim,box(m.W+.06,fH,.03,mTrim,0,fY,s*(ez+.016)),9,markLen('fascia',m.W)));
       if(params.soffit){

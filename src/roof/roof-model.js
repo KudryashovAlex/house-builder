@@ -44,7 +44,7 @@ export function computeRoofModel(p) {
     let deadEst = deadKgOf(rt, rd) * 9.81 / 1000;
     for (let iter = 0; iter < 4; iter++) {
       MS = solveMansard(p, {
-        half, length, eave, pitch, deadKN: deadEst, Sg, step, G,
+        half, length, eave, pitch, deadKN: deadEst, Sg, step, G, autoSect,
         tieSect: [Math.round(tt * 1000), Math.round(th * 1000)], boltD: cl(p.boltD, 8, 20), boltN: cl(p.boltN, 2, 8),
         seatWmm: Math.round(seatW0 * 1000), minSect: [Math.round(rt * 1000), Math.round(rd * 1000)],
         th, pw, ph, plateLenZ: length + 2 * rake
@@ -64,6 +64,10 @@ export function computeRoofModel(p) {
     MS.deadKN = deadKgOf(rt, rd) * 9.81 / 1000;
   }
 
+  const broken = mansardOn && MS.scheme==='broken';
+  const rtLo = broken && Array.isArray(MS.sectLower) ? MS.sectLower[0]/1000 : rt;
+  const rdLo = broken && Array.isArray(MS.sectLower) ? MS.sectLower[1]/1000 : rd;
+  const rdEave = broken ? rdLo : rd;
   const bw=.10, plumbH=rd/ca, bh=Math.max(.15, Math.ceil(plumbH/.05)*.05);
   const sw=.15, sh=.15, jd=.20, jt=.05;
   const tieMode = TIEMODE[p.tieMode] ? p.tieMode : 'side';
@@ -97,12 +101,17 @@ export function computeRoofModel(p) {
     const A = fA==null?a:fA;
     const f={pos,rot,zTop:fin(zTop),zBot:fin(zBot),kind,adj,tag:tag||'main',
       rl:fRL==null?rl:fRL, a:A, sa:Math.sin(A), ca:Math.max(.16,Math.cos(A)), ta:Math.tan(A), deg:deg(A), mu:snowMu(deg(A))};
+    /* Сечение и уровни пирога — свои на каждый скат. */
+    f.rt = (mansardOn && tag==='lower') ? rtLo : rt;
+    f.rd = (mansardOn && tag==='lower') ? rdLo : rd;
+    f.yMem = f.rd; f.yCnt = f.rd+memT; f.yBat = f.yCnt+cntH;
+    f.covY = f.yBat+(solid?deckT:batT); f.coverTop = f.covY+covT;
     if (mansardOn && tag==='upper') { f.rlPie = f.rl + (MS.lap||.22); f.isBreakEnd = true; }
-    else { f.rlPie = Math.max(f.rl*.6, f.rl + (fasciaOut - coverTop*f.sa)/f.ca); f.isBreakEnd = false; }
+    else { f.rlPie = Math.max(f.rl*.6, f.rl + (fasciaOut - f.coverTop*f.sa)/f.ca); f.isBreakEnd = false; }
     f.basis = eulerBasis(rot);
     /* Верхняя грань стропилы сдвинута к коньку на rd·tgα — торцы резаны вертикально.
        Пирог кладём от неё: точка (xPie0, rd) лежит ровно на оси конька/перелома. */
-    f.xPie0 = -rd * f.ta;
+    f.xPie0 = -f.rd * f.ta;
     const sx = f.rlPie - (eave/f.ca + .30);
     f.snowRows = (mansardOn && tag==='upper') ? [] : (f.rlPie>2.4?[sx,sx-.7]:[sx]).filter(v=>v>.3 && v<f.rlPie-.35);
     return f;
@@ -130,12 +139,15 @@ export function computeRoofModel(p) {
     const hiA = MS.highA, loA = MS.lowA;
     const den = Math.sin(loA) - Math.cos(loA)*Math.tan(hiA);
     if (den > 1e-4) {
-      const k = (1/Math.cos(hiA) - Math.cos(loA) - Math.sin(loA)*Math.tan(hiA))/den;
-      msMiter = cl(coverTop*k, 0, .6);
-      const dOut = -msMiter*Math.cos(loA) + coverTop*Math.sin(loA);
+      /* Толщина пирога у скатов своя — считаем митер по обоим, а не по одному. */
+      const fU = faces.find(f => f.tag === 'upper'), fL = faces.find(f => f.tag === 'lower');
+      const tU = fU ? fU.coverTop : coverTop, tL = fL ? fL.coverTop : coverTop;
+      const mix = t => tU/Math.cos(hiA) - t*(Math.cos(loA) + Math.sin(loA)*Math.tan(hiA));
+      msMiter = cl(mix(tL)/den, 0, .6);
+      const dOut = -msMiter*Math.cos(loA) + tL*Math.sin(loA);
       faces.forEach(f => {
-        if (f.tag === 'upper') { f.rlPie = f.rl + (dOut - coverTop*Math.sin(hiA))/Math.cos(hiA); f.isBreakEnd = true; }
-        else if (f.tag === 'lower') { f.xPie0 = -msMiter; f.xTopLimit = -cl(rd*k, 0, .6);
+        if (f.tag === 'upper') { f.rlPie = f.rl + (dOut - tU*Math.sin(hiA))/Math.cos(hiA); f.isBreakEnd = true; }
+        else if (f.tag === 'lower') { f.xPie0 = -msMiter; f.xTopLimit = -cl(mix(f.rd)/den, 0, .6);
           f.headSeat = (MS.breakPurlinW || .15)/2*f.ca; }
       });
     }
@@ -309,8 +321,8 @@ export function computeRoofModel(p) {
   },0);
 
   const V={
-    rafter: rafters.filter(r=>!r.jack).reduce((s,r)=>s+r.len,0)*rt*rd,
-    jack: rafters.filter(r=>r.jack).reduce((s,r)=>s+r.len,0)*rt*rd,
+    rafter: rafters.filter(r=>!r.jack).reduce((s,r)=>s+r.len*(r.f.rt||rt)*(r.f.rd||rd),0),
+    jack: rafters.filter(r=>r.jack).reduce((s,r)=>s+r.len*(r.f.rt||rt)*(r.f.rd||rd),0),
     hip: hipLen*hipW*hipDepth,
     tie: tieZ.length*(mansardOn?1:tieSides)*2*tieHalf*tt*th,
     ridgeBeam: ridgeLen*ridgeBeamSect[0]/1000*ridgeBeamSect[1]/1000,
@@ -355,5 +367,5 @@ export function computeRoofModel(p) {
     hipW,hipDepth,hipLam,hipBoardT,hips,jackJoints,seatRuns,bearR,cleatLen,
     rise,tieFrac,tieHalf,topPlaneC,ovLo,ovHi,fullLo,fullHi,overlap,fullOverlap,
     underEdgeLo:ovLo,underEdgeHi:tieHalf,boltD,boltN,bearingY,
-    mansard:MS,mansardOn,joistsOn,ridgeBeamSect,qArea,deadKg,deadKN,insulMM,autoSect,msMiter };
+    mansard:MS,mansardOn,joistsOn,ridgeBeamSect,qArea,deadKg,deadKN,insulMM,autoSect,msMiter,rdEave };
 }
