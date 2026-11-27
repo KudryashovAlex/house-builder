@@ -107,16 +107,34 @@ export function calculateMaterials(params) {
     interiorCount += wallLayers;
   });
 
-  const totalCount = wallCountX + wallCountZ + gableCountTotal + interiorCount;
-  const totalLength = wallLengthTotal + gableLengthTotal + interiorLength;
-  const volume = isBrevno
-    ? Math.PI * (beamW / 2) ** 2 * totalLength
-    : beamW * beamW * totalLength;
+  /* Времянки коробки: перемычка (опирание 250 мм) + две сшивки (защемление 400 мм).
+     Ставятся только в коробке, при отделке снимаются — в смете живут отдельной строкой. */
+  const temp = { lintels: 0, plates: 0, length: 0, volume: 0 };
+  if (String(params.finish) === 'rough') {
+    (params.exteriorOpenings || []).forEach(op => {
+      const w = num(op.width, 0);
+      if (!(w > .1)) return;
+      const lintelL = w + .5, plateL = w + .8;
+      temp.lintels += 1; temp.plates += 2;
+      temp.length += lintelL + 2 * plateL;
+      temp.volume += beamW * .15 * lintelL + 2 * .04 * .15 * plateL;
+    });
+  }
+
+  const baseLength = wallLengthTotal + gableLengthTotal + interiorLength;
+  const baseVolume = isBrevno
+    ? Math.PI * (beamW / 2) ** 2 * baseLength
+    : beamW * beamW * baseLength;
+
+  const totalCount = wallCountX + wallCountZ + gableCountTotal + interiorCount + temp.lintels + temp.plates;
+  const totalLength = baseLength + temp.length;
+  const volume = baseVolume + temp.volume;
 
   return {
     walls: { count: wallCountX + wallCountZ, length: wallLengthTotal, logsX: wallCountX, logsZ: wallCountZ },
     gables: { count: gableCountTotal, length: gableLengthTotal },
     interior: { count: interiorCount, length: interiorLength },
+    temp,
     total: { count: totalCount, length: totalLength, volume },
   };
 }

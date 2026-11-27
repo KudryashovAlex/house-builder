@@ -59,6 +59,7 @@ const MATERIAL_STYLES = {
   brevno: { color: '#b8875e' },
 };
 import { TIMBER_H, normWidth, courseStep, coursesFor, profile as timberProfile, CORNER } from './house/timber.js';
+
 function isMansard(params) {
   return params.mansard === 'yes' && params.floors >= 2;
 }
@@ -131,7 +132,9 @@ export function buildHouse(scene, params) {
     
     // НОВЫЕ ФУНКЦИИ ДЛЯ ВНЕШНИХ ОКОН
     addExteriorHitboxes(house, params, actualWallsHeight);
-    addExteriorOpeningsVisuals(house, params);
+    /* Коробка: проём держит сплошной брус того же венца (см. addWalls).
+       Отдельных досок-перемычек нет. Черновая и под ключ — обсада и заполнение. */
+    if (params.finish !== 'rough') { addExteriorOpeningsVisuals(house, params); addOpeningFrames(house, params); }
     addStairs(house, params);
     addColumns(house, params);
   }
@@ -257,6 +260,26 @@ function addTopTrim(house, params, layers, stepY) {
     house.add(mesh);
   });
 }
+/* Проём в брусе ЕВ режут ПО ВЕНЦАМ. Венец над проёмом остаётся целым —
+   это перемычка, её не выпиливают. В коробке внутри высокого проёма оставляют
+   ещё один целый венец — временную связь: пока обсады и окна нет, простенки
+   не должны играть. Перед монтажом окна этот венец выпиливают. */
+function openingCourses(params, op, stepY) {
+  const base = BASE_HEIGHT + ((op.floor || 1) - 1) * params.wallHeight;
+  const lo = base + (op.sillHeight || 0), hi = lo + (op.height || 0);
+  const k0 = Math.max(0, Math.floor((lo - BASE_HEIGHT) / stepY - .5));
+  const k1 = Math.ceil((hi - BASE_HEIGHT) / stepY - .5);
+  const n = Math.max(0, k1 - k0);
+
+  /* Связь ставим ТОЛЬКО окну и только в коробке (params.finish === 'rough').
+     Дверь — проход, её не перекрываем.
+     Проём без распознанного типа связь тоже не получает. */
+  const tie = (params.finish === 'rough' && op.type === 'window' && n >= 4) ? k0 + Math.floor(n / 2) : -1;
+
+  return { k0, k1, n, tie, lintel: k1 };
+}
+const isTieCourse = (params, op, i, stepY) => openingCourses(params, op, stepY).tie === i;
+
 function addWalls(house, params, wallsHeight, layers, stepY) {
   const isBrevno = params.material === 'brevno';
   const beamW = normWidth(params.beamWidth) / 1000;
@@ -283,9 +306,15 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
       let holes = [];
       
       extOpenings.forEach(op => {
-        if (op.wall === wallName && op.floor === floorNumX) {
-          const opYMin = BASE_HEIGHT + (op.floor - 1) * params.wallHeight + op.sillHeight;
-          const opYMax = opYMin + op.height;
+        if (op.wall === wallName && op.floor === floorNumX && !isTieCourse(params, op, i, stepY)) {
+          /* Проём режем ПО ВЕНЦАМ: черновой проём кратен шагу, поэтому
+             доборы-заглушки не нужны и шов профиля не рвётся. */
+          const rawMin = BASE_HEIGHT + (op.floor - 1) * params.wallHeight + op.sillHeight;
+          const rawMax = rawMin + op.height;
+          const k0 = Math.max(0, Math.floor((rawMin - BASE_HEIGHT) / stepY - .5));
+          const k1 = Math.ceil((rawMax - BASE_HEIGHT) / stepY - .5);
+          const opYMin = BASE_HEIGHT + (k0 + .5) * stepY;
+          const opYMax = BASE_HEIGHT + (k1 + .5) * stepY;
           const logYMin = yX - beamH / 2;
           const logYMax = yX + beamH / 2;
           
@@ -312,23 +341,7 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
           addLogMesh(house, mat, isBrevno, holeMin - currentX, beamH, beamW, currentX + (holeMin - currentX) / 2, yX, zPos, 'x', params.width, params.length, stepY, i);
         }
 
-        if (hole.op) {
-          const overlap = 0.02;
-          if (hole.logYMax > hole.opYMax) {
-            const topH = Math.min(beamH, hole.logYMax - hole.opYMax) - overlap;
-            const fillerGeo = new THREE.BoxGeometry(hole.width, topH, beamW);
-            const filler = applyShadows(new THREE.Mesh(fillerGeo, mat));
-            filler.position.set(hole.x, hole.opYMax + overlap + topH/2, zPos);
-            house.add(filler);
-          }
-          if (hole.logYMin < hole.opYMin) {
-            const botH = Math.min(beamH, hole.opYMin - hole.logYMin) + overlap;
-            const fillerGeo = new THREE.BoxGeometry(hole.width, botH, beamW);
-            const filler = applyShadows(new THREE.Mesh(fillerGeo, mat));
-            filler.position.set(hole.x, hole.logYMin - overlap*2 + botH/2, zPos);
-            house.add(filler);
-          }
-        }
+
 
         currentX = Math.max(currentX, holeMax);
       });
@@ -343,9 +356,13 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
       let holes = [];
       
       extOpenings.forEach(op => {
-        if (op.wall === wallName && op.floor === floorNumZ) {
-          const opYMin = BASE_HEIGHT + (op.floor - 1) * params.wallHeight + op.sillHeight;
-          const opYMax = opYMin + op.height;
+        if (op.wall === wallName && op.floor === floorNumZ && !isTieCourse(params, op, i, stepY)) {
+          const rawMin = BASE_HEIGHT + (op.floor - 1) * params.wallHeight + op.sillHeight;
+          const rawMax = rawMin + op.height;
+          const k0 = Math.max(0, Math.floor((rawMin - BASE_HEIGHT) / stepY - .5));
+          const k1 = Math.ceil((rawMax - BASE_HEIGHT) / stepY - .5);
+          const opYMin = BASE_HEIGHT + (k0 + .5) * stepY;
+          const opYMax = BASE_HEIGHT + (k1 + .5) * stepY;
           const logYMin = yZ - beamH / 2;
           const logYMax = yZ + beamH / 2;
           
@@ -372,24 +389,7 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
           addLogMesh(house, mat, isBrevno, beamW, beamH, holeMin - currentZ, xPos, yZ, currentZ + (holeMin - currentZ) / 2, 'z', params.width, params.length, stepY, i);
         }
 
-        // ФИКС: Доборы для боковых стен с твоей логикой
-        if (hole.op) {
-          const overlap = 0.02;
-          if (hole.logYMax > hole.opYMax) {
-            const topH = Math.min(beamH, hole.logYMax - hole.opYMax) - overlap;
-            const fillerGeo = new THREE.BoxGeometry(beamW, topH, hole.width);
-            const filler = applyShadows(new THREE.Mesh(fillerGeo, mat));
-            filler.position.set(xPos, hole.opYMax + overlap + topH/2, hole.x);
-            house.add(filler);
-          }
-          if (hole.logYMin < hole.opYMin) {
-            const botH = Math.min(beamH, hole.opYMin - hole.logYMin) + overlap;
-            const fillerGeo = new THREE.BoxGeometry(beamW, botH, hole.width);
-            const filler = applyShadows(new THREE.Mesh(fillerGeo, mat));
-            filler.position.set(xPos, hole.logYMin - overlap*2 + botH/2, hole.x);
-            house.add(filler);
-          }
-        }
+
 
         currentZ = Math.max(currentZ, holeMax);
       });
@@ -529,7 +529,107 @@ function addLogMesh(house, mat, isBrevno, sx, sy, sz, x, y, z, axis, houseWidth,
   mesh.position.set(x, y - (isBrevno ? 0 : gap / 2), z);
   applyShadows(mesh);
   house.add(mesh);
+  return mesh;
 }
+/* Окосячка (обсада) и усадочный зазор. Проём в брусе зажимать нельзя:
+   сруб садится на 2–4%, поэтому над верхней колодой оставляем 60 мм
+   с мягким заполнением, а боковины держат венцы от выпадения в проём. */
+function addOpeningFrames(house, params) {
+  const ops = params.exteriorOpenings || [];
+  if (!ops.length) return;
+  const isBrevno = params.material === 'brevno';
+  const beamW = normWidth(params.beamWidth) / 1000;
+  const stepY = isBrevno ? beamW * 0.85 : courseStep() / 1000;
+  const SHRINK = 0.06, jamb = 0.05;
+  const mFrame = new THREE.MeshStandardMaterial({ color: '#b98a52', roughness: .8, map: WOOD_TEXTURE });
+  const mGap = new THREE.MeshStandardMaterial({ color: '#d8cfa8', roughness: .95 });
+  ops.forEach(op => {
+    const alongX = op.wall === 'front' || op.wall === 'back';
+    const half = alongX ? params.length / 2 : params.width / 2;
+    const sign = (op.wall === 'front' || op.wall === 'right') ? 1 : -1;
+    const plane = sign * half;
+    const base = BASE_HEIGHT + (op.floor - 1) * params.wallHeight;
+    const rawMin = base + (op.sillHeight || 0), rawMax = rawMin + op.height;
+    const k0 = Math.max(0, Math.floor((rawMin - BASE_HEIGHT) / stepY - .5));
+    const k1 = Math.ceil((rawMax - BASE_HEIGHT) / stepY - .5);
+    const y0 = BASE_HEIGHT + (k0 + .5) * stepY;
+    const y1 = BASE_HEIGHT + (k1 + .5) * stepY;
+    const w = op.width, h = y1 - y0;
+    if (!(w > .1 && h > .2)) return;
+    const cx = alongX ? op.x : plane, cz = alongX ? plane : op.x;
+    const put = (sx, sy, sz, x, y, z, mm_, tag) => {
+      if (![sx, sy, sz].every(v => Number.isFinite(v) && v > .004)) return;
+      const me = applyShadows(new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), mm_));
+      me.position.set(x, y, z);
+      me.userData.openingFrame = tag;
+      house.add(me);
+    };
+    [-1, 1].forEach(s => {
+      const off = s * (w / 2 + jamb / 2);
+      if (alongX) put(jamb, h, beamW, cx + off, y0 + h / 2, cz, mFrame, 'jamb');
+      else put(beamW, h, jamb, cx, y0 + h / 2, cz + off, mFrame, 'jamb');
+    });
+    const lintelY = y1 - SHRINK - jamb / 2;
+    if (alongX) {
+      put(w + jamb * 2, jamb, beamW, cx, lintelY, cz, mFrame, 'lintel');
+      put(w, SHRINK, beamW * .9, cx, y1 - SHRINK / 2, cz, mGap, 'shrinkGap');
+    } else {
+      put(beamW, jamb, w + jamb * 2, cx, lintelY, cz, mFrame, 'lintel');
+      put(beamW * .9, SHRINK, w, cx, y1 - SHRINK / 2, cz, mGap, 'shrinkGap');
+    }
+    if ((op.sillHeight || 0) > .05) {
+      if (alongX) put(w + jamb * 2, jamb, beamW, cx, y0 + jamb / 2, cz, mFrame, 'sill');
+      else put(beamW, jamb, w + jamb * 2, cx, y0 + jamb / 2, cz, mFrame, 'sill');
+    }
+  });
+}
+
+/* КОРОБКА: проём выпиливан в собранной стене, венцы над ним висят.
+   Временная перемычка несёт их сверху (опирание 250 мм на сторону),
+   сшивные накладки с двух сторон стягивают обрезанные торцы, чтобы стену
+   не развело при усадке 2–4%. При отделке времянки снимают и ставят обсаду. */
+function addTemporaryBracing(house, params) {
+  const ops = params.exteriorOpenings || [];
+  if (!ops.length) return;
+  const isBrevno = params.material === 'brevno';
+  const beamW = normWidth(params.beamWidth) / 1000;
+  const stepY = isBrevno ? beamW * 0.85 : courseStep() / 1000;
+  const LH = 0.15, BEAR = 0.25, PL = 0.04, PH = 0.15, GRIP = 0.4;
+  const mTemp = new THREE.MeshStandardMaterial({ color: '#caa06a', roughness: .85, map: WOOD_TEXTURE });
+  const mPlate = new THREE.MeshStandardMaterial({ color: '#b08a52', roughness: .9, map: WOOD_TEXTURE });
+  ops.forEach(op => {
+    const w = op.width;
+    if (!(w > .1)) return;
+    const alongX = op.wall === 'front' || op.wall === 'back';
+    const half = alongX ? params.length / 2 : params.width / 2;
+    const sign = (op.wall === 'front' || op.wall === 'right') ? 1 : -1;
+    const plane = sign * half;
+    const rawMax = BASE_HEIGHT + (op.floor - 1) * params.wallHeight + (op.sillHeight || 0) + op.height;
+    const k1 = Math.ceil((rawMax - BASE_HEIGHT) / stepY - .5);
+    const y1 = BASE_HEIGHT + (k1 + .5) * stepY;   // низ первого целого венца над проёмом
+    const cx = alongX ? op.x : plane, cz = alongX ? plane : op.x;
+    const put = (sx, sy, sz, x, y, z, mm_, tag) => {
+      if (![sx, sy, sz].every(v => Number.isFinite(v) && v > .004)) return;
+      const me = applyShadows(new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), mm_));
+      me.position.set(x, y, z);
+      me.userData.tempBrace = tag;
+      me.userData.opWall = op.wall;
+      house.add(me);
+    };
+    /* перемычка встаёт вплотную под венец — он опирается на неё всей плоскостью */
+    const ly = y1 - LH / 2, ll = w + 2 * BEAR;
+    if (alongX) put(ll, LH, beamW, cx, ly, cz, mTemp, 'tempLintel');
+    else put(beamW, LH, ll, cx, ly, cz, mTemp, 'tempLintel');
+    /* сшивки по обеим граням стены, поверх перемычки */
+    const pl = w + 2 * GRIP;
+    [-1, 1].forEach(s => {
+      const off = s * (beamW / 2 + PL / 2);
+      if (alongX) put(pl, PH, PL, cx, ly, cz + off, mPlate, 'tempPlate');
+      else put(PL, PH, pl, cx + off, ly, cz, mPlate, 'tempPlate');
+    });
+  });
+}
+
 function isWallDeleted(wallName, floor, params) {
   if (!params.deletedExteriorWalls) return false;
   const del = params.deletedExteriorWalls.filter(d => d.wall === wallName && d.floor === floor);
@@ -1305,6 +1405,9 @@ function addExteriorOpeningsVisuals(house, params) {
     sideFrameR.position.set(op.width/2 + frameThick/2, 0, 0); group.add(sideFrameR);
 
         if (op.type === 'door') {
+      /* Коробка: полотна нет, проём пустой. Рама уже построена выше.
+         Полотно появляется с чистовой стадии — тогда же выпиливают временную связь. */
+      if ((params.finish || 'rough') === 'rough') return;
       // Вычисляем базовый угол (чуть приоткрыта)
       const baseRot = (rot === Math.PI || rot === -Math.PI/2) ? -Math.PI / 6 : Math.PI / 6;
       // Если дверь открыта, доворачиваем на 90 градусов

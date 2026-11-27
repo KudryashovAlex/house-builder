@@ -17,6 +17,7 @@ export const HOUSE_GROUPS = {
   K: { n: 'Калькулятор', c: '#fbbf24' },
   S: { n: 'Сцена', c: '#7dd3fc' },
   E: { n: 'Консоль', c: '#f4645f' },
+  T: { n: 'Времянки', c: '#fb923c' },
   L: { n: 'Планировка', c: '#a3e635' },
 };
 
@@ -69,6 +70,15 @@ export const HOUSE_MATRIX = [
     { x1: 1, z1: 0, x2: 1, z2: 3, floor: 1, openings: [] },
   ] } },
   { name: 'Режим планировки', p: { editMode: true, currentFloor: 1, floors: 2 } },
+  { name: 'Коробка: времянки на проёмах', p: { finish: 'rough', exteriorOpenings: [
+    { wall: 'front', floor: 1, x: 0, width: .9, height: 2.05, sillHeight: 0, type: 'door' },
+    { wall: 'front', floor: 1, x: 2.4, width: 1.4, height: 1.6, sillHeight: .8, type: 'window' },
+    { wall: 'left', floor: 1, x: 0, width: 1.4, height: 1.6, sillHeight: .8, type: 'window' },
+  ] } },
+  { name: 'Под ключ: времянок нет', p: { finish: 'turnkey', exteriorOpenings: [
+    { wall: 'front', floor: 1, x: 0, width: .9, height: 2.05, sillHeight: 0, type: 'door' },
+    { wall: 'front', floor: 1, x: 2.4, width: 1.4, height: 1.6, sillHeight: .8, type: 'window' },
+  ] } },
   { name: 'Планировка: перегородки на двух этажах', p: { editMode: true, currentFloor: 1, floors: 2,
     interiorWalls: [
       { x1: -4, z1: 0, x2: 1, z2: 0, floor: 1, openings: [{ offset: 1.5, width: .9, height: 2.05, sillHeight: 0, type: 'door' }] },
@@ -147,6 +157,16 @@ export function auditCore(raw) {
   const tallOp = ops.filter(o => num(o.sillHeight) + num(o.height) > num(p.wallHeight) + 1e-6);
   R.push(ok('O02', 'Проём не выше этажа', !tallOp.length,
     tallOp.length ? `выше этажа ${tallOp.length}` : `этаж ${p.wallHeight} м`));
+  const snap = ops.map(o => {
+    const lo = ((num(o.floor) - 1) * num(p.wallHeight) + num(o.sillHeight)) * 1000;
+    const hi = lo + num(o.height) * 1000;
+    const k0 = Math.max(0, Math.floor(lo / TIMBER_H - .5));
+    const k1 = Math.ceil(hi / TIMBER_H - .5);
+    return { want: Math.round(num(o.height) * 1000), rough: (k1 - k0) * TIMBER_H };
+  });
+  R.push(ok('O05', 'Черновой проём кратен венцу и не меньше чистового',
+    snap.every(s => s.rough % TIMBER_H === 0 && s.rough >= s.want - 1e-6),
+    snap.map(s => `${s.want}→${s.rough} мм`).join(' · ') || 'проёмов нет'));
 
   let sumErr = 0, over = 0, short = 0, clash = 0, noShift = 0, pairs = 0;
   const walls = [num(p.width) * 1000, num(p.width) * 1000, num(p.length) * 1000, num(p.length) * 1000];
@@ -186,6 +206,15 @@ export function auditCore(raw) {
     R.push(known('K02', 'Калькулятор считает брусья, а не погонаж',
       num(calc.total && calc.total.count) === sum.blanks,
       `калькулятор ${num(calc.total && calc.total.count)} шт · венцов-кусков ${sum.blanks}`));
+    const tv = num(calc.temp && calc.temp.volume);
+    const wantTemp = String(p.finish) === 'rough'
+      ? (p.exteriorOpenings || []).reduce((s, o) => {
+          const w = num(o.width); if (!(w > .1)) return s;
+          return s + normWidth(p.beamWidth) / 1000 * .15 * (w + .5) + 2 * .04 * .15 * (w + .8);
+        }, 0)
+      : 0;
+    R.push(ok('K03', 'Времянки посчитаны в кубатуре', Math.abs(tv - wantTemp) < 1e-6,
+      `${tv.toFixed(3)} м³ · ожидается ${wantTemp.toFixed(3)} м³`));
   }
   return R;
 }
@@ -223,13 +252,58 @@ export function auditScene(THREE, house, raw, msgs) {
     Number.isFinite(size.x) && Math.abs(size.x) / 2 <= limX + num(p.overhangSides) + 2 &&
     Math.abs(size.z) / 2 <= limZ + num(p.overhangFront) + 2,
     `${f2(size.x)}×${f2(size.z)}×${f2(size.y)} м`));
-  R.push(ok('S05', 'Высота набрана венцами', (() => {
-    const per = coursesFor(num(p.wallHeight) * 1000 * Math.max(1, Math.round(num(p.floors)) || 1));
-    return size.y > per.height / 1000 * .8;
-  })(), `${f2(size.y)} м`));
+  /* В планировке сцена показывает только текущий этаж — сравниваем с высотой
+     ВИДИМЫХ этажей, а не всего дома. Иначе проверка требует второй этаж,
+     которого в режиме планировки быть и не должно. */
+  const visFloors = p.editMode
+    ? Math.max(1, Math.round(num(p.currentFloor)) || 1)
+    : Math.max(1, Math.round(num(p.floors)) || 1);
+  const perH = coursesFor(num(p.wallHeight) * 1000 * visFloors);
+  R.push(ok('S05', 'Высота набрана венцами',
+    size.y > perH.height / 1000 * .8,
+    `${f2(size.y)} м · видно ${visFloors} эт. · венцы ${(perH.height / 1000).toFixed(2)} м`));
   R.push(ok('S06', 'Ничего не провалилось ниже площадки', box.min.y > -3.5, `низ ${f2(box.min.y)} м`));
 
+  const temps = meshes.filter(o => o.userData.tempBrace);
+  const tLint = temps.filter(o => o.userData.tempBrace === 'tempLintel');
+  const tPlate = temps.filter(o => o.userData.tempBrace === 'tempPlate');
+  const nOp = (p.exteriorOpenings || []).filter(o => num(o.width) > .1).length;
+  const rough = String(p.finish) === 'rough';
+  R.push(ok('T01', 'Времянки только в коробке', rough || temps.length === 0,
+    `${p.finish}: времянок ${temps.length}`));
+  R.push(ok('T02', 'Перемычка на каждый проём коробки', !rough || tLint.length === nOp,
+    `проёмов ${nOp}, перемычек ${tLint.length}`));
+  R.push(ok('T03', 'Сшивных накладок две на проём', !rough || tPlate.length === nOp * 2,
+    `накладок ${tPlate.length} из ${nOp * 2}`));
+  const doors = meshes.filter(o => o.userData.isDoor);
+  R.push(ok('T04', 'В коробке нет дверных полотен', !rough || doors.length === 0,
+    `полотен ${doors.length}`));
+
   /* Планировка: перегородки, режим этажа, проёмы. */
+  const opsL = p.exteriorOpenings || [];
+  const stepM = TIMBER_H / 1000;
+  const oc = opsL.map(o => {
+    const base = ((o.floor || 1) - 1) * num(p.wallHeight);
+    const lo = base + num(o.sillHeight), hi = lo + num(o.height);
+    const k0 = Math.max(0, Math.floor(lo / stepM - .5)), k1 = Math.ceil(hi / stepM - .5);
+    const n = Math.max(0, k1 - k0);
+    const rough = (p.finish || 'rough') === 'rough';
+    const tie = (rough && o.type !== 'door' && n >= 4) ? k0 + Math.floor(n / 2) : -1;
+    const half = (o.wall === 'front' || o.wall === 'back' ? num(p.width) : num(p.length)) / 2;
+    const bear = half - Math.abs(num(o.x)) - num(o.width) / 2;
+    return { o, k0, k1, n, tie, bear };
+  });
+  R.push(ok('O03', 'Перемычка над проёмом — целый венец',
+    oc.every(s => s.k1 > s.k0),
+    oc.map(s => `${s.o.type}: вырез ${s.k0}…${s.k1 - 1}, перемычка ${s.k1}`).join(' · ') || 'проёмов нет'));
+  const ties = oc.filter(s => s.tie >= 0);
+  R.push(ok('O04', 'В коробке высокий проём держит временная связь',
+    ties.every(s => s.tie > s.k0 && s.tie < s.k1),
+    `связей ${ties.length} на ${oc.length} проёмов`));
+  R.push(ok('O06', 'Перемычка опирается на простенок не меньше 250 мм',
+    oc.every(s => s.bear >= .25 - 1e-6),
+    oc.map(s => `${Math.round(s.bear * 1000)} мм`).join(' · ') || 'проёмов нет'));
+
   const inner = meshes.filter(o => o.userData.isInteriorWall);
   const wantInner = (p.interiorWalls || []).filter(w => !w.isFence &&
     (!p.editMode || w.floor === p.currentFloor)).length;
