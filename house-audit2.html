@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Аудит дома · ДОМ·ЛЕС</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1310; --s1:#101a17; --s2:#16211c; --s3:#1d2a24; --line:#2b3a32;
+  --amber:#e8a34c; --honey:#f7c477; --tan:#c49a6c;
+  --ok:#4ade80; --warn:#fbbf24; --bad:#f4645f; --info:#4cc9f0; --scene:#7dd3fc; --violet:#b07cf0;
+  --tx:#ece7da; --mute:#8fa792; --dim:#5f6f61;
+  --m:'JetBrains Mono',ui-monospace,monospace; --s:'Manrope',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  background:var(--bg); color:var(--tx); font-family:var(--s); overflow:hidden;
+  background-image:
+    radial-gradient(900px 520px at 12% -8%, rgba(232,163,76,.16), transparent 62%),
+    radial-gradient(760px 480px at 92% 4%, rgba(76,201,240,.11), transparent 60%),
+    radial-gradient(700px 600px at 60% 108%, rgba(176,124,240,.10), transparent 62%),
+    linear-gradient(168deg,#0d1714,#0a110e 62%,#080d0b);
+}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;opacity:.045;z-index:9;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence baseFrequency='.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>")}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:#0c1512;border-left:1px solid var(--line)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--tan),#8a6a45);border:2px solid #0c1512;border-radius:9px}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--honey),var(--amber))}
+*{scrollbar-color:var(--tan) #0c1512;scrollbar-width:thin}
+
+header{position:fixed;top:0;left:0;right:0;height:62px;z-index:20;display:flex;align-items:center;gap:14px;
+  padding:0 18px;background:linear-gradient(180deg,rgba(16,26,23,.97),rgba(16,26,23,.86));
+  border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.mark{width:32px;height:32px;flex:none;border-radius:9px;display:grid;place-items:center;
+  background:linear-gradient(145deg,var(--amber),#a9702f);box-shadow:0 5px 18px rgba(232,163,76,.32)}
+.mark svg{width:19px;height:19px;stroke:#1a1109;fill:none;stroke-width:2.2;stroke-linejoin:round}
+.bt{font:800 14px/1 var(--s);letter-spacing:.13em;text-transform:uppercase}
+.bs{font:600 10px/1.3 var(--m);color:var(--mute);margin-top:3px}
+.tot{display:flex;gap:8px;margin-left:auto;flex-wrap:nowrap}
+.chip{display:flex;flex-direction:column;gap:2px;padding:6px 12px;border-radius:10px;background:var(--s2);border:1px solid var(--line);min-width:66px}
+.chip u{font:700 8.5px/1 var(--s);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+.chip b{font:800 16px/1 var(--m)}
+.c-bug b{color:var(--bad)} .c-norm b{color:var(--warn)} .c-ok b{color:var(--ok)} .c-all b{color:var(--honey)}
+.btn{height:33px;padding:0 14px;border-radius:9px;border:1px solid var(--line);background:var(--s2);color:var(--tx);
+  font:700 12px var(--s);cursor:pointer;transition:.16s;white-space:nowrap}
+.btn:hover{border-color:var(--amber);color:var(--honey);transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn.p{background:linear-gradient(145deg,var(--amber),#c07f31);color:#1a1109;border-color:transparent;box-shadow:0 4px 14px rgba(232,163,76,.3)}
+.btn.p:hover{color:#1a1109;filter:brightness(1.08)}
+.btn[disabled]{opacity:.42;pointer-events:none}
+
+main{position:absolute;top:62px;bottom:0;left:0;right:0;display:grid;grid-template-columns:296px 1fr}
+aside{border-right:1px solid var(--line);background:rgba(13,21,18,.72);overflow-y:auto;padding:16px 14px 40px}
+.lab{font:800 9px/1 var(--s);letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin:0 0 9px}
+.field{margin-bottom:14px}
+select,input[type=search]{width:100%;height:33px;border-radius:9px;border:1px solid var(--line);background:var(--s2);
+  color:var(--tx);font:600 12px var(--s);padding:0 10px;outline:none}
+select:focus,input:focus{border-color:var(--amber)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.f{padding:5px 10px;border-radius:20px;border:1px solid var(--line);background:var(--s2);color:var(--mute);
+  font:700 10.5px var(--s);cursor:pointer;transition:.15s}
+.f:hover{color:var(--tx);border-color:var(--tan)}
+.f.on{background:linear-gradient(145deg,var(--amber),#b87830);color:#1a1109;border-color:transparent}
+.dom{display:flex;align-items:center;gap:8px;padding:5px 0;font:600 11px var(--s);color:var(--mute)}
+.dot{width:9px;height:9px;border-radius:3px;flex:none}
+.dom i{margin-left:auto;font:700 10px var(--m);font-style:normal;color:var(--dim)}
+.cfg{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:8px;cursor:pointer;transition:.14s;
+  font:600 11px/1.35 var(--s);color:var(--mute);border:1px solid transparent}
+.cfg:hover{background:var(--s2);color:var(--tx)}
+.cfg.on{background:var(--s3);border-color:var(--line);color:var(--tx)}
+.cfg s{width:7px;height:7px;border-radius:50%;flex:none;text-decoration:none;background:var(--dim)}
+.cfg s.ok{background:var(--ok);box-shadow:0 0 8px rgba(74,222,128,.55)}
+.cfg s.bad{background:var(--bad);box-shadow:0 0 8px rgba(244,100,95,.6)}
+.cfg s.norm{background:var(--warn)}
+.cfg em{margin-left:auto;font:700 9.5px var(--m);font-style:normal;color:var(--dim)}
+
+section{overflow-y:auto;padding:18px 22px 60px}
+.bar{height:4px;border-radius:4px;background:var(--s2);overflow:hidden;margin-bottom:16px}
+.bar i{display:block;height:100%;width:0;border-radius:4px;transition:width .25s;
+  background:linear-gradient(90deg,var(--tan),var(--amber) 42%,var(--ok) 78%,var(--info))}
+.hero{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.hero h1{margin:0;font:800 27px/1.1 var(--s);letter-spacing:-.02em}
+.hero h1 span{background:linear-gradient(96deg,var(--honey),var(--amber) 40%,var(--tan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;font:600 12px/1.5 var(--s);color:var(--mute);max-width:560px}
+.card{border:1px solid var(--line);border-radius:13px;background:linear-gradient(170deg,rgba(22,33,28,.92),rgba(16,26,23,.92));
+  margin-bottom:12px;overflow:hidden;animation:up .34s both}
+@keyframes up{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.ch{display:flex;align-items:center;gap:11px;padding:12px 15px;cursor:pointer;user-select:none}
+.ch:hover{background:rgba(232,163,76,.05)}
+.ch h3{margin:0;font:700 13px var(--s);flex:1;min-width:0}
+.pill{font:800 9.5px/1 var(--m);padding:5px 8px;border-radius:6px;letter-spacing:.05em}
+.p-ok{background:rgba(74,222,128,.14);color:var(--ok);border:1px solid rgba(74,222,128,.32)}
+.p-bad{background:rgba(244,100,95,.15);color:var(--bad);border:1px solid rgba(244,100,95,.36)}
+.p-norm{background:rgba(251,191,36,.13);color:var(--warn);border:1px solid rgba(251,191,36,.3)}
+.arw{color:var(--dim);font:700 11px var(--m);transition:.2s}
+.card.open .arw{transform:rotate(90deg)}
+.cb{display:none;border-top:1px solid var(--line);padding:5px 0}
+.card.open .cb{display:block}
+.row{display:grid;grid-template-columns:52px 1fr auto;gap:11px;align-items:start;padding:7px 15px;border-left:3px solid transparent}
+.row+.row{border-top:1px solid rgba(43,58,50,.5)}
+.row.bad{border-left-color:var(--bad);background:rgba(244,100,95,.055)}
+.row.norm{border-left-color:var(--warn);background:rgba(251,191,36,.04)}
+.row.skip{opacity:.5}
+.rid{font:700 10.5px var(--m);color:var(--dim);padding-top:2px}
+.rn{font:600 12px/1.45 var(--s)}
+.rd{font:500 10.5px/1.5 var(--m);color:var(--mute);margin-top:2px;word-break:break-word}
+.rs{font:800 9px/1 var(--m);padding:4px 7px;border-radius:5px;white-space:nowrap}
+.empty{padding:44px 20px;text-align:center;color:var(--dim);font:600 13px var(--s)}
+.console{border:1px solid rgba(244,100,95,.3);border-radius:13px;background:rgba(244,100,95,.05);padding:14px 16px;margin-bottom:16px}
+.console h4{margin:0 0 9px;font:800 10px/1 var(--s);letter-spacing:.14em;text-transform:uppercase;color:var(--bad)}
+.cl{font:500 11px/1.6 var(--m);color:var(--tx);padding:6px 0;border-top:1px solid rgba(244,100,95,.16);word-break:break-word}
+.cl b{color:var(--warn)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,26px);opacity:0;pointer-events:none;
+  padding:11px 20px;border-radius:11px;background:var(--s3);border:1px solid var(--amber);color:var(--honey);
+  font:700 12px var(--s);z-index:40;transition:.26s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:900px){
+  main{grid-template-columns:1fr}
+  aside{position:fixed;top:62px;bottom:0;left:0;width:280px;z-index:15;transform:translateX(-101%);transition:.24s}
+  aside.open{transform:none;box-shadow:22px 0 60px rgba(0,0,0,.6)}
+  .tot{display:none}
+  section{padding:14px 13px 60px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="btn" id="mob" style="display:none">☰</button>
+  <div class="brand">
+    <div class="mark"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 11v9h14v-9M9 20v-5h6v5"/></svg></div>
+    <div><div class="bt">Аудит дома</div><div class="bs">венец · профиль · угол · раскрой · сцена · консоль</div></div>
+  </div>
+  <div class="tot">
+    <div class="chip c-all"><u>Проверок</u><b id="tAll">0</b></div>
+    <div class="chip c-ok"><u>Пройдено</u><b id="tOk">0</b></div>
+    <div class="chip c-bug"><u>Багов</u><b id="tBug">0</b></div>
+    <div class="chip c-norm"><u>Норм</u><b id="tNorm">0</b></div>
+  </div>
+  <button class="btn" id="bJson">JSON</button>
+  <button class="btn" id="bCsv">CSV</button>
+  <button class="btn p" id="bRun">Прогнать</button>
+</header>
+
+<main>
+  <aside id="side">
+    <div class="field"><div class="lab">Режим</div>
+      <select id="mode"><option value="full">Ядро + сцена</option><option value="core">Только ядро</option></select></div>
+    <div class="field"><div class="lab">Темп</div>
+      <select id="speed"><option value="0">Без пауз</option><option value="16" selected>Обычный</option><option value="90">Наглядный</option></select></div>
+    <div class="field"><div class="lab">Поиск</div>
+      <input type="search" id="q" placeholder="проверка, ID, деталь…"></div>
+    <div class="field"><div class="lab">Фильтр</div>
+      <div class="chips" id="filters">
+        <button class="f on" data-f="all">Все</button>
+        <button class="f" data-f="bad">Баги</button>
+        <button class="f" data-f="norm">Нормы</button>
+        <button class="f" data-f="skip">Пропуски</button>
+      </div></div>
+    <div class="field"><div class="lab">Домены</div><div id="doms"></div></div>
+    <div class="field"><div class="lab">Конфигурации</div><div id="cfgs"></div></div>
+    <div class="field" style="display:flex;gap:6px">
+      <button class="btn" id="bExpand" style="flex:1">Раскрыть</button>
+      <button class="btn" id="bCollapse" style="flex:1">Свернуть</button>
+    </div>
+  </aside>
+
+  <section id="out">
+    <div class="bar"><i id="prog"></i></div>
+    <div class="hero">
+      <h1>Дом собран <span>правильно?</span></h1>
+      <p>Аудит гоняет коробку по матрице конфигураций: считает венцы из профиля, проверяет смыкание шипа и паза, чашу угла, раскрой по заготовке и ловит всё, что падает в консоль при сборке сцены.</p>
+    </div>
+    <div id="consoleBox"></div>
+    <div id="list"><div class="empty">Нажми «Прогнать» — аудит соберёт дом по каждой конфигурации и покажет, что сломано.</div></div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.169.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.169.0/examples/jsm/"}}
+</script>
+<script type="module">
+import { HOUSE_GROUPS, HOUSE_MATRIX, HOUSE_DEFAULTS, auditConfig, compactReport, csvReport } from './src/house/house-audit.js';
+
+const $ = s => document.querySelector(s);
+const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c; if (h != null) n.innerHTML = h; return n; };
+const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 2200); };
+
+let results = [], filter = 'all', query = '', focusCfg = null, running = false, openAll = false;
+let THREE = null, buildHouse = null, renderer = null, sceneMsgs = [];
+
+function captureConsole(on) {
+  if (on) {
+    sceneMsgs = [];
+    const push = level => (...a) => {
+      sceneMsgs.push({ level, text: a.map(x => (x && x.message) || String(x)).join(' ').slice(0, 300) });
+      captureConsole._orig[level](...a);
+    };
+    captureConsole._orig = { error: console.error, warn: console.warn };
+    console.error = push('error'); console.warn = push('warn');
+  } else if (captureConsole._orig) {
+    console.error = captureConsole._orig.error; console.warn = captureConsole._orig.warn;
+    captureConsole._orig = null;
+  }
+}
+
+async function initScene() {
+  THREE = await import('three');
+  ({ buildHouse } = await import('./src/builder.js'));
+  renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+  renderer.setPixelRatio(1);
+  renderer.setSize(64, 64, false);
+}
+
+function disposeTree(o) {
+  o.traverse(c => {
+    if (c.geometry) c.geometry.dispose();
+    if (c.material) (Array.isArray(c.material) ? c.material : [c.material]).forEach(m => m && m.dispose());
+  });
+}
+
+function makeScene(params) {
+  const scene = new THREE.Scene();
+  captureConsole(true);
+  let house = null, err = null;
+  try { house = buildHouse(scene, { ...structuredClone(HOUSE_DEFAULTS), ...structuredClone(params) }); }
+  catch (e) { err = e; }
+  captureConsole(false);
+  const msgs = sceneMsgs.slice();
+  let rows;
+  if (err) {
+    rows = [{ id: 'S00', name: 'Сцена собирается без исключения', pass: false, detail: String(err.message || err), group: 'S' }];
+    const { auditScene } = window.__ha;
+    rows = rows.concat(auditScene(THREE, null, params, msgs));
+  } else {
+    rows = window.__ha.auditScene(THREE, house, params, msgs);
+  }
+  if (house) disposeTree(house);
+  scene.clear();
+  return rows;
+}
+
+function totals() {
+  const t = { all: 0, ok: 0, bug: 0, norm: 0 };
+  results.forEach(r => { t.all += r.all.length; t.ok += r.passed; t.bug += r.bugs; t.norm += r.norms; });
+  $('#tAll').textContent = t.all; $('#tOk').textContent = t.ok;
+  $('#tBug').textContent = t.bug; $('#tNorm').textContent = t.norm;
+}
+
+function renderDomains() {
+  const box = $('#doms'); box.innerHTML = '';
+  Object.entries(HOUSE_GROUPS).forEach(([k, g]) => {
+    let n = 0, bad = 0;
+    results.forEach(r => r.all.forEach(x => { if (x.group === k) { n++; if (!x.pass && !x.expected && !x.skipped) bad++; } }));
+    const d = el('div', 'dom', `<span class="dot" style="background:${g.c}"></span>${g.n}<i style="${bad ? 'color:#f4645f' : ''}">${bad ? bad + ' / ' : ''}${n}</i>`);
+    box.appendChild(d);
+  });
+}
+
+function renderCfgs() {
+  const box = $('#cfgs'); box.innerHTML = '';
+  results.forEach((r, i) => {
+    const cls = r.bugs ? 'bad' : r.norms ? 'norm' : 'ok';
+    const c = el('div', 'cfg' + (focusCfg === i ? ' on' : ''), `<s class="${cls}"></s><span>${esc(r.name)}</span><em>${r.bugs || r.norms || '✓'}</em>`);
+    c.onclick = () => { focusCfg = focusCfg === i ? null : i; render(); document.getElementById('cfg' + i)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    box.appendChild(c);
+  });
+}
+
+function renderConsole() {
+  const box = $('#consoleBox'); box.innerHTML = '';
+  const map = new Map();
+  results.forEach(r => r.all.filter(x => x.group === 'E' && !x.pass).forEach(x => {
+    x.detail.split(' | ').forEach(t => {
+      if (!t || t === 'чисто') return;
+      if (!map.has(t)) map.set(t, { n: 0, cfgs: new Set() });
+      const e = map.get(t); e.n++; e.cfgs.add(r.name);
+    });
+  }));
+  if (!map.size) return;
+  const c = el('div', 'console', `<h4>Консоль при сборке — ${map.size} уникальных сообщений</h4>`);
+  [...map.entries()].sort((a, b) => b[1].n - a[1].n).forEach(([t, e]) => {
+    c.appendChild(el('div', 'cl', `<b>×${e.n}</b> ${esc(t)}<br><span style="color:#8fa792">${esc([...e.cfgs].slice(0, 3).join(' · '))}${e.cfgs.size > 3 ? ' …' : ''}</span>`));
+  });
+  box.appendChild(c);
+}
+
+function render() {
+  const list = $('#list'); list.innerHTML = '';
+  const q = query.trim().toLowerCase();
+  let shown = 0;
+  results.forEach((r, i) => {
+    if (focusCfg != null && focusCfg !== i) return;
+    let rows = r.all.filter(x => {
+      if (filter === 'bad') return !x.pass && !x.expected && !x.skipped;
+      if (filter === 'norm') return !x.pass && x.expected;
+      if (filter === 'skip') return x.skipped;
+      return true;
+    });
+    if (q) rows = rows.filter(x => (x.id + ' ' + x.name + ' ' + x.detail + ' ' + r.name).toLowerCase().includes(q));
+    if (!rows.length) return;
+    shown++;
+    const st = r.bugs ? ['p-bad', r.bugs + ' баг'] : r.norms ? ['p-norm', r.norms + ' норм'] : ['p-ok', 'чисто'];
+    const card = el('div', 'card' + (openAll || r.bugs || focusCfg === i ? ' open' : ''));
+    card.id = 'cfg' + i;
+    card.style.animationDelay = Math.min(shown * 24, 320) + 'ms';
+    const head = el('div', 'ch', `<span class="arw">▶</span><h3>${esc(r.name)}</h3><span style="font:600 10px var(--m);color:var(--dim)">${rows.length}</span><span class="pill ${st[0]}">${st[1]}</span>`);
+    head.onclick = () => card.classList.toggle('open');
+    card.appendChild(head);
+    const body = el('div', 'cb');
+    rows.forEach(x => {
+      const bad = !x.pass && !x.expected && !x.skipped;
+      const cls = x.skipped ? 'skip' : bad ? 'bad' : !x.pass ? 'norm' : '';
+      const st2 = x.skipped ? ['ПРОПУСК', '#5f6f61'] : bad ? ['БАГ', '#f4645f'] : !x.pass ? ['НОРМА', '#fbbf24'] : ['OK', '#4ade80'];
+      const g = HOUSE_GROUPS[x.group] || { c: '#8fa792' };
+      body.appendChild(el('div', 'row ' + cls,
+        `<span class="rid" style="color:${g.c}">${esc(x.id)}</span>` +
+        `<span><span class="rn">${esc(x.name)}</span>${x.detail ? `<span class="rd">${esc(x.detail)}</span>` : ''}</span>` +
+        `<span class="rs" style="color:${st2[1]};background:${st2[1]}1f">${st2[0]}</span>`));
+    });
+    card.appendChild(body);
+    list.appendChild(card);
+  });
+  if (!shown) list.appendChild(el('div', 'empty', results.length ? 'Под фильтр ничего не попало.' : 'Нажми «Прогнать».'));
+  totals(); renderDomains(); renderCfgs(); renderConsole();
+}
+
+async function run() {
+  if (running) return;
+  running = true; $('#bRun').disabled = true; $('#bRun').textContent = 'Идёт…';
+  results = []; focusCfg = null;
+  const mode = $('#mode').value, gap = +$('#speed').value;
+  let sceneReady = false;
+  if (mode === 'full') {
+    try { if (!renderer) await initScene(); sceneReady = true; }
+    catch (e) { toast('Сцена недоступна: ' + (e.message || e) + ' — гоняю ядро'); }
+  }
+  for (let i = 0; i < HOUSE_MATRIX.length; i++) {
+    const c = HOUSE_MATRIX[i];
+    const make = sceneReady ? makeScene : null;
+    results.push(auditConfig(c, make));
+    $('#prog').style.width = ((i + 1) / HOUSE_MATRIX.length * 100) + '%';
+    render();
+    if (gap) await new Promise(r => setTimeout(r, gap));
+  }
+  running = false; $('#bRun').disabled = false; $('#bRun').textContent = 'Прогнать';
+  const b = results.reduce((s, r) => s + r.bugs, 0);
+  toast(b ? `Готово: ${b} багов` : 'Готово: багов нет');
+}
+
+function download(name, text, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type }));
+  a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+$('#bRun').onclick = run;
+$('#bJson').onclick = () => { if (!results.length) return toast('Сначала прогони'); download('house-audit.json', JSON.stringify(compactReport(results, $('#mode').value === 'full' ? 'core+scene' : 'core')), 'application/json'); toast('JSON выгружен'); };
+$('#bCsv').onclick = () => { if (!results.length) return toast('Сначала прогони'); download('house-audit.csv', '\ufeff' + csvReport(results), 'text/csv'); toast('CSV выгружен'); };
+$('#q').oninput = e => { query = e.target.value; render(); };
+$('#filters').onclick = e => { const b = e.target.closest('.f'); if (!b) return; [...$('#filters').children].forEach(x => x.classList.remove('on')); b.classList.add('on'); filter = b.dataset.f; render(); };
+$('#bExpand').onclick = () => { openAll = true; render(); };
+$('#bCollapse').onclick = () => { openAll = false; focusCfg = null; render(); };
+$('#mob').onclick = () => $('#side').classList.toggle('open');
+const mq = matchMedia(maxWidth => { });
+function responsive() { $('#mob').style.display = innerWidth <= 900 ? 'block' : 'none'; }
+addEventListener('resize', responsive); responsive();
+
+window.__houseAudit = { run, get results() { return results; } };
+import * as HA from './src/house/house-audit.js';
+window.__ha = HA;
+renderDomains();
+</script>
+</body>
+</html>

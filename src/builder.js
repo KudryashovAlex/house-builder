@@ -601,8 +601,9 @@ function createGableRoof(width, length, roofHeight, params) {
 
   const G = roofGeom(params);
   const isBrevno = params.material === 'brevno';
-  const beamW = Number(params.beamWidth || 150) / 1000;
-  const protrusion = beamW * (isBrevno ? 1.5 : 1.2);
+  const beamW = normWidth(params.beamWidth) / 1000;
+  const beamH = isBrevno ? beamW : TIMBER_H / 1000;
+  const protrusion = isBrevno ? beamW * 1.5 : CORNER.tail / 1000;
   const hw = G.hw, totalDrop = G.rise;
   const woodMat = new THREE.MeshStandardMaterial({
     color: MATERIAL_STYLES[params.material]?.color || '#c49a6c',
@@ -611,9 +612,9 @@ function createGableRoof(width, length, roofHeight, params) {
 
   function createWoodGableWall() {
     const g = new THREE.Group();
-    const startY = -beamW / 2;
+    const startY = -beamH / 2;
     const gap = 0.01;
-    const stepY = isBrevno ? beamW * 0.85 : beamW * 0.95;
+    const stepY = isBrevno ? beamW * 0.85 : courseStep() / 1000;
     const count = Math.ceil((roofHeight - startY) / stepY);
     const getLimitX = (yGlobal) => {
       const xRoof = (roofHeight - yGlobal) * hw / totalDrop;
@@ -648,10 +649,10 @@ function createGableRoof(width, length, roofHeight, params) {
         geo.computeVertexNormals();
       } else {
         const len = width + protrusion * 2;
-        geo = new THREE.ExtrudeGeometry(createProfiledShape(beamW - gap), { depth: len, bevelEnabled: false });
+        geo = new THREE.ExtrudeGeometry(createProfiledShape(beamW - gap, beamH), { depth: len, bevelEnabled: false });
         geo.translate(0, 0, -len / 2);
         geo.rotateY(Math.PI / 2);
-        yOffset = yBase + (beamW - gap) / 2;
+        yOffset = yBase + beamH / 2;
         const pos = geo.attributes.position;
         for (let j = 0; j < pos.count; j++) {
           const x = pos.getX(j);
@@ -928,8 +929,9 @@ function addInteriorWalls(house, params) {
   if (!params.interiorWalls) return;
 
   const isBrevno = params.material === 'brevno';
-  const beamW = Number(params.beamWidth || 150) / 1000;
-  const stepY = isBrevno ? beamW * 0.85 : beamW * 0.95;
+  const beamW = normWidth(params.beamWidth) / 1000;
+  const beamH = isBrevno ? beamW : TIMBER_H / 1000;
+  const stepY = isBrevno ? beamW * 0.85 : courseStep() / 1000;
   const thickness = beamW;
 
   const mat = new THREE.MeshStandardMaterial({ 
@@ -997,7 +999,7 @@ function addInteriorWalls(house, params) {
 
     const layersCount = Math.ceil(actualHeight / stepY);
     for (let i = 0; i < layersCount; i++) {
-      let yGlobal = floorY + i * stepY + beamW / 2;
+      let yGlobal = floorY + i * stepY + beamH / 2;
       if (!isAlongX) yGlobal += stepY / 2;
       yGlobal -= 0.005; 
 
@@ -1024,7 +1026,7 @@ function addInteriorWalls(house, params) {
           geo = new THREE.CylinderGeometry(beamW / 2, beamW / 2, length, 16);
           geo.rotateX(Math.PI / 2);
         } else {
-          const shape = createProfiledShape(beamW);
+          const shape = createProfiledShape(thickness, beamH);
           geo = new THREE.ExtrudeGeometry(shape, { depth: length, bevelEnabled: false });
           geo.translate(0, 0, -length / 2);
         }
@@ -1049,8 +1051,8 @@ function addInteriorWalls(house, params) {
         // ФИКС: Доборы для внутренних стен с твоей логикой
         const opYMin = floorY + (op.sillHeight || 0);
         const opYMax = opYMin + op.height;
-        const logYMin = yGlobal - beamW / 2;
-        const logYMax = yGlobal + beamW / 2;
+        const logYMin = yGlobal - beamH / 2;
+        const logYMax = yGlobal + beamH / 2;
         const cx = p1.x + dir.x * (op.offset + op.width / 2);
         const cz = p1.z + dir.z * (op.offset + op.width / 2);
         const overlap = 0.02;
