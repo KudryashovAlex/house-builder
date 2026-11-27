@@ -58,7 +58,7 @@ const MATERIAL_STYLES = {
   brus:   { color: '#c49a6c' },
   brevno: { color: '#b8875e' },
 };
-
+import { TIMBER_H, normWidth, courseStep, coursesFor, profile as timberProfile, CORNER } from './house/timber.js';
 function isMansard(params) {
   return params.mansard === 'yes' && params.floors >= 2;
 }
@@ -82,11 +82,14 @@ export function buildHouse(scene, params) {
   const house = new THREE.Group();
   
   const isBrevno = params.material === 'brevno';
-  const beamW = Number(params.beamWidth || 150) / 1000;
-  const stepY = isBrevno ? beamW * 0.85 : beamW * 0.95;
-  
+  /* Толщина стены и высота венца — РАЗНЫЕ размеры: 90/140/190 × 140.
+     Шаг венца берём из профиля, а не «0.95 от высоты». */
+  const beamW = normWidth(params.beamWidth) / 1000;
+  const beamH = isBrevno ? beamW : TIMBER_H / 1000;
+  const stepY = isBrevno ? beamW * 0.85 : courseStep() / 1000;
+
   const baseWallsHeight = getWallsHeight(params);
-  let layers = Math.ceil(baseWallsHeight / stepY);
+  let layers = isBrevno ? Math.ceil(baseWallsHeight / stepY) : coursesFor(baseWallsHeight * 1000).n;
   
   if (params.editMode) {
     const maxVisibleHeight = params.currentFloor * params.wallHeight;
@@ -256,8 +259,10 @@ function addTopTrim(house, params, layers, stepY) {
 }
 function addWalls(house, params, wallsHeight, layers, stepY) {
   const isBrevno = params.material === 'brevno';
-  const beamW = Number(params.beamWidth || 150) / 1000;
-  const protrusion = beamW * (isBrevno ? 1.5 : 1.2);
+  const beamW = normWidth(params.beamWidth) / 1000;
+  const beamH = isBrevno ? beamW : TIMBER_H / 1000;
+  /* Остаток угла «в чашу» — 250 мм по сортаменту, а не доля толщины. */
+  const protrusion = isBrevno ? beamW * 1.5 : CORNER.tail / 1000;
   
   const mat = new THREE.MeshStandardMaterial({
     color: MATERIAL_STYLES[params.material]?.color || '#c49a6c',
@@ -268,8 +273,8 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
   const deletedWalls = params.deletedExteriorWalls || [];
 
   for (let i = 0; i < layers; i++) {
-    const yX = BASE_HEIGHT + i * stepY + beamW / 2;
-    const yZ = yX + stepY / 2;
+    const yX = BASE_HEIGHT + i * stepY + beamH;
+    const yZ = yX;   // венцы всех стен в одном уровне — иначе чаша не сойдётся
     const floorNumX = Math.floor((yX - BASE_HEIGHT) / params.wallHeight) + 1;
     const floorNumZ = Math.floor((yZ - BASE_HEIGHT) / params.wallHeight) + 1;
 
@@ -281,8 +286,8 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
         if (op.wall === wallName && op.floor === floorNumX) {
           const opYMin = BASE_HEIGHT + (op.floor - 1) * params.wallHeight + op.sillHeight;
           const opYMax = opYMin + op.height;
-          const logYMin = yX - beamW / 2;
-          const logYMax = yX + beamW / 2;
+          const logYMin = yX - beamH / 2;
+          const logYMax = yX + beamH / 2;
           
           if (logYMax > opYMin && logYMin < opYMax) {
             holes.push({ x: op.x, width: op.width + 0.04, op: op, opYMin: opYMin, opYMax: opYMax, logYMin: logYMin, logYMax: logYMax });
@@ -304,20 +309,20 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
         const holeMin = hole.x - hole.width / 2;
         const holeMax = hole.x + hole.width / 2;
         if (holeMin > currentX) {
-          addLogMesh(house, mat, isBrevno, holeMin - currentX, beamW, beamW, currentX + (holeMin - currentX) / 2, yX, zPos, 'x', params.width, params.length, stepY);
+          addLogMesh(house, mat, isBrevno, holeMin - currentX, beamH, beamW, currentX + (holeMin - currentX) / 2, yX, zPos, 'x', params.width, params.length, stepY, i);
         }
 
         if (hole.op) {
           const overlap = 0.02;
           if (hole.logYMax > hole.opYMax) {
-            const topH = Math.min(beamW, hole.logYMax - hole.opYMax) - overlap;
+            const topH = Math.min(beamH, hole.logYMax - hole.opYMax) - overlap;
             const fillerGeo = new THREE.BoxGeometry(hole.width, topH, beamW);
             const filler = applyShadows(new THREE.Mesh(fillerGeo, mat));
             filler.position.set(hole.x, hole.opYMax + overlap + topH/2, zPos);
             house.add(filler);
           }
           if (hole.logYMin < hole.opYMin) {
-            const botH = Math.min(beamW, hole.opYMin - hole.logYMin) + overlap;
+            const botH = Math.min(beamH, hole.opYMin - hole.logYMin) + overlap;
             const fillerGeo = new THREE.BoxGeometry(hole.width, botH, beamW);
             const filler = applyShadows(new THREE.Mesh(fillerGeo, mat));
             filler.position.set(hole.x, hole.logYMin - overlap*2 + botH/2, zPos);
@@ -329,7 +334,7 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
       });
 
       if (endX > currentX) {
-        addLogMesh(house, mat, isBrevno, endX - currentX, beamW, beamW, currentX + (endX - currentX) / 2, yX, zPos, 'x', params.width, params.length, stepY);
+        addLogMesh(house, mat, isBrevno, endX - currentX, beamH, beamW, currentX + (endX - currentX) / 2, yX, zPos, 'x', params.width, params.length, stepY, i);
       }
     });
 
@@ -341,8 +346,8 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
         if (op.wall === wallName && op.floor === floorNumZ) {
           const opYMin = BASE_HEIGHT + (op.floor - 1) * params.wallHeight + op.sillHeight;
           const opYMax = opYMin + op.height;
-          const logYMin = yZ - beamW / 2;
-          const logYMax = yZ + beamW / 2;
+          const logYMin = yZ - beamH / 2;
+          const logYMax = yZ + beamH / 2;
           
           if (logYMax > opYMin && logYMin < opYMax) {
             holes.push({ x: op.x, width: op.width + 0.04, op: op, opYMin: opYMin, opYMax: opYMax, logYMin: logYMin, logYMax: logYMax });
@@ -364,21 +369,21 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
         const holeMin = hole.x - hole.width / 2;
         const holeMax = hole.x + hole.width / 2;
         if (holeMin > currentZ) {
-          addLogMesh(house, mat, isBrevno, beamW, beamW, holeMin - currentZ, xPos, yZ, currentZ + (holeMin - currentZ) / 2, 'z', params.width, params.length, stepY);
+          addLogMesh(house, mat, isBrevno, beamW, beamH, holeMin - currentZ, xPos, yZ, currentZ + (holeMin - currentZ) / 2, 'z', params.width, params.length, stepY, i);
         }
 
         // ФИКС: Доборы для боковых стен с твоей логикой
         if (hole.op) {
           const overlap = 0.02;
           if (hole.logYMax > hole.opYMax) {
-            const topH = Math.min(beamW, hole.logYMax - hole.opYMax) - overlap;
+            const topH = Math.min(beamH, hole.logYMax - hole.opYMax) - overlap;
             const fillerGeo = new THREE.BoxGeometry(beamW, topH, hole.width);
             const filler = applyShadows(new THREE.Mesh(fillerGeo, mat));
             filler.position.set(xPos, hole.opYMax + overlap + topH/2, hole.x);
             house.add(filler);
           }
           if (hole.logYMin < hole.opYMin) {
-            const botH = Math.min(beamW, hole.opYMin - hole.logYMin) + overlap;
+            const botH = Math.min(beamH, hole.opYMin - hole.logYMin) + overlap;
             const fillerGeo = new THREE.BoxGeometry(beamW, botH, hole.width);
             const filler = applyShadows(new THREE.Mesh(fillerGeo, mat));
             filler.position.set(xPos, hole.logYMin - overlap*2 + botH/2, hole.x);
@@ -390,13 +395,24 @@ function addWalls(house, params, wallsHeight, layers, stepY) {
       });
 
       if (endZ > currentZ) {
-        addLogMesh(house, mat, isBrevno, beamW, beamW, endZ - currentZ, xPos, yZ, currentZ + (endZ - currentZ) / 2, 'z', params.width, params.length, stepY);
+        addLogMesh(house, mat, isBrevno, beamW, beamH, endZ - currentZ, xPos, yZ, currentZ + (endZ - currentZ) / 2, 'z', params.width, params.length, stepY, i);
       }
     });
   }
 }
-
-function createProfiledShape(w) {
+/* Профиль венца берём из timber.js: шипы вниз, пазы сверху, зазор 2 мм.
+   Тело 0…H сдвигаем на −H/2, чтобы центр меша совпал с центром тела. */
+function createProfiledShape(w, h) {
+  const pr = timberProfile(Math.round(w * 1000));
+  const s = new THREE.Shape();
+  pr.pts.forEach(([x, y], i) => {
+    const X = x / 1000, Y = y / 1000 - h / 2;
+    if (i) s.lineTo(X, Y); else s.moveTo(X, Y);
+  });
+  s.closePath();
+  return s;
+}
+function createProfiledShapeOld(w) {
   const hw = w / 2;
   const chamfer = w * 0.105;
   const crestW  = w * 0.052;
@@ -434,7 +450,7 @@ function createProfiledShape(w) {
   
   return shape;
 }
-function addLogMesh(house, mat, isBrevno, sx, sy, sz, x, y, z, axis, houseWidth, houseLength, stepY) {
+function addLogMesh(house, mat, isBrevno, sx, sy, sz, x, y, z, axis, houseWidth, houseLength, stepY, courseIdx) {
   if (![sx, sy, sz, x, y, z, stepY].every(Number.isFinite) || sx <= 0.001 || sy <= 0.001 || sz <= 0.001) return;
   const gap = 0.01;
   let geo;
@@ -468,25 +484,33 @@ function addLogMesh(house, mat, isBrevno, sx, sy, sz, x, y, z, axis, houseWidth,
 
   } else {
     const length = axis === 'x' ? sx : sz;
-    const shape = createProfiledShape(sy);
+    const shape = createProfiledShape(axis === 'x' ? sz : sx, sy);
     geo = new THREE.ExtrudeGeometry(shape, { depth: length, bevelEnabled: false });
     geo.translate(0, 0, -length / 2);
     if (axis === 'x') geo.rotateY(Math.PI / 2);
 
     const pos = geo.attributes.position;
     
-    for (let i = 0; i < pos.count; i++) {
-      let px = pos.getX(i); let py = pos.getY(i); let pz = pos.getZ(i);
-      if (py < 0) {
-        if (axis === 'x') {
-          const absX = x + px;
-          if (Math.abs(absX - houseWidth / 2) < sy && py < -sy * 0.1) pos.setY(i, -sy * 0.1);
-          if (Math.abs(absX - (-houseWidth / 2)) < sy && py < -sy * 0.1) pos.setY(i, -sy * 0.1);
-        } else {
-          const absZ = z + pz;
-          if (Math.abs(absZ - houseLength / 2) < sy && py < -sy * 0.1) pos.setY(i, -sy * 0.1);
-          if (Math.abs(absZ - (-houseLength / 2)) < sy && py < -sy * 0.1) pos.setY(i, -sy * 0.1);
-        }
+    /* Угол «в чашу с остатком» = полудерево: на пересечении снимаем половину тела,
+       через венец чередуем какую — тогда брусы не делят объём. Остаток за углом целый.
+       Ширина выемки — по толщине ПОПЕРЕЧНОЙ стены, а не по высоте венца. */
+    const halfSpan = axis === 'x' ? houseWidth / 2 : houseLength / 2;
+    if (isBrevno) {
+      for (let i = 0; i < pos.count; i++) {
+        const py = pos.getY(i);
+        if (py >= 0) continue;
+        const along = axis === 'x' ? x + pos.getX(i) : z + pos.getZ(i);
+        if (Math.abs(Math.abs(along) - halfSpan) < sy) pos.setY(i, Math.max(py, -sy * 0.1));
+      }
+    } else {
+      const thick = axis === 'x' ? sz : sx;
+      const cupR = thick / 2 + CORNER.cupClear / 1000;
+      const keepTop = ((courseIdx | 0) + (axis === 'z' ? 1 : 0)) % 2 === 0;
+      for (let i = 0; i < pos.count; i++) {
+        const along = axis === 'x' ? x + pos.getX(i) : z + pos.getZ(i);
+        if (Math.abs(Math.abs(along) - halfSpan) > cupR) continue;
+        const py = pos.getY(i);
+        pos.setY(i, keepTop ? Math.max(py, 0) : Math.min(py, 0));
       }
     }
     

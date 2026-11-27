@@ -86,20 +86,38 @@ export function courseRuns(wallMm, stockMm, index) {
   const base = Math.floor(need / n);
   const even = new Array(n).fill(base); even[n - 1] += need - base * n;
   if (index % 2 === 0) return pack(need, stock, even, true);
-  const ej = jointsOf(even);
-  const stepH = Math.max(50, Math.round(stock / 40));
-  for (let h = MIN_PIECE; h <= stock; h += stepH) {
-    const rest = need - h, m = Math.ceil(rest / stock);
-    if (m < 1) continue;
-    const b = Math.floor(rest / m);
-    if (b < MIN_PIECE || b > stock) continue;
-    const pieces = [h, ...new Array(m).fill(b)];
-    pieces[pieces.length - 1] += need - pieces.reduce((s, v) => s + v, 0);
-    if (pieces.some(v => v < MIN_PIECE || v > stock)) continue;
-    if (jointsOf(pieces).every(j => ej.every(e => Math.abs(j - e) >= JOINT_SHIFT)))
-      return pack(need, stock, pieces, true);
+  const odd = staggerPieces(need, stock, jointsOf(even));
+  return odd ? pack(need, stock, odd, true) : pack(need, stock, even, false);
+}
+
+/* Раскладка нечётного венца: полный перебор по сетке 50 мм.
+   Ищем путь 0 → need, где каждый кусок 1200…stock, а каждый стык отстоит
+   от стыков чётного венца минимум на JOINT_SHIFT. Перебор полный: если
+   раскладка существует — найдём, а не «повезёт». Прежняя эвристика
+   «первый кусок + равные» для части длин решения не имела вовсе. */
+function staggerPieces(need, stock, evenJoints) {
+  const STEP = 50, nodes = [];
+  for (let p = 0; p < need; p += STEP) nodes.push(p);
+  if (nodes[nodes.length - 1] !== need) nodes.push(need);
+  const free = p => p === 0 || p === need ||
+    evenJoints.every(j => Math.abs(p - j) >= JOINT_SHIFT);
+  const from = new Map([[0, null]]);
+  for (const p of nodes) {
+    if (!from.has(p)) continue;
+    for (const q of nodes) {
+      if (q <= p) continue;
+      const L = q - p;
+      if (L < MIN_PIECE) continue;
+      if (L > stock) break;
+      if (from.has(q) || !free(q)) continue;
+      from.set(q, p);
+    }
   }
-  return pack(need, stock, even, false);
+  if (!from.has(need)) return null;
+  const pieces = [];
+  for (let cur = need; from.get(cur) != null; cur = from.get(cur))
+    pieces.unshift(cur - from.get(cur));
+  return pieces;
 }
 
 /* Сводка по коробке: венцы, погонаж, кубатура, число заготовок. */

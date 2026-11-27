@@ -1,5 +1,6 @@
 // src/calculator.js
 import { PRICES } from './prices.js';
+import { normWidth, courseStep, coursesFor } from './house/timber.js';
 
 const MANSARD_KNEE_HEIGHT = 1.8;
 const num = (v, d) => (Number.isFinite(Number(v)) ? Number(v) : d);
@@ -24,10 +25,11 @@ function mergedLength(intervals) {
 
 export function calculateMaterials(params) {
   const isBrevno = params.material === 'brevno';
-  const beamW = num(params.beamWidth, 150) / 1000;
-  const stepY = isBrevno ? beamW * 0.85 : beamW * 0.95; // совпадает с builder.js
-  const protrusion = beamW * (isBrevno ? 1.5 : 1.2);
-  const layers = Math.max(1, Math.ceil(getWallsHeight(params) / stepY));
+  const beamW = normWidth(params.beamWidth) / 1000;
+  const stepY = isBrevno ? beamW * 0.85 : courseStep() / 1000;
+  const protrusion = isBrevno ? beamW * 1.5 : 0.25;
+  const layers = isBrevno ? Math.max(1, Math.ceil(getWallsHeight(params) / stepY))
+                          : coursesFor(getWallsHeight(params) * 1000).n;
 
   // --- 1. Коробка ---
   const lenX = params.width + protrusion * 2;
