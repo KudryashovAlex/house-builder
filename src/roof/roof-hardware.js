@@ -265,11 +265,7 @@ export function buildHardware(m, p, S) {
       const P0 = L2W(f, Xs, Ys, r.z);
       const wallN = w.axisN.clone().multiplyScalar(Math.sign(P0.dot(w.axisN)) || 1);
       const cN = w.half + m.pw / 2 + PT / 2;
-      /* Опорная полка уголка обязана стоять на ТОЙ плоскости, на которую
-         реально опирается стропило. В мансардных схемах без аттиковой стенки
-         (ригель, коньковый прогон, фермы) мауэрлата на уровне ската нет —
-         полка ложится на перекрытие (верх решётки = потолок комнаты).
-         Иначе уголок висит в воздухе снаружи стены и вылетает за кровлю. */
+
       const hasBearingWall = !MSD || MSD.scheme === 'broken' || MSD.kneeTop > .05;
       const seatY = hasBearingWall ? bear.yBot : MSD.roomH - m.th;
       [-1, 1].forEach(sj => {
